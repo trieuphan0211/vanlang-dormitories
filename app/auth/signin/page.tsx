@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import "@/css/satoshi.css";
 import "@/css/style.css";
-import { FormSignin } from "@/components/FormElements/form-signin";
+import { SigninForm } from "@/components/FormElements/signin-form";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -182,7 +182,7 @@ const SignIn: React.FC = () => {
                   Sign In to VanlangDorms
                 </h2>
               </div>
-              <FormSignin />
+              <SigninForm />
             </div>
           </div>
         </div>

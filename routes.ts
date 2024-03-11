@@ -3,7 +3,12 @@
  * These routes are accessible to everyone
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/verification-account", "/reset-password"];
+export const publicRoutes = [
+  "/",
+  "/verification-account",
+  "/reset-password",
+  // "/home",
+];
 
 /**
  * An array of routes that are protected
@@ -13,7 +18,7 @@ export const publicRoutes = ["/", "/verification-account", "/reset-password"];
 export const authRouters = [
   "/auth/signin",
   "/auth/signup",
-  "/auth/error",
+  "/error",
   "/auth/forgot-password",
 ];
 
@@ -28,4 +33,5 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect route after a user logs in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/settings";
+export const DEFAULT_ADMIN_LOGIN_REDIRECT = "/admin";
+export const DEFAULT_ORTHER_LOGIN_REDIRECT = "/home";

@@ -1,18 +1,83 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { use, useState, useTransition } from "react";
+import { SigninSchema } from "@/schema";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
+import { signin } from "@/actions/auth/signin";
+import { signIn, useSession } from "next-auth/react";
 
-export const FormSignin = () => {
+export const SigninForm = () => {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<z.infer<typeof SigninSchema>>({
+    resolver: zodResolver(SigninSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  // const session = useSession();
+
+  const onSubmit = (value: z.infer<typeof SigninSchema>) => {
+    startTransition(() => {
+      signin(value).then((res) => {
+        if (res?.error) {
+          reset();
+          setError(res.error);
+        }
+        if (res.success) {
+          reset();
+          setSuccess(res.success);
+        }
+      });
+      // .catch(() => setError("Something went wrong!"));
+    });
+  };
+
+  // Authenticated by azure ad
+  const onClick = (provider: string) => {
+    try {
+      signIn(provider, {
+        callbackUrl: "/admin",
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
-        <label className="mb-2.5 block font-medium text-black dark:text-white">
+        <label
+          className={clsx(
+            `mb-2.5 block font-medium text-black dark:text-white`,
+            {
+              "text-red": errors.email,
+            },
+          )}
+        >
           Email
         </label>
         <div className="relative">
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className={clsx(
+              "w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+              {
+                "focus:border-red": errors.email,
+              },
+            )}
+            disabled={isPending}
+            {...register("email")}
           />
           <span className="absolute right-4 top-4">
             <svg
@@ -32,11 +97,25 @@ export const FormSignin = () => {
             </svg>
           </span>
         </div>
+        <p
+          className={clsx(`font-smblock text-sm text-black dark:text-white`, {
+            "text-red": errors.email,
+          })}
+        >
+          {errors.email?.message}
+        </p>
       </div>
 
       <div className="mb-6">
         <div className="flex justify-between">
-          <label className="mb-2.5 block font-medium text-black dark:text-white">
+          <label
+            className={clsx(
+              "mb-2.5 block font-medium text-black dark:text-white",
+              {
+                "text-red": errors.password,
+              },
+            )}
+          >
             Password
           </label>
           <Link
@@ -50,7 +129,15 @@ export const FormSignin = () => {
           <input
             type="password"
             placeholder="6+ Characters, 1 Capital letter"
-            className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className={clsx(
+              "w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+
+              {
+                "focus:border-red": errors.email,
+              },
+            )}
+            disabled={isPending}
+            {...register("password")}
           />
 
           <span className="absolute right-4 top-4">
@@ -75,17 +162,32 @@ export const FormSignin = () => {
             </svg>
           </span>
         </div>
+        <p
+          className={clsx(`font-smblock text-sm text-black dark:text-white`, {
+            "text-red": errors.password,
+          })}
+        >
+          {errors.password?.message}
+        </p>
       </div>
-
+      <div className="mb-4">
+        <p className="text-green-600">{success}</p>
+        <p className="text-red">{error}</p>
+      </div>
       <div className="mb-5">
         <input
           type="submit"
           value="Sign In"
           className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+          disabled={isPending}
         />
       </div>
 
-      <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+      <button
+        className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
+        disabled={isPending}
+        onClick={() => onClick("azure-ad")}
+      >
         <div className="h-8 w-8">
           <svg
             viewBox="0 0 32 32"
@@ -112,7 +214,11 @@ export const FormSignin = () => {
       <div className="mt-6 text-center">
         <p>
           Don’t have any account?
-          <Link href="/auth/signup" className="text-primary hover:underline">
+          <Link
+            href="/auth/signup"
+            className="text-primary hover:underline"
+            aria-disabled={isPending}
+          >
             Sign Up
           </Link>
         </p>

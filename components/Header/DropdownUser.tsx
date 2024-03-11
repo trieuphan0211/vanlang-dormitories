@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 const DropdownUser = () => {
+  //Begin: Handle dropdown state UI
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -33,6 +35,16 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
+  //Begin: Handle dropdown state UI
+
+  //Begin: Handle Data & Function
+  const session = useSession();
+  // Begin: Handle Logout
+  const handleLogout = async () => {
+    await signOut();
+  };
+  // End: Handle Logout
+  // End: Handle Data & Function
 
   return (
     <div className="relative">
@@ -44,16 +56,18 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {session.data?.user.name || "No Name"}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs capitalize">
+            {session.data?.user.role}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src={session.data?.user.image || "/images/user/user-01.png"}
             style={{
               width: "auto",
               height: "auto",
@@ -161,7 +175,11 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 
+        ease-in-out hover:text-primary lg:text-base"
+          onClick={handleLogout}
+        >
           <svg
             className="fill-current"
             width="22"

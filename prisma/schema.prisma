@@ -52,13 +52,13 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
-  roleId                String
+  role                  String                 @default("USER")
   // sessions              Session[]
   isTwoFactorEnabled    Boolean                @default(false)
   accounts              Account[]
   twoFactorComfirmation TwoFactorComfirmation?
 
-  userRole UserRole @relation(fields: [roleId], references: [id])
+  userRole UserRole @relation(fields: [role], references: [name])
 }
 
 enum TypeToken {
