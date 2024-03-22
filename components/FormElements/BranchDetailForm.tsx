@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
-import { branchSeletor, getBranchList } from "@/lib/features/branchs";
 
 export const BranchDetailForm = ({ branch }: { branch: BRANCH }) => {
   const image = JSON.parse(branch?.img as string);
@@ -48,17 +46,6 @@ export const BranchDetailForm = ({ branch }: { branch: BRANCH }) => {
       });
     });
   };
-
-  // redux
-  // const dispatch = useAppDispatch();
-  // // const { branchList,status } = branchSeletor;
-  // const { branchList, status, message } = useAppSelector(
-  //   (state) => state.branchManagerReducer,
-  // );
-  // useEffect(() => {
-  //   dispatch(getBranchList({ query: "", currentPage: 1, entries: 10 }));
-  // }, []);
-  // console.log(branchList, status, message);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
