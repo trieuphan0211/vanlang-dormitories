@@ -4,7 +4,6 @@ import * as z from "zod";
 import { SigninSchema } from "@/schema";
 import { getUserByEmail } from "@/data/users";
 import { signIn } from "@/auth";
-import { getUserRoleById } from "@/data/userRole";
 import { AuthError } from "next-auth";
 
 export const signin = async (value: z.infer<typeof SigninSchema>) => {

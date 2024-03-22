@@ -47,7 +47,7 @@ export const SigninForm = () => {
   const onClick = (provider: string) => {
     try {
       signIn(provider, {
-        callbackUrl: "/admin",
+        callbackUrl: "/",
       });
     } catch (e) {
       console.log(e);
@@ -186,7 +186,10 @@ export const SigninForm = () => {
       <button
         className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
         disabled={isPending}
-        onClick={() => onClick("azure-ad")}
+        onClick={(e) => {
+          e.preventDefault();
+          onClick("azure-ad");
+        }}
       >
         <div className="h-8 w-8">
           <svg

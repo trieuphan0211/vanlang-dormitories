@@ -4,7 +4,6 @@ import GitHub from "next-auth/providers/github";
 import { db } from "./lib/db";
 import authConfig from "./auth.config";
 import { getUserById } from "./data/users";
-import { getUserRoleById } from "./data/userRole";
 
 export const {
   handlers: { GET, POST },
@@ -16,10 +15,20 @@ export const {
     signIn: "/auth/signin",
     error: "/error",
   },
-
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       return true;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
     async session({ session, token }) {
       if (session.user) {

@@ -69,25 +69,35 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Branch Management",
-      href: "/branch",
+      title: "Branch",
+      href: "/admin/branch",
     },
     {
-      icon: "/images/header-icon/employee.svg",
-      title: "Service Management",
-      href: "/service",
+      icon: "/images/header-icon/service.svg",
+      title: "Service",
+      href: "/admin/service",
     },
     {
-      icon: "/images/header-icon/employee.svg",
-      title: "Room Type Management",
-      hrèf: "/room-type",
+      icon: "/images/header-icon/room-type.svg",
+      title: "Room Type",
+      href: "/admin/room-type",
+    },
+    {
+      icon: "/images/header-icon/student.svg",
+      title: "Student",
+      href: "/admin/student",
+    },
+    {
+      icon: "/images/header-icon/user.svg",
+      title: "User",
+      href: "/admin/user",
     },
   ];
   // End: Handle Logic
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -146,11 +156,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 //   );
                 // }
                 return (
-                  <MenuItem
-                    icon={item.icon}
-                    title={item.title}
-                    href={item.href}
-                  />
+                  <li key={index}>
+                    <MenuItem
+                      icon={item.icon}
+                      title={item.title}
+                      href={item.href}
+                    />
+                  </li>
                 );
               })}
             </ul>

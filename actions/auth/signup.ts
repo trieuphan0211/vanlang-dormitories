@@ -29,7 +29,6 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
       name,
       email,
       password: hashedPassword,
-      role: "USER",
     },
   });
 
