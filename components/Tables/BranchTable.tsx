@@ -26,6 +26,9 @@ export const BranchTable = ({
       console.log(id, "id");
       removeBranch(id).then((res) => {
         if (res.success) {
+          // Refesh data
+          router.refresh();
+          // Show alert
           dispatch(
             alertManagerActions.setAlert({
               message: {
@@ -34,10 +37,8 @@ export const BranchTable = ({
               },
             }),
           );
-          router.refresh();
         }
       });
-      router.refresh();
     });
   };
   return (

@@ -1,9 +1,7 @@
 import { combineReducers, configureStore, Tuple } from "@reduxjs/toolkit";
-import { branchManagerReducer } from "@/lib/features/branchs";
 import { alertManagerReducer } from "./features/alert/alert-slice";
 
 const rootReducer = combineReducers({
-  branchManagerReducer,
   alertManagerReducer,
 });
 

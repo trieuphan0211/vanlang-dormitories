@@ -92,6 +92,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       title: "User",
       href: "/admin/user",
     },
+    {
+      icon: "/images/header-icon/user.svg",
+      title: "Facilities",
+      href: "/admin/facilities",
+    },
+    {
+      icon: "/images/header-icon/user.svg",
+      title: "Facilities Type",
+      href: "/admin/facilities-type",
+    },
   ];
   // End: Handle Logic
   return (
@@ -102,14 +112,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-6 pb-5.5 lg:pb-6.5">
         <Link href="/" className="flex h-22 items-center overflow-hidden">
           <Image
             width={176}
             height={32}
             src={"/images/logo/logo.png"}
             alt="Logo"
-            priority
           />
         </Link>
 
