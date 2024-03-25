@@ -1,5 +1,7 @@
 import { BRAND } from "@/types/brand";
 import Image from "next/image";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { FaCheck } from "react-icons/fa";
 
 const brandData: BRAND[] = [
   {
@@ -89,6 +91,17 @@ const TableOne = () => {
             }`}
             key={key}
           >
+            <div className="flex items-center justify-center p-2.5 xl:p-5">
+              <Checkbox.Root
+                className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_10px] outline-none "
+                // defaultChecked
+                id="c1"
+              >
+                <Checkbox.Indicator className="text-violet11">
+                  <FaCheck />
+                </Checkbox.Indicator>
+              </Checkbox.Root>
+            </div>
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <div className="flex-shrink-0">
                 <Image src={brand.logo} alt="Brand" width={48} height={48} />
@@ -100,10 +113,6 @@ const TableOne = () => {
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{brand.visitors}K</p>
-            </div>
-
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">${brand.revenues}</p>
             </div>
 
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">

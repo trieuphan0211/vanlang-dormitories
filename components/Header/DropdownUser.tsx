@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
   //Begin: Handle dropdown state UI
@@ -63,7 +64,7 @@ const DropdownUser = () => {
           </span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
+        <span className="h-12 w-12 overflow-hidden rounded-full">
           <Image
             width={112}
             height={112}

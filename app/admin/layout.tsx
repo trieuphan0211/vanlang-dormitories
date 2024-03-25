@@ -9,6 +9,8 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Alert } from "@/components/common/Alert";
+import { useAppSelector } from "@/hooks/redux";
+import { alertSeletor } from "@/lib/features/alert/alert-selector";
 
 export default function AdminLayout({
   children,
@@ -17,6 +19,7 @@ export default function AdminLayout({
 }>) {
   const [loading, setLoading] = useState<boolean>(true);
   const session = useSession();
+  const { status } = useAppSelector(alertSeletor);
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);
   }, []);
@@ -25,6 +28,12 @@ export default function AdminLayout({
       <main className="dark:bg-boxdark-2 dark:text-bodydark">
         {loading ? <Loader /> : <DefaultLayout>{children}</DefaultLayout>}
         <Alert />
+
+        {status && (
+          <div className="absolute bottom-0 left-0 right-0 top-0 z-99">
+            <Loader />
+          </div>
+        )}
       </main>
     );
   }

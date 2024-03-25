@@ -9,7 +9,7 @@ import { MdOutlineErrorOutline } from "react-icons/md";
 import { IoWarningOutline } from "react-icons/io5";
 
 export const Alert = () => {
-  const { status, message } = useAppSelector(alertSeletor);
+  const { message } = useAppSelector(alertSeletor);
   const dispatch = useAppDispatch();
 
   function handleDelete() {
@@ -40,9 +40,9 @@ export const Alert = () => {
           </div>
 
           <AlertDialog.Description className="mb-2 text-center text-2xl font-bold">
-            {message.type === "success" && "Successfully!"}
-            {message.type === "error" && "Error!"}
-            {message.type === "warning" && "Warning!"}
+            {message.type === "success" && "Thành công!"}
+            {message.type === "error" && "Lỗi!"}
+            {message.type === "warning" && "Cảnh báo!"}
           </AlertDialog.Description>
           <p className="mb-5 text-center text-xl">{message.content}</p>
           <AlertDialog.Cancel asChild>

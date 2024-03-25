@@ -3,4 +3,5 @@ export type ROOMTYPE = {
   name: string;
   members: number;
   description?: string;
+  code: string;
 };

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface alertState {
-  status: "idle" | "loading" | "failed";
+  status: boolean;
   message: {
     type: "success" | "error" | "warning" | null;
     content: string;
@@ -10,7 +10,7 @@ export interface alertState {
 
 // Define the initial state using that type
 const initialState: alertState = {
-  status: "idle",
+  status: false,
   message: {
     type: null,
     content: "",
@@ -25,8 +25,8 @@ export const { reducer: alertManagerReducer, actions: alertManagerActions } =
         state: alertState,
         action: {
           payload: {
-            status?: "idle" | "loading" | "failed";
-            message: {
+            status?: boolean;
+            message?: {
               type: "success" | "error" | "warning" | null;
               content: string;
             };

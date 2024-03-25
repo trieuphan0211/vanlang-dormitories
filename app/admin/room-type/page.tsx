@@ -1,12 +1,11 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { RoomTypeTable } from "@/components/Tables/RoomTypeTable";
-import { ServicesTable } from "@/components/Tables/ServicesTable";
 import { getCountRoomtypes, getFilterRoomTypes } from "@/data/room-type";
 import { ROOMTYPE } from "@/types/room-type";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Services Managerment",
+  title: "Quản lý loại phòng",
   description: "",
 };
 const RoomTypePage = async ({
@@ -29,7 +28,7 @@ const RoomTypePage = async ({
   const count = await getCountRoomtypes(query);
   return (
     <div>
-      <Breadcrumb pageName="Services Managerment" />
+      <Breadcrumb pageName="Quản lý loại phòng" />
       <RoomTypeTable roomTypes={roomTypes} count={Number(count)} />
     </div>
   );

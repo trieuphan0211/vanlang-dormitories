@@ -33,5 +33,3 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect route after a user logs in
  * @type {string}
  */
-export const DEFAULT_ADMIN_LOGIN_REDIRECT = "/admin";
-export const DEFAULT_ORTHER_LOGIN_REDIRECT = "/home";

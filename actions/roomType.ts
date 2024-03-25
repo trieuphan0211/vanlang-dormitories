@@ -1,12 +1,12 @@
 "use server";
 
-import { createBranch, deleteBranch } from "@/data/branch";
 import {
   createRoomType,
   deleteRoomType,
   updateRoomType,
 } from "@/data/room-type";
 import { RoomTypeSchema } from "@/schema";
+import crypto from "crypto";
 import * as z from "zod";
 
 export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
@@ -15,11 +15,14 @@ export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
     return { error: "Invalid Values!" };
   }
   const { roomTypeName, members, description } = validateValue.data;
+  const token = "RT" + crypto.randomInt(100_000, 1_000_000).toString();
+  console.log(token);
   try {
-    const roomType = await createRoomType({
+    await createRoomType({
       name: roomTypeName,
       members: Number(members),
       description,
+      code: token,
     });
     return { success: "Room type is created!" };
   } catch (error) {
@@ -29,7 +32,7 @@ export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
 };
 export const removeRoomType = async (id: string) => {
   try {
-    const roomType = await deleteRoomType(id);
+    await deleteRoomType(id);
     console.log("RoomType is removed!");
     return { success: "Branch is removed!" };
   } catch (error) {

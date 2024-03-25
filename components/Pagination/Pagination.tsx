@@ -6,7 +6,6 @@ import {
   IoChevronDownCircleOutline,
   IoChevronUpCircleOutline,
 } from "react-icons/io5";
-import { MdCheckCircleOutline } from "react-icons/md";
 
 export const Pagination = ({ count }: { count: number }) => {
   const searchParams = useSearchParams();
@@ -14,7 +13,7 @@ export const Pagination = ({ count }: { count: number }) => {
   const { replace } = useRouter();
 
   const pageNumber =
-    Math.round(count / Number(searchParams.get("entries") || 10)) || 1;
+    Math.ceil(count / Number(searchParams.get("entries") || 10)) || 1;
   function handlePage(page?: string, entries?: string) {
     const params = new URLSearchParams(searchParams);
     if (page) {
@@ -126,16 +125,28 @@ export const Pagination = ({ count }: { count: number }) => {
               </Select.ScrollUpButton>
               <Select.Viewport className="p-[5px]">
                 <Select.Group>
-                  <Select.Item value="5">
+                  <Select.Item
+                    className="cursor-pointer px-2 hover:bg-gray"
+                    value="5"
+                  >
                     <Select.ItemText>5</Select.ItemText>
                   </Select.Item>
-                  <Select.Item value="10">
+                  <Select.Item
+                    className="cursor-pointer px-2 hover:bg-gray"
+                    value="10"
+                  >
                     <Select.ItemText>10</Select.ItemText>
                   </Select.Item>
-                  <Select.Item value="15">
+                  <Select.Item
+                    className="cursor-pointer px-2 hover:bg-gray"
+                    value="15"
+                  >
                     <Select.ItemText>15</Select.ItemText>
                   </Select.Item>
-                  <Select.Item value="20">
+                  <Select.Item
+                    className="cursor-pointer px-2 hover:bg-gray"
+                    value="20"
+                  >
                     <Select.ItemText>20</Select.ItemText>
                   </Select.Item>
                 </Select.Group>
@@ -144,7 +155,7 @@ export const Pagination = ({ count }: { count: number }) => {
           </Select.Portal>
         </Select.Root>
         <p className="font-medium">
-          Showing {searchParams.get("page") || 1} 0f {pageNumber} pages
+          Hiển thị {searchParams.get("page") || 1} trên {pageNumber} trang
         </p>
       </div>
     </div>

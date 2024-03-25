@@ -1,6 +1,11 @@
 "use server";
 
-import { createBranch, deleteBranch, updateBranch } from "@/data/branch";
+import {
+  createBranch,
+  deleteBranch,
+  getAllBranchs,
+  updateBranch,
+} from "@/data/branch";
 import { BranchSchema } from "@/schema";
 import * as z from "zod";
 
@@ -46,7 +51,7 @@ export const updateBranchById = async (
   const { name, address, numberFloors, description, image } =
     validateValue.data;
   try {
-    const branch = await updateBranch(id, {
+    await updateBranch(id, {
       name,
       address,
       floorNumber: Number(numberFloors),
@@ -57,5 +62,14 @@ export const updateBranchById = async (
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };
+  }
+};
+export const getBranchsAll = async () => {
+  try {
+    const branchs = await getAllBranchs();
+    return branchs;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 };

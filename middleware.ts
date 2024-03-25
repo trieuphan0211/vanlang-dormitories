@@ -1,10 +1,5 @@
 import authConfig from "@/auth.config";
-import {
-  DEFAULT_ORTHER_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  authRouters,
-  publicRoutes,
-} from "@/routes";
+import { apiAuthPrefix, authRouters, publicRoutes } from "@/routes";
 import NextAuth from "next-auth";
 
 const { auth } = NextAuth(authConfig);
@@ -20,7 +15,7 @@ export default auth(async (req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_ORTHER_LOGIN_REDIRECT, nextUrl));
+      return Response.redirect(new URL("/", nextUrl));
     }
     return;
   }

@@ -1,18 +1,28 @@
 "use client";
 import { addBranch } from "@/actions/branch";
+import { useAppDispatch } from "@/hooks/redux";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { readFile } from "@/lib/file";
 import { BranchSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
 import { IoAdd, IoClose } from "react-icons/io5";
 import * as z from "zod";
 
-export const AddNewItem = () => {
-  const [isPending, startTransition] = useTransition();
+export const AddNewItem = ({
+  isPending,
+  startTransition,
+}: {
+  isPending: boolean;
+  startTransition: Function;
+}) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState({
@@ -50,13 +60,26 @@ export const AddNewItem = () => {
     startTransition(() => {
       addBranch(value).then((res) => {
         if (res?.success) {
+          router.refresh();
           handleCloseModal();
-          alert("Add Branch Success");
-          document.location.reload();
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "success",
+                content: "Chi nhánh đã được thêm thành công!",
+              },
+            }),
+          );
         }
         if (res?.error) {
-          console.log(res.error);
-          alert("Add Branch Fail");
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "error",
+                content: "Có lỗi xảy ra! Vui lòng thử lại!",
+              },
+            }),
+          );
         }
       });
     });
@@ -73,7 +96,7 @@ export const AddNewItem = () => {
           className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
           <IoAdd className="text-2xl" />
-          Add Branch
+          Thêm
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -81,10 +104,10 @@ export const AddNewItem = () => {
           className="fixed inset-0 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow"
           onClick={handleCloseModal}
         />
-        <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
             <Dialog.Title className="font-medium text-black dark:text-white">
-              Add Branch
+              Thêm Chi nhánh
             </Dialog.Title>
           </div>
 
@@ -100,11 +123,11 @@ export const AddNewItem = () => {
                     },
                   )}
                 >
-                  Branch Name
+                  Tên Chi nhánh
                 </label>
                 <input
                   type="text"
-                  placeholder="Default Input"
+                  placeholder="Nhập tên chi nhánh"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -134,11 +157,11 @@ export const AddNewItem = () => {
                     },
                   )}
                 >
-                  Address
+                  Địa chỉ
                 </label>
                 <input
                   type="text"
-                  placeholder="Default Input"
+                  placeholder="Nhập địa chỉ chi nhánh"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -168,11 +191,11 @@ export const AddNewItem = () => {
                     },
                   )}
                 >
-                  Number Of Floors
+                  Số tầng
                 </label>
                 <input
                   type="number"
-                  placeholder="Default Input"
+                  placeholder="Nhập số tầng của chi nhánh"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -195,11 +218,11 @@ export const AddNewItem = () => {
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Description
+                  Mô tả
                 </label>
                 <textarea
                   rows={6}
-                  placeholder="Type your message"
+                  placeholder="Nhập mô tả chi nhánh ..."
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   {...register("description")}
                   disabled={isPending}
@@ -208,7 +231,7 @@ export const AddNewItem = () => {
               <div className="mb-6">
                 <div>
                   <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Image
+                    Hình ảnh
                   </label>
                 </div>
                 <div className="items-center justify-between lg:flex ">
@@ -224,7 +247,7 @@ export const AddNewItem = () => {
                       disabled={isPending}
                     >
                       <FiUpload className="text-base" />
-                      Upload Image
+                      Tải ảnh lên
                       <input
                         type="file"
                         className="absolute inset-0 h-full w-full  opacity-0"
@@ -276,7 +299,7 @@ export const AddNewItem = () => {
                   className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
                   aria-label="Close"
                 >
-                  Save
+                  Lưu
                 </button>
               </Dialog.Close>
             </div>

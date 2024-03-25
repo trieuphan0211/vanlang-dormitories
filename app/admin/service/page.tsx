@@ -5,7 +5,7 @@ import { SERVICES } from "@/types/services";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Services Managerment",
+  title: "Quản lý dịch vụ",
   description: "",
 };
 const ServicePage = async ({
@@ -28,7 +28,7 @@ const ServicePage = async ({
   const count = await getCountServices(query);
   return (
     <div>
-      <Breadcrumb pageName="Services Managerment" />
+      <Breadcrumb pageName="Quản lý dịch vụ" />
       <ServicesTable services={services} count={Number(count)} />
     </div>
   );

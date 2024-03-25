@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { BRAND } from "zod";
 
 interface Branch {
   name: string;
@@ -17,6 +16,20 @@ export const getBranchById = async (id: string) => {
       },
     });
     return branch;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const getAllBranchs = async () => {
+  try {
+    const branchs = await db.branch.findMany({
+      orderBy: [
+        {
+          createDate: "desc",
+        },
+      ],
+    });
+    return branchs;
   } catch (e) {
     console.error(e);
   }

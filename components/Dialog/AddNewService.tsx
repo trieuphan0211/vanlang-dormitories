@@ -1,9 +1,12 @@
 "use client";
 import { addService } from "@/actions/service";
+import { useAppDispatch } from "@/hooks/redux";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { ServiceSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { IoAdd } from "react-icons/io5";
@@ -12,6 +15,8 @@ import * as z from "zod";
 export const AddNewService = () => {
   const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -31,13 +36,26 @@ export const AddNewService = () => {
     startTransition(() => {
       addService(value).then((res) => {
         if (res?.success) {
+          router.refresh();
           handleCloseModal();
-          alert("Add service successfully");
-          document.location.reload();
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "success",
+                content: "Dịch vụ đã được thêm thành công!",
+              },
+            }),
+          );
         }
         if (res?.error) {
-          console.log(res.error);
-          alert("Add service failed");
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "error",
+                content: "Có lỗi xảy ra! Vui lòng thử lại sau!",
+              },
+            }),
+          );
         }
       });
     });
@@ -54,7 +72,7 @@ export const AddNewService = () => {
           className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
           <IoAdd className="text-2xl" />
-          Add Service
+          Thêm
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -62,10 +80,10 @@ export const AddNewService = () => {
           className="fixed inset-0 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow"
           onClick={handleCloseModal}
         />
-        <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+        <Dialog.Content className="fixed  left-[50%] top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
             <Dialog.Title className="font-medium text-black dark:text-white">
-              Add Service
+              Thêm dịch vụ
             </Dialog.Title>
           </div>
 
@@ -81,11 +99,11 @@ export const AddNewService = () => {
                     },
                   )}
                 >
-                  Service Name
+                  Tên dịch vụ
                 </label>
                 <input
                   type="text"
-                  placeholder="Default Input"
+                  placeholder="Nhập tên dịch vụ"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -115,11 +133,11 @@ export const AddNewService = () => {
                     },
                   )}
                 >
-                  Cost
+                  Chi phí
                 </label>
                 <input
                   type="number"
-                  placeholder="Default Input"
+                  placeholder="Nhập chi phí trên tháng"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -142,11 +160,11 @@ export const AddNewService = () => {
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Description
+                  Mô tả
                 </label>
                 <textarea
                   rows={6}
-                  placeholder="Type your message"
+                  placeholder="Nhập mô tả dịch vụ ..."
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   {...register("description")}
                   disabled={isPending}
@@ -160,7 +178,7 @@ export const AddNewService = () => {
                   className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
                   aria-label="Close"
                 >
-                  Save
+                  Lưu
                 </button>
               </Dialog.Close>
             </div>

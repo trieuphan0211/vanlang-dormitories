@@ -5,7 +5,7 @@ import { BRANCH } from "@/types/branch";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Branch Managerment",
+  title: "Quản lý chi nhánh",
   description: "",
 };
 
@@ -30,7 +30,7 @@ const BranchPage = async ({
 
   return (
     <div>
-      <Breadcrumb pageName="Branch Managerment" />
+      <Breadcrumb pageName="Quản lý chi nhánh" />
       <BranchTable branchs={branchs} count={Number(count)} />
     </div>
   );

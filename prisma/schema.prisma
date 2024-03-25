@@ -32,13 +32,13 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+// model Session {
+//   id           String   @id @default(cuid())
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
 
 enum UserRole {
   ADMIN
@@ -48,58 +48,30 @@ enum UserRole {
 }
 
 model User {
-  id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  role                  UserRole               @default(USER)
-  sessions              Session[]
-  isTwoFactorEnabled    Boolean                @default(false)
-  accounts              Account[]
-  twoFactorComfirmation TwoFactorComfirmation?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  signinTime    DateTime?
+  image         String?
+  role          UserRole  @default(USER)
+  // sessions           Session[]
+  accounts      Account[]
+  student       Student?
 }
 
-enum TypeToken {
-  EMAIL
-  PASSWORD
-}
-
-model VerificationToken {
-  identifier String    @id @default(cuid())
-  email      String
-  token      String    @unique
-  expires    DateTime
-  type       TypeToken @default(EMAIL)
-
-  @@unique([identifier, token])
-}
-
-model PasswordResetToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model TwoFactorToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
-
-  @@unique([email, token])
-}
-
-model TwoFactorComfirmation {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
+model Student {
+  id         String    @id @default(cuid())
+  email      String    @unique
+  user       User      @relation(fields: [email], references: [email])
+  fullName   String
+  major      String?
+  schoolYear Int?
+  brithday   DateTime?
+  gender     String?
+  address    String?
+  phone      String?
+  createDate DateTime  @default(now())
 }
 
 // Branch Dormitory
@@ -113,6 +85,7 @@ model Branch {
   service         Services[]
   ServiceOnBranch ServiceOnBranch[]
   createDate      DateTime          @default(now())
+  facilities      Facilities[]
 }
 
 model Services {
@@ -131,6 +104,36 @@ model RoomType {
   members     Int
   description String?
   createDate  DateTime @default(now())
+  code        String   @unique
+}
+
+model FacilitiesType {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  createDate  DateTime     @default(now())
+  code        String       @unique
+  facilities  Facilities[]
+}
+
+enum StatusFacilities {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  LIQUIDATION
+}
+
+model Facilities {
+  id                 String           @id @default(cuid())
+  name               String
+  description        String?
+  facilitiesTypeCode String
+  status             StatusFacilities @default(INACTIVE)
+  branchId           String?
+  code               String           @unique
+  branch             Branch?          @relation(fields: [branchId], references: [id])
+  facilitiesType     FacilitiesType   @relation(fields: [facilitiesTypeCode], references: [code], onDelete: Cascade)
+  createDate         DateTime         @default(now())
 }
 
 // Services + Branch

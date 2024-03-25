@@ -7,6 +7,7 @@ import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { MenuItem, MenuItemList } from "./MenuItem";
 import { list } from "postcss";
+import path from "path";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -64,50 +65,75 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const menu = [
     {
       icon: "/images/header-icon/dashboard.svg",
-      title: "Dashboard",
+      title: "Bảng điều khiển",
       href: "/admin",
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Branch",
-      href: "/admin/branch",
+      title: "Quản lý thông tin",
+
+      list: [
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Chi nhánh",
+          href: "/admin/branch",
+        },
+        {
+          icon: "/images/header-icon/service.svg",
+          title: "Dịch vụ",
+          href: "/admin/service",
+        },
+        {
+          icon: "/images/header-icon/room-type.svg",
+          title: "Loại phòng",
+          href: "/admin/room-type",
+        },
+      ],
     },
     {
-      icon: "/images/header-icon/service.svg",
-      title: "Service",
-      href: "/admin/service",
+      icon: "/images/header-icon/branch.svg",
+      title: "Người dùng",
+      list: [
+        {
+          icon: "/images/header-icon/student.svg",
+          title: "Sinh viên",
+          href: "/admin/student",
+        },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Người dùng",
+          href: "/admin/user",
+        },
+      ],
     },
     {
-      icon: "/images/header-icon/room-type.svg",
-      title: "Room Type",
-      href: "/admin/room-type",
+      icon: "/images/header-icon/branch.svg",
+      title: "Cơ sở vật chất",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Cơ sở vật chất",
+          href: "/admin/facilities",
+        },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Loại cơ sở vật chất",
+          href: "/admin/facilities-type",
+        },
+      ],
     },
-    {
-      icon: "/images/header-icon/student.svg",
-      title: "Student",
-      href: "/admin/student",
-    },
+
     {
       icon: "/images/header-icon/user.svg",
-      title: "User",
-      href: "/admin/user",
-    },
-    {
-      icon: "/images/header-icon/user.svg",
-      title: "Facilities",
-      href: "/admin/facilities",
-    },
-    {
-      icon: "/images/header-icon/user.svg",
-      title: "Facilities Type",
-      href: "/admin/facilities-type",
+      title: "QR Code",
+      href: "/admin/qr-code",
     },
   ];
   // End: Handle Logic
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-1 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -154,16 +180,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
               {menu.map((item, index) => {
-                // if (item.list) {
-                //   return (
-                //     <MenuItemList
-                //       icon={item.icon}
-                //       title={item.title}
-                //       path={item.path}
-                //       list={item.list}
-                //     />
-                //   );
-                // }
+                if (item.list) {
+                  return (
+                    <MenuItemList
+                      icon={item.icon}
+                      title={item.title}
+                      list={item.list}
+                      index={index}
+                    />
+                  );
+                }
                 return (
                   <li key={index}>
                     <MenuItem

@@ -1,18 +1,20 @@
 "use client";
-import { addBranch } from "@/actions/branch";
 import { addRoomType } from "@/actions/roomType";
-import { readFile } from "@/lib/file";
-import { BranchSchema, RoomTypeSchema } from "@/schema";
+import { useAppDispatch } from "@/hooks/redux";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
+import { RoomTypeSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { FiUpload } from "react-icons/fi";
-import { IoAdd, IoClose } from "react-icons/io5";
+import { IoAdd } from "react-icons/io5";
 import * as z from "zod";
 
 export const AddNewRoomType = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
 
@@ -30,17 +32,29 @@ export const AddNewRoomType = () => {
     },
   });
   const onSubmit = (value: z.infer<typeof RoomTypeSchema>) => {
-    console.log(value);
     startTransition(() => {
       addRoomType(value).then((res) => {
         if (res?.success) {
+          router.refresh();
           handleCloseModal();
-          alert("Add room type successfully");
-          document.location.reload();
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "success",
+                content: "Loại phòng đã được thêm thành công!",
+              },
+            }),
+          );
         }
         if (res?.error) {
-          console.log(res.error);
-          alert("Add room type failed");
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "error",
+                content: "Đã xảy ra lỗi! Vui lòng thử lại sau!",
+              },
+            }),
+          );
         }
       });
     });
@@ -57,7 +71,7 @@ export const AddNewRoomType = () => {
           className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
         >
           <IoAdd className="text-2xl" />
-          Add Room Type
+          Thêm
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -65,10 +79,10 @@ export const AddNewRoomType = () => {
           className="fixed inset-0 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow"
           onClick={handleCloseModal}
         />
-        <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+        <Dialog.Content className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
             <Dialog.Title className="font-medium text-black dark:text-white">
-              Add Room Type
+              Thêm loại phòng
             </Dialog.Title>
           </div>
 
@@ -84,11 +98,11 @@ export const AddNewRoomType = () => {
                     },
                   )}
                 >
-                  Room Type Name
+                  Tên loại phòng
                 </label>
                 <input
                   type="text"
-                  placeholder="Default Input"
+                  placeholder="Nhập tên loại phòng"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -118,11 +132,11 @@ export const AddNewRoomType = () => {
                     },
                   )}
                 >
-                  Number of members
+                  Số thành viên
                 </label>
                 <input
                   type="number"
-                  placeholder="Default Input"
+                  placeholder="Nhập số thành viên"
                   className={clsx(
                     "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
                     {
@@ -145,11 +159,11 @@ export const AddNewRoomType = () => {
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Description
+                  Mô tả
                 </label>
                 <textarea
                   rows={6}
-                  placeholder="Type your message"
+                  placeholder="Nhập mô tả loại phòng ..."
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   {...register("description")}
                   disabled={isPending}
@@ -157,23 +171,15 @@ export const AddNewRoomType = () => {
               </div>
             </div>
             <div className="border-t border-stroke px-6.5 py-4">
-              <Dialog.Close className="w-full">
-                <button
-                  disabled={isPending}
-                  className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
-                  aria-label="Close"
-                >
-                  Save
-                </button>
-              </Dialog.Close>
+              <button
+                disabled={isPending}
+                className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
+                aria-label="Close"
+              >
+                Lưu
+              </button>
             </div>
           </form>
-          <Dialog.Close asChild>
-            <button
-              className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close"
-            ></button>
-          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

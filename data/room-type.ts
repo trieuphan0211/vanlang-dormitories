@@ -4,6 +4,7 @@ interface ROOMTYPE {
   name: string;
   members: number;
   description: string;
+  code: string;
 }
 export const getRoomTypeById = async (id: string) => {
   try {
@@ -39,6 +40,11 @@ export const getFilterRoomTypes = async (
           },
           {
             description: {
+              contains: query,
+            },
+          },
+          {
+            code: {
               contains: query,
             },
           },
@@ -121,7 +127,14 @@ export const deleteRoomType = async (id: string) => {
   }
 };
 
-export const updateRoomType = async (id: string, fields: ROOMTYPE) => {
+export const updateRoomType = async (
+  id: string,
+  fields: {
+    name: string;
+    members: number;
+    description: string;
+  },
+) => {
   try {
     const roomTypes = await db.roomType.update({ where: { id }, data: fields });
     return roomTypes;

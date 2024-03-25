@@ -24,7 +24,20 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile }) {
+      const curentUser = await db.user
+        .findUniqueOrThrow({
+          where: { id: user.id || "" },
+        })
+        .then((res) => res)
+        .catch((err) => null);
+      console.log("curentUser: ", curentUser);
+      if (!curentUser) return true;
+      if (!(account?.provider === "azure-ad")) return true;
+      await db.user.update({
+        where: { id: user.id },
+        data: { signinTime: new Date() },
+      });
       return true;
     },
     async redirect({ url, baseUrl }) {

@@ -15,13 +15,8 @@ interface MenuItemProps {
 interface MenuItemListProps {
   icon: string;
   title: string;
-  path: string;
-  list: SubItems[];
+  list: MenuItemProps[];
   index: number;
-}
-interface SubItems {
-  title: string;
-  href: string;
 }
 
 export const MenuItem = (item: MenuItemProps) => {
@@ -55,7 +50,10 @@ export const MenuItemList = (item: MenuItemListProps) => {
   );
   return (
     <SidebarLinkGroup
-      activeCondition={pathname.includes(item.path)}
+      activeCondition={item.list
+        .map((i) => i.href)
+        .join(",")
+        .includes(pathname)}
       key={item.index}
     >
       {(handleClick, open) => {
@@ -66,7 +64,10 @@ export const MenuItemList = (item: MenuItemListProps) => {
               className={clsx(
                 "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4",
                 {
-                  "bg-graydark dark:bg-meta-4": pathname.includes(item.path),
+                  "bg-graydark dark:bg-meta-4": item.list
+                    .map((i) => i.href)
+                    .join(",")
+                    .includes(pathname),
                 },
               )}
               onClick={(e) => {
@@ -128,7 +129,7 @@ export const MenuItemList = (item: MenuItemListProps) => {
                 {item.list.map((subItem, index) => (
                   <li key={index}>
                     <Link
-                      href={item.path + subItem.href}
+                      href={subItem.href}
                       className={clsx(
                         "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white",
                         {
@@ -136,6 +137,13 @@ export const MenuItemList = (item: MenuItemListProps) => {
                         },
                       )}
                     >
+                      <Image
+                        className="!text-bodydark1"
+                        src={subItem.icon}
+                        alt={subItem.title}
+                        width={18}
+                        height={18}
+                      />
                       {subItem.title}
                     </Link>
                   </li>
