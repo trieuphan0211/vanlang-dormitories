@@ -30,6 +30,7 @@ export const MenuItem = (item: MenuItemProps) => {
           "bg-graydark dark:bg-meta-4": pathname === item.href,
         },
       )}
+      key={item.title}
     >
       <Image
         className="!text-bodydark1"

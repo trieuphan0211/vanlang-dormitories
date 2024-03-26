@@ -133,8 +133,8 @@ export const createFacilitiesType = async (fields: FACILITIESTYPE) => {
 
 export const deleteFacilitiesType = async (id: string) => {
   try {
-    const branch = await db.facilitiesType.delete({ where: { id } });
-    return branch;
+    const facilitiesType = await db.facilitiesType.delete({ where: { id } });
+    return facilitiesType;
   } catch (e) {
     console.error(e);
   }

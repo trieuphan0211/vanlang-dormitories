@@ -120,8 +120,8 @@ export const createRoomType = async (fields: ROOMTYPE) => {
 };
 export const deleteRoomType = async (id: string) => {
   try {
-    const branch = await db.roomType.delete({ where: { id } });
-    return branch;
+    const roomType = await db.roomType.delete({ where: { id } });
+    return roomType;
   } catch (e) {
     console.error(e);
   }
@@ -136,8 +136,8 @@ export const updateRoomType = async (
   },
 ) => {
   try {
-    const roomTypes = await db.roomType.update({ where: { id }, data: fields });
-    return roomTypes;
+    const roomType = await db.roomType.update({ where: { id }, data: fields });
+    return roomType;
   } catch (e) {
     console.error(e);
   }

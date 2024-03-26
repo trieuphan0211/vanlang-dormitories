@@ -120,13 +120,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           title: "Loại cơ sở vật chất",
           href: "/admin/facilities-type",
         },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Bảo trì",
+          href: "/admin/maintenance",
+        },
       ],
     },
-
     {
-      icon: "/images/header-icon/user.svg",
-      title: "QR Code",
-      href: "/admin/qr-code",
+      icon: "/images/header-icon/branch.svg",
+      title: "Dịch vụ",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Đăng ký Ký túc xá",
+          href: "/admin/register-dormitory",
+        },
+      ],
     },
   ];
   // End: Handle Logic

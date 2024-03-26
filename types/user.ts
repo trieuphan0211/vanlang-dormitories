@@ -6,4 +6,5 @@ export type USER = {
   name: string;
   role: UserRole;
   image: string;
+  signinTime: Date;
 };

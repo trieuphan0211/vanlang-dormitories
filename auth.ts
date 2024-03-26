@@ -21,6 +21,19 @@ export const {
         where: { id: user.id },
         data: { emailVerified: new Date() },
       });
+      const curentStudent = await db.student.findUnique({
+        where: {
+          email: user.email || "",
+        },
+      });
+      if (curentStudent) return;
+      await db.student.create({
+        data: {
+          email: user.email || "",
+          fullName: user.name || "",
+          createDate: new Date(),
+        },
+      });
     },
   },
   callbacks: {
@@ -31,7 +44,6 @@ export const {
         })
         .then((res) => res)
         .catch((err) => null);
-      console.log("curentUser: ", curentUser);
       if (!curentUser) return true;
       if (!(account?.provider === "azure-ad")) return true;
       await db.user.update({

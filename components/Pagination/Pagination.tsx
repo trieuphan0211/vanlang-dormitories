@@ -127,27 +127,28 @@ export const Pagination = ({ count }: { count: number }) => {
                 <Select.Group>
                   <Select.Item
                     className="cursor-pointer px-2 hover:bg-gray"
-                    value="5"
-                  >
-                    <Select.ItemText>5</Select.ItemText>
-                  </Select.Item>
-                  <Select.Item
-                    className="cursor-pointer px-2 hover:bg-gray"
                     value="10"
                   >
                     <Select.ItemText>10</Select.ItemText>
                   </Select.Item>
+
                   <Select.Item
                     className="cursor-pointer px-2 hover:bg-gray"
-                    value="15"
+                    value="25"
                   >
-                    <Select.ItemText>15</Select.ItemText>
+                    <Select.ItemText>25</Select.ItemText>
                   </Select.Item>
                   <Select.Item
                     className="cursor-pointer px-2 hover:bg-gray"
-                    value="20"
+                    value="50"
                   >
-                    <Select.ItemText>20</Select.ItemText>
+                    <Select.ItemText>50</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item
+                    className="cursor-pointer px-2 hover:bg-gray"
+                    value="100"
+                  >
+                    <Select.ItemText>100</Select.ItemText>
                   </Select.Item>
                 </Select.Group>
               </Select.Viewport>

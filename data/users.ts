@@ -44,7 +44,7 @@ export const getFilterUsers = async (
   entries: number,
 ) => {
   try {
-    const services = await db.user.findMany({
+    const users = await db.user.findMany({
       orderBy: [
         {
           emailVerified: "desc",
@@ -56,6 +56,7 @@ export const getFilterUsers = async (
         name: true,
         role: true,
         image: true,
+        signinTime: true,
       },
       where: {
         OR: [
@@ -74,7 +75,7 @@ export const getFilterUsers = async (
       skip: (currentPage - 1) * entries,
       take: entries,
     });
-    return services;
+    return users;
   } catch (e) {
     console.error(e);
   }
@@ -125,11 +126,11 @@ export const updateUser = async (
   },
 ) => {
   try {
-    const facilitiesType = await db.user.update({
+    const user = await db.user.update({
       where: { id },
       data: fields,
     });
-    return facilitiesType;
+    return user;
   } catch (e) {
     console.error(e);
   }

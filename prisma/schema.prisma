@@ -57,13 +57,11 @@ model User {
   role          UserRole  @default(USER)
   // sessions           Session[]
   accounts      Account[]
-  student       Student?
 }
 
 model Student {
   id         String    @id @default(cuid())
   email      String    @unique
-  user       User      @relation(fields: [email], references: [email])
   fullName   String
   major      String?
   schoolYear Int?
@@ -72,6 +70,7 @@ model Student {
   address    String?
   phone      String?
   createDate DateTime  @default(now())
+  userId     String?
 }
 
 // Branch Dormitory

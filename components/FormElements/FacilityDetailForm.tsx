@@ -45,7 +45,16 @@ export const FacilityDetailForm = ({
       description: facilities?.description || "",
       branchId: facilities?.branchId || "",
       facilitiesTypeCode: facilities?.facilitiesTypeCode || "",
+      status: facilities?.status,
+      code: facilities?.code,
     },
+  });
+  console.log({
+    name: facilities?.name || "",
+    description: facilities?.description || "",
+    branchId: facilities?.branchId || "",
+    facilitiesTypeCode: facilities?.facilitiesTypeCode || "",
+    status: facilities?.status,
   });
   const onSubmit = (value: z.infer<typeof FacilitiesSchema>) => {
     console.log(value);
@@ -256,41 +265,18 @@ export const FacilityDetailForm = ({
           >
             Loại cơ sở vật chất
           </label>
-          <Select.Root
-            disabled={type === "detail" ? true : null || isPending}
-            defaultValue={facilities.facilitiesTypeCode}
-            onValueChange={(e) => setValue("facilitiesTypeCode", e)}
-          >
-            <Select.Trigger
-              className="flex w-full items-center justify-between rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              aria-label="branchId"
-            >
-              <Select.Value placeholder="Choise Facilities Type" />
-              <Select.Icon className="text-black">
-                <IoChevronDownCircleOutline />
-              </Select.Icon>
-            </Select.Trigger>
-            <Select.Portal>
-              <Select.Content className="z-10 w-full overflow-hidden rounded-md bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-                <Select.ScrollUpButton className="flex  cursor-default items-center justify-center bg-white text-black">
-                  <IoChevronUpCircleOutline />
-                </Select.ScrollUpButton>
-                <Select.Viewport className=" p-[5px]">
-                  <Select.Group className="z-10">
-                    {facilitiesType.map((type, index) => (
-                      <Select.Item
-                        value={type.code}
-                        className="px-5 py-3 hover:cursor-pointer hover:bg-gray"
-                        key={index}
-                      >
-                        <Select.ItemText>{type.name}</Select.ItemText>
-                      </Select.Item>
-                    ))}
-                  </Select.Group>
-                </Select.Viewport>
-              </Select.Content>
-            </Select.Portal>
-          </Select.Root>
+          <input
+            className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            type="text"
+            id="branchName"
+            placeholder="Nhập tên sơ sở vật chất"
+            value={
+              facilities.facilitiesType?.code +
+              " - " +
+              facilities.facilitiesType?.name
+            }
+            disabled={true}
+          />
           <p
             className={clsx(
               `font-smblock mt-1 text-sm text-black dark:text-white`,

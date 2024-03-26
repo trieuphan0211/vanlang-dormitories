@@ -25,7 +25,7 @@ export default function AdminLayout({
   }, []);
   if (session.data?.user?.role !== "USER") {
     return (
-      <main className="dark:bg-boxdark-2 dark:text-bodydark">
+      <main className=" dark:bg-boxdark-2 dark:text-bodydark">
         {loading ? <Loader /> : <DefaultLayout>{children}</DefaultLayout>}
         <Alert />
 

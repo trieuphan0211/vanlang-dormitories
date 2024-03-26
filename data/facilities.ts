@@ -32,6 +32,7 @@ export const getFacilitiesById = async (id: string) => {
       },
       include: {
         branch: true,
+        facilitiesType: true,
       },
     });
     return facilities;
@@ -169,8 +170,10 @@ export const updateFacilities = async (
     description?: string;
     status?: StatusFacilities;
     code?: string;
+    createDate?: Date;
   },
 ) => {
+  console.log("fields: ", fields);
   try {
     const facilities = await db.facilities.update({
       where: { id },

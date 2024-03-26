@@ -4,6 +4,7 @@ import { removeFacilities } from "@/actions/facilities";
 import { removeFacilitiesType } from "@/actions/facilitiesType";
 import { removeRoomType } from "@/actions/roomType";
 import { removeService } from "@/actions/service";
+import { removeStudent } from "@/actions/student";
 import { removeUser } from "@/actions/user";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
@@ -20,6 +21,7 @@ export const RemoveItem = ({
   facilitiesTypeId,
   facilityId,
   userId,
+  studentId,
   title,
 }: {
   isPending: boolean;
@@ -30,6 +32,7 @@ export const RemoveItem = ({
   facilitiesTypeId?: string;
   facilityId?: string;
   userId?: string;
+  studentId?: string;
   title?: string;
 }) => {
   const router = useRouter();
@@ -215,6 +218,36 @@ export const RemoveItem = ({
           }
         });
       }
+      if (studentId) {
+        console.log(studentId);
+        removeStudent(studentId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setOpen(false);
+            // Show alert
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Sinh viên đã được xóa thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Xóa sinh viên thất bại!",
+                },
+              }),
+            );
+          }
+        });
+      }
     });
   };
   const handleCloseModal = () => {
@@ -285,6 +318,7 @@ export const RemoveItem = ({
                 {facilitiesTypeId && "Có, xóa loại cơ sở vật chất"}
                 {facilityId && "Có, xóa cơ sở vật chất"}
                 {userId && "Có, xóa người dùng"}
+                {studentId && "Có, xóa sinh viên"}
               </button>
             </AlertDialog.Action>
           </div>

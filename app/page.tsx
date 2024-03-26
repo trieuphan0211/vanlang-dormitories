@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import MaintenancePage from "./admin/maintenance/page";
 
 export default async function Home() {
   const session = await auth();
@@ -26,6 +27,7 @@ export default async function Home() {
       >
         Admin
       </Link>
+      <MaintenancePage />
     </main>
   );
 }

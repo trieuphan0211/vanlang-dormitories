@@ -30,6 +30,7 @@ export const addFacilities = async (
       description,
       facilitiesTypeCode,
       branchId: branchId || undefined,
+
       code: genetateCode + "-" + index,
     }),
   );
@@ -74,6 +75,7 @@ export const updateFacilityById = async (
       description,
       status,
       code,
+      createDate: new Date(),
     });
     if (response) {
       return { success: "facilities is updated!" };

@@ -3,11 +3,15 @@ import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
 import { FACILITIES } from "@/types/facilities";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import { FaRegEdit } from "react-icons/fa";
+import { useState, useTransition } from "react";
+import { FaCheck, FaRegEdit } from "react-icons/fa";
 import { AddNewFacilities } from "../Dialog/AddNewFacilities";
 import { RemoveItem } from "../Dialog/RemoveItem";
+import * as Checkbox from "@radix-ui/react-checkbox";
 import clsx from "clsx";
+import { useAppDispatch } from "@/hooks/redux";
+import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
+import { FaQrcode } from "react-icons/fa6";
 
 export const FacilitiesTable = ({
   facilities,
@@ -18,6 +22,12 @@ export const FacilitiesTable = ({
 }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [code, setCode] = useState<FACILITIES[]>([]);
+  const getQrCode = () => {
+    dispatch(qrManagerActions.setQrCode({ qrList: code }));
+    router.push("facilities/qr-code");
+  };
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
@@ -27,10 +37,38 @@ export const FacilitiesTable = ({
           startTransition={startTransition}
         />
       </div>
+      <div className="my-3 border-t-[1px] border-graydark"></div>
+      <div className="mb-5 flex w-full gap-3">
+        <button
+          onClick={getQrCode}
+          disabled={code.length === 0}
+          className="inline-flex items-center justify-center gap-2 text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 disabled:bg-[rgba(0,0,0,0.5)] lg:px-8 xl:px-10"
+        >
+          <FaQrcode />
+          Tạo QR
+        </button>
+      </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="px-4 py-4 font-medium text-black dark:text-white">
+                {" "}
+                <Checkbox.Root
+                  className=" flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-switcher outline-none "
+                  onCheckedChange={(e) => {
+                    if (e) {
+                      setCode([...facilities]);
+                    } else {
+                      setCode([]);
+                    }
+                  }}
+                >
+                  <Checkbox.Indicator className="">
+                    <FaCheck />
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
+              </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 #
               </th>
@@ -59,6 +97,25 @@ export const FacilitiesTable = ({
               return (
                 <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <Checkbox.Root
+                      className=" flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-switcher outline-none "
+                      onCheckedChange={(e) => {
+                        if (e) {
+                          setCode([...code, facility]);
+                        } else {
+                          setCode(
+                            code.filter((item) => item.code !== facility.code),
+                          );
+                        }
+                      }}
+                      checked={code.some((item) => item.code === facility.code)}
+                    >
+                      <Checkbox.Indicator className="">
+                        <FaCheck />
+                      </Checkbox.Indicator>
+                    </Checkbox.Root>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{key + 1}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -74,7 +131,7 @@ export const FacilitiesTable = ({
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p
                       className={clsx(
-                        "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium",
+                        "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
                         {
                           "bg-success text-success":
                             facility.status === "ACTIVE",

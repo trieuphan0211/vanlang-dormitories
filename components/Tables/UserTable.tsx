@@ -23,7 +23,7 @@ export const UserTable = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const sesion = useSession();
+  console.log(users);
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
@@ -48,6 +48,9 @@ export const UserTable = ({
                 Quyền
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
+                Lần truy cập cuối
+              </th>
+              <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
             </tr>
@@ -57,14 +60,13 @@ export const UserTable = ({
               <tr
                 key={key}
                 className={clsx("", {
-                  "bg-green-100 ": user.id === sesion.data?.user.id,
+                  "bg-green-100 ": user.id === currentUserId,
                 })}
               >
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={clsx("text-black dark:text-white", {
-                      "font-medium text-green-500":
-                        user.id === sesion.data?.user.id,
+                      "font-medium text-green-500": user.id === currentUserId,
                     })}
                   >
                     {key + 1}
@@ -74,8 +76,7 @@ export const UserTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={clsx("text-black dark:text-white", {
-                      "font-medium text-green-500":
-                        user.id === sesion.data?.user.id,
+                      "font-medium text-green-500": user.id === currentUserId,
                     })}
                   >
                     {user.name}
@@ -85,8 +86,7 @@ export const UserTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={clsx("text-black dark:text-white", {
-                      "font-medium text-green-500":
-                        user.id === sesion.data?.user.id,
+                      "font-medium text-green-500": user.id === currentUserId,
                     })}
                   >
                     {user.email}
@@ -95,14 +95,20 @@ export const UserTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={clsx("text-black dark:text-white", {
-                      "font-medium text-green-500":
-                        user.id === sesion.data?.user.id,
+                      "font-medium text-green-500": user.id === currentUserId,
                     })}
                   >
                     {user.role === "ADMIN" && "Quản trị viên"}
                     {user.role === "DIRECTOR" && "Giám đốc"}
                     {user.role === "STAFF" && "Nhân viên"}
                     {user.role === "USER" && "Người dùng"}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {user?.signinTime
+                      ? new Date(user.signinTime).toLocaleString()
+                      : "Chưa truy cập"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

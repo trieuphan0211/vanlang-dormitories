@@ -1,8 +1,10 @@
 import { combineReducers, configureStore, Tuple } from "@reduxjs/toolkit";
 import { alertManagerReducer } from "./features/alert/alert-slice";
+import { qrManagerReducer } from "./features/qr-code/qr-slice";
 
 const rootReducer = combineReducers({
   alertManagerReducer,
+  qrManagerReducer,
 });
 
 export const makeStore = () => {
