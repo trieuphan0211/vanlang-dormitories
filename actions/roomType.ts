@@ -21,7 +21,7 @@ export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
     await createRoomType({
       name: roomTypeName,
       members: Number(members),
-      description,
+      description: description || "",
       code: token,
     });
     return { success: "Room type is created!" };
@@ -54,7 +54,7 @@ export const updateRoomTypeById = async (
     const branch = await updateRoomType(id, {
       name: roomTypeName,
       members: Number(members),
-      description,
+      description: description || "",
     });
     return { success: "Branch is updated!" };
   } catch (error) {

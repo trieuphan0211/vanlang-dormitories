@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { SigninSchema } from "./schema";
+// import { SigninSchema } from "./schema";
 import { getUserByEmail } from "@/data/users";
 import bcrypt from "bcryptjs";
 import AzureAd from "next-auth/providers/azure-ad";

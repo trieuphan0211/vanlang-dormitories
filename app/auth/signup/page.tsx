@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { SignupForm } from "@/components/FormElements/signup-form";
+// import { SignupForm } from "@/components/FormElements/signup-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -177,7 +177,7 @@ const SignUp: React.FC = () => {
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign Up to VanlangDorms
               </h2>
-              <SignupForm />
+              {/* <SignupForm /> */}
             </div>
           </div>
         </div>

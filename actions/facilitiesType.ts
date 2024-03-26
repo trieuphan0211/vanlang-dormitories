@@ -32,7 +32,7 @@ export const addFacilitiesType = async (
   try {
     await createFacilitiesType({
       name: facilitesTypeName,
-      description,
+      description: description || "",
       code: token,
     });
     return { success: "Facilities Type is created!" };
@@ -65,7 +65,7 @@ export const updateFacilitiesTypeById = async (
   try {
     const branch = await updateFacilitiesType(id, {
       name: facilitesTypeName,
-      description,
+      description: description || "",
     });
     return { success: "Facilities Type is updated!" };
   } catch (error) {
