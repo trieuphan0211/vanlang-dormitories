@@ -55,7 +55,6 @@ export const MenuItemList = (item: MenuItemListProps) => {
         .map((i) => i.href)
         .join(",")
         .includes(pathname)}
-      key={item.index}
     >
       {(handleClick, open) => {
         return (

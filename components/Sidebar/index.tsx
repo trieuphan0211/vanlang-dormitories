@@ -192,12 +192,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {menu.map((item, index) => {
                 if (item.list) {
                   return (
-                    <MenuItemList
-                      icon={item.icon}
-                      title={item.title}
-                      list={item.list}
-                      index={index}
-                    />
+                    <div key={index}>
+                      <MenuItemList
+                        icon={item.icon}
+                        title={item.title}
+                        list={item.list}
+                        index={index}
+                      />
+                    </div>
                   );
                 }
                 return (
