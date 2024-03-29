@@ -1,42 +1,48 @@
-"use client";
-import { QrReader } from "@/components/scanner/Scanner";
-import { Result } from "@zxing/library";
-import { useState } from "react";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { MaintenancesTable } from "@/components/Tables/MaintenancesTable";
+import {
+  getCountMaintenances,
+  getFilterMaintenances,
+} from "@/data/maintenance";
+import { MAINTENNANCES } from "@/types/maintenances";
+import { Metadata } from "next";
 
-// export const metadata: Metadata = {
-//   title: "Quản lý bảo trì",
-//   description: "",
-// };
+export const metadata: Metadata = {
+  title: "Quản lý bảo trì",
+  description: "",
+};
 
-const MaintenancePage = () => {
-  const [data, setData] = useState<String>("");
-  const [open, setOpen] = useState(false);
-
+const MaintenancePage = async ({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+    entries?: string;
+  };
+}) => {
+  const query = searchParams?.query?.trim() || "";
+  const currentPage = Number(searchParams?.page) || 1;
+  const entries = Number(searchParams?.entries) || 10;
+  const maintenances = (await getFilterMaintenances(
+    query,
+    currentPage,
+    entries,
+  )) as MAINTENNANCES[];
+  const count = await getCountMaintenances(query);
   return (
     <div>
-      {open && (
-        <QrReader
-          onResult={(
-            result: Result | undefined | null,
-            error: Error | undefined | null,
-          ) => {
-            if (!!result) {
-              if (Object.keys(result).length > 0) {
-                setData(result.getText());
-              }
-            }
-
-            if (!!error) {
-            }
-          }}
-          scanDelay={1000}
-          // style={{ width: "100%" }}
-        />
-      )}
-
-      <p>{data}</p>
-      <button onClick={() => setOpen(!open)}>OPEN</button>
+      <Breadcrumb pageName="Quản lý bảo trì" />
+      <MaintenancesTable maintenances={maintenances} count={Number(count)} />
     </div>
+    // <div>
+    //   {open && (
+    //
+    //   )}
+
+    //   <p>{data}</p>
+    //   <button onClick={() => setOpen(!open)}>OPEN</button>
+    // </div>
   );
 };
 

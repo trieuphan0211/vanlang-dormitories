@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/css/style.css";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
 import { StoreProvider } from "@/app/StoreProvider";
+import { auth } from "@/auth";
+import "@/css/style.css";
+import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +26,9 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <StoreProvider>
         <html lang="en">
-          <body className={`${inter.className} h-screen w-screen`}>
+          <body
+            className={`${inter.className} h-screen w-screen overflow-x-hidden`}
+          >
             {children}
           </body>
         </html>

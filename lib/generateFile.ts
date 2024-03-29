@@ -1,6 +1,6 @@
 "use server";
 import { Document, ImageRun, Packer, Paragraph, TextRun } from "docx";
-export const generateFile = (qrList?: Array<Promise<any>>) => {
+export const generateFile = async (qrList?: Array<Promise<any>>) => {
   const img: ImageRun[] = [];
   const images = qrList?.map(async (qr) => {
     qr.then((res) => {
@@ -15,7 +15,6 @@ export const generateFile = (qrList?: Array<Promise<any>>) => {
       );
     });
   });
-  console.log(images);
   const doc = new Document({
     sections: [
       {
@@ -30,7 +29,7 @@ export const generateFile = (qrList?: Array<Promise<any>>) => {
   });
 
   // Used to export the file into a .docx file
-  return Packer.toBase64String(doc).then((string) => {
+  return await Packer.toBase64String(doc).then((string) => {
     return string;
   });
 };

@@ -52,9 +52,6 @@ export const {
       });
       return true;
     },
-    async redirect({ url, baseUrl }) {
-      return baseUrl;
-    },
     async session({ session, token }) {
       if (session.user) {
         if (token.sub) {

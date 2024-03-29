@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Alert } from "@/components/common/Alert";
 import { useAppSelector } from "@/hooks/redux";
 import { alertSeletor } from "@/lib/features/alert/alert-selector";
+import NotFound from "../not-found";
 
 export default function AdminLayout({
   children,
@@ -37,11 +38,5 @@ export default function AdminLayout({
       </main>
     );
   }
-  return (
-    <div>
-      <Link href="/auth/signin">
-        <button>Back to Sign in</button>
-      </Link>
-    </div>
-  );
+  return <NotFound />;
 }

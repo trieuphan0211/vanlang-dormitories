@@ -14,9 +14,6 @@ export default auth(async (req) => {
   }
 
   if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL("/", nextUrl));
-    }
     return;
   }
 

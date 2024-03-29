@@ -1,4 +1,4 @@
-import { StatusFacilities, UserRole } from "@prisma/client";
+import { StatusFacilities, StatusMaintenance, UserRole } from "@prisma/client";
 import * as z from "zod";
 
 // Branch Schema
@@ -105,6 +105,14 @@ export const FacilitiesTypeSchema = z.object({
     .min(1, "Tên loại cơ sở vật chất không được để trống"),
   description: z.optional(z.string()),
   code: z.optional(z.string()),
+});
+
+export const MaintenanceSchema = z.object({
+  code: z.string().min(1, "Mã bảo trì không được để trống"),
+  description: z.optional(z.string()),
+  startDate: z.optional(z.date()),
+  endDate: z.optional(z.date()),
+  status: z.enum([StatusMaintenance.FINISHED, StatusMaintenance.INPROGRESS]),
 });
 
 export const ServiceSchema = z

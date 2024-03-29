@@ -133,6 +133,25 @@ model Facilities {
   branch             Branch?          @relation(fields: [branchId], references: [id])
   facilitiesType     FacilitiesType   @relation(fields: [facilitiesTypeCode], references: [code], onDelete: Cascade)
   createDate         DateTime         @default(now())
+  maintenanceId      String?
+  maintenance        Maintenance?     @relation(fields: [maintenanceId], references: [id])
+}
+
+// Maintenance
+enum StatusMaintenance {
+  INPROGRESS
+  FINISHED
+}
+
+model Maintenance {
+  id          String            @id @default(cuid())
+  code        String            @unique
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  facilities  Facilities[]
+  status      StatusMaintenance @default(INPROGRESS)
+  createDate  DateTime          @default(now())
 }
 
 // Services + Branch

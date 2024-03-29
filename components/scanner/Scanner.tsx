@@ -12,13 +12,12 @@ export const QrReader = ({
   onResult,
   videoId,
 }: QrReaderProps) => {
-  const reader = useQrReader({
+  useQrReader({
     constraints,
     scanDelay,
     onResult,
     videoId,
   });
-
   return (
     <section className={`h-[400px] w-[400px]`} style={containerStyle}>
       <div
@@ -95,5 +94,5 @@ QrReader.defaultProps = {
     facingMode: "environment",
   },
   videoId: "video",
-  scanDelay: 500,
+  scanDelay: 2000,
 };

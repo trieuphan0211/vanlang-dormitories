@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { qrSeletor } from "@/lib/features/qr-code/qr-selector";
 import { generateFile } from "@/lib/generateFile";
 // import { generateFile } from "@/lib/generateFile";
@@ -8,28 +8,35 @@ import { useQRCode } from "next-qrcode";
 import { CgPrinter } from "react-icons/cg";
 import React from "react";
 import html2canvas from "html2canvas";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 
 const QrCodePage = () => {
   const { qrList } = useAppSelector(qrSeletor);
   const { Image } = useQRCode();
+  const dispatch = useAppDispatch();
 
   const dowloadFile = async () => {
-    const qrList = addQrCode();
+    console.log("dowloadFile");
+    // dispatch(alertManagerActions.setAlert({ status: true }));
+    const qrList = await addQrCode();
     const getBase64 = await generateFile(qrList);
+    console.log("getBase64");
+    // dispatch(alertManagerActions.setAlert({ status: false }));
     let qrCodeFile = `data:application/docx;base64,${getBase64}`;
     let a = document.createElement("a");
     a.href = qrCodeFile;
     a.download = "qr-code-facilities.docx";
+
     a.click();
   };
 
-  const addQrCode = () => {
+  const addQrCode = async () => {
     const qrList = [];
     const qrcode: HTMLCollection = document.getElementsByClassName("qrcode");
     if (qrcode.length === 0) return;
     const imageBase64 = Array.from({ length: qrcode.length }).map(
-      (v, index) => {
-        return html2canvas(qrcode.item(index) as HTMLElement).then(
+      async (v, index) => {
+        return await html2canvas(qrcode.item(index) as HTMLElement).then(
           function (canvas) {
             return canvas.toDataURL("image/jpeg");
           },

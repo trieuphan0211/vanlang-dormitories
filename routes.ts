@@ -3,24 +3,14 @@
  * These routes are accessible to everyone
  * @type {string[]}
  */
-export const publicRoutes = [
-  "/",
-  "/verification-account",
-  "/reset-password",
-  // "/home",
-];
+export const publicRoutes = ["/", "/room"];
 
 /**
  * An array of routes that are protected
  * These routes are only accessible to authenticated users
  * @type {string[]}
  */
-export const authRouters = [
-  "/auth/signin",
-  "/auth/signup",
-  "/error",
-  "/auth/forgot-password",
-];
+export const authRouters = ["/auth/signin", "/error"];
 
 /**
  * The prefix for the API routes

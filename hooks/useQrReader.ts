@@ -1,10 +1,6 @@
 "use client";
-import { MutableRefObject, useEffect, useRef } from "react";
-import {
-  BrowserCodeReader,
-  BrowserQRCodeReader,
-  IScannerControls,
-} from "@zxing/browser";
+import { BrowserQRCodeReader, IScannerControls } from "@zxing/browser";
+import { useEffect, useRef, useState } from "react";
 
 import { isMediaDevicesSupported, isValidType } from "@/lib/ultis";
 import { UseQrReaderHook } from "@/types/qr-code";
@@ -16,46 +12,40 @@ export const useQrReader: UseQrReaderHook = ({
   onResult,
   videoId,
 }) => {
-  let controlsRef = useRef<IScannerControls | null>(null);
+  const codeReader = new BrowserQRCodeReader(undefined, {
+    delayBetweenScanAttempts,
+  });
+  const [result, setResult] = useState(null);
 
-  useEffect(() => {
-    const codeReader = new BrowserQRCodeReader(undefined, {
-      delayBetweenScanAttempts,
-    });
-
-    if (
-      !isMediaDevicesSupported() &&
-      isValidType(onResult, "onResult", "function")
-    ) {
-      const message =
-        'MediaDevices API has no support for your browser. You can fix this by running "npm i webrtc-adapter"';
-      if (onResult) {
-        onResult(null, new Error(message), codeReader);
-      }
+  if (
+    !isMediaDevicesSupported() &&
+    isValidType(onResult, "onResult", "function")
+  ) {
+    const message =
+      'MediaDevices API has no support for your browser. You can fix this by running "npm i webrtc-adapter"';
+    if (onResult) {
+      onResult(null, new Error(message), codeReader);
     }
-    console.log(videoId, video, "videoId, video");
-    if (isValidType(video, "constraints", "object")) {
-      codeReader
-        .decodeFromConstraints({ video }, videoId, (result, error) => {
-          if (isValidType(onResult, "onResult", "function")) {
-            if (onResult && JSON.stringify(result) !== "{}") {
-              onResult(result, error, codeReader);
-              return;
-            }
+  }
+  console.log(videoId, video, "videoId, video");
+  if (isValidType(video, "constraints", "object")) {
+    const controls = codeReader.decodeFromConstraints(
+      { video },
+      videoId,
+      (result, error) => {
+        console.log(result, "result, error");
+        if (isValidType(onResult, "onResult", "function")) {
+          if (onResult && result !== undefined) {
+            onResult(result, error, codeReader);
           }
-        })
-        .then((controls: IScannerControls) => (controlsRef.current = controls))
-        .catch((error: Error) => {
-          if (isValidType(onResult, "onResult", "function")) {
-            if (onResult) {
-              onResult(null, error, codeReader);
-            }
-          }
-        });
-    }
-
-    return () => {
-      controlsRef.current?.stop();
-    };
-  }, []);
+        }
+      },
+    );
+      useEffect(() => {
+        if(result) {
+          setResult(result);
+        }
+      }, [result]);
+    // setTimeout(async () => (await controls).stop(), 10000);
+  }
 };
