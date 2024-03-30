@@ -1,27 +1,36 @@
 "use client";
-import { AddNewMaintenance } from "@/components/Dialog/AddNewMaintenance";
-import { RemoveItem } from "@/components/Dialog/RemoveItem";
+import { removeRoomType } from "@/actions/roomType";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { MAINTENNANCES } from "@/types/maintenances";
-import { useRouter } from "next/navigation";
+import { ROOMTYPE } from "@/types/room-type";
 import { useTransition } from "react";
+import { AddNewRoomType } from "../Dialog/AddNewRoomType";
+import { useRouter } from "next/navigation";
+import { RemoveItem } from "../Dialog/RemoveItem";
 import { FaRegEdit } from "react-icons/fa";
+import { ROOM } from "@/types/room";
+import { AddNewRoom } from "@/components//Dialog/AddNewRoom";
+import { BRANCH } from "@/types/branch";
 
-export const MaintenancesTable = ({
-  maintenances,
+export const RoomTable = ({
+  rooms,
   count,
+  branchs,
+  roomTypes,
 }: {
-  maintenances: MAINTENNANCES[];
+  rooms: ROOM[];
   count: number;
+  branchs: BRANCH[];
+  roomTypes: ROOMTYPE[];
 }) => {
+  console.log("rooms: ", rooms);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
-        <SearchTable placeholder="Tìm kiếm đơn bảo trì ..." />
-        <AddNewMaintenance />
+        <SearchTable placeholder="Tìm kiếm phòng ..." />
+        <AddNewRoom branchs={branchs} roomTypes={roomTypes} />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -31,59 +40,51 @@ export const MaintenancesTable = ({
                 #
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Tên bảo trì
+                Mã phòng
               </th>
-
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Mã bảo trì
+                Loại phòng
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Ngày bắt đầu
+                Chi nhánh
+              </th>
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Tầng
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Trạng thái
-              </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Hoạt động
+                Hành động
               </th>
             </tr>
           </thead>
           <tbody>
-            {maintenances.map((maintenance, key) => (
+            {rooms.map((room, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{key + 1}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">{room.code}</p>
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {maintenance.mantainanceName}
+                    {room.roomType.code + " - " + room.roomType.name}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {maintenance.code}
+                    {room.branch.name}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {new Date(maintenance.startDate).toLocaleDateString()}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {maintenance.status === "CREATED" && "Đã tạo"}
-                    {maintenance.status === "INPROGRESS" && "Đang xử lý"}
-                    {maintenance.status === "FINISHED" && "Đã hoàn thành"}
-                  </p>
+                  <p className="text-black dark:text-white">{room.floor}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <button
                       className="rounded-xl p-2 text-green-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                       onClick={() =>
-                        router.push(
-                          `/admin/maintenance/detail/${maintenance.id}`,
-                        )
+                        router.push(`/admin/room/detail/${room.id}`)
                       }
                     >
                       <svg
@@ -106,17 +107,15 @@ export const MaintenancesTable = ({
                     </button>
                     <button
                       className="rounded-xl p-2 text-yellow-600 shadow-14 hover:bg-gray-3 focus:outline-none"
-                      onClick={() =>
-                        router.push(`/admin/maintenance/${maintenance.id}`)
-                      }
+                      onClick={() => router.push(`/admin/room/${room.id}`)}
                     >
                       <FaRegEdit />
                     </button>
                     <RemoveItem
                       isPending={isPending}
                       startTransition={startTransition}
-                      maintenanceId={maintenance.id}
-                      title={"Bạn có chắc chắn muốn xóa Đơn bảo trì này không?"}
+                      roomId={room.id}
+                      title={"Bạn có chắc chắn muốn xóa phòng này không?"}
                     />
                   </div>
                 </td>
@@ -125,7 +124,7 @@ export const MaintenancesTable = ({
           </tbody>
         </table>
       </div>
-      {maintenances.length > 0 && <Pagination count={count} />}
+      {rooms.length > 0 && <Pagination count={count} />}
     </div>
   );
 };

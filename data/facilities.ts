@@ -28,7 +28,7 @@ export const getFacilitiesById = async (id: string) => {
   try {
     const facilities = await db.facilities.findUnique({
       where: {
-        id,
+        code: id,
       },
       include: {
         branch: true,
@@ -164,13 +164,14 @@ export const deleteFacilities = async (id: string) => {
 export const updateFacilities = async (
   id: string,
   fields: {
-    name: string;
-    facilitiesTypeCode: string;
+    name?: string;
+    facilitiesTypeCode?: string;
     branchId?: string;
     description?: string;
     status?: StatusFacilities;
     code?: string;
     createDate?: Date;
+    maintenanceId?: string;
   },
 ) => {
   console.log("fields: ", fields);

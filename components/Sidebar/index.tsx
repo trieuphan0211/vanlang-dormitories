@@ -85,6 +85,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         },
         {
           icon: "/images/header-icon/room-type.svg",
+          title: "phòng",
+          href: "/admin/room",
+        },
+        {
+          icon: "/images/header-icon/room-type.svg",
           title: "Loại phòng",
           href: "/admin/room-type",
         },

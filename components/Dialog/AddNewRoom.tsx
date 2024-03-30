@@ -1,17 +1,15 @@
 "use client";
-import { getBranchsAll } from "@/actions/branch";
-import { addFacilities } from "@/actions/facilities";
-import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
+import { addRoomType } from "@/actions/roomType";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
-import { FacilitiesSchema } from "@/schema";
+import { RoomSchema, RoomTypeSchema } from "@/schema";
+import { BRANCH } from "@/types/branch";
+import { ROOMTYPE } from "@/types/room-type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Branch, FacilitiesType } from "@prisma/client";
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import {
   IoAdd,
@@ -19,21 +17,19 @@ import {
   IoChevronUpCircleOutline,
 } from "react-icons/io5";
 import * as z from "zod";
+import * as Select from "@radix-ui/react-select";
+import { addRooms } from "@/actions/room";
 
-export const AddNewFacilities = ({
-  isPending,
-  startTransition,
+export const AddNewRoom = ({
   branchs,
-  facilitiesType,
+  roomTypes,
 }: {
-  isPending: boolean;
-  startTransition: Function;
-  branchs: Branch[];
-  facilitiesType: FacilitiesType[];
+  branchs: BRANCH[];
+  roomTypes: ROOMTYPE[];
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
 
   const {
@@ -42,20 +38,18 @@ export const AddNewFacilities = ({
     formState: { errors },
     reset,
     setValue,
-  } = useForm<z.infer<typeof FacilitiesSchema>>({
-    resolver: zodResolver(FacilitiesSchema),
+  } = useForm<z.infer<typeof RoomSchema>>({
+    resolver: zodResolver(RoomSchema),
     defaultValues: {
-      name: "",
-      description: "",
       branchId: "",
-      facilitiesTypeCode: "",
-      count: "0",
+      description: "",
+      roomTypeCode: "",
     },
   });
-  const onSubmit = (value: z.infer<typeof FacilitiesSchema>) => {
-    console.log(value);
+  const onSubmit = (value: z.infer<typeof RoomSchema>) => {
     startTransition(() => {
-      addFacilities(value).then((res) => {
+      console.log(value);
+      addRooms(value).then((res) => {
         if (res?.success) {
           router.refresh();
           handleCloseModal();
@@ -63,7 +57,7 @@ export const AddNewFacilities = ({
             alertManagerActions.setAlert({
               message: {
                 type: "success",
-                content: "Cơ sở vật chất đã được thêm thành công!",
+                content: "Phòng đã được thêm thành công!",
               },
             }),
           );
@@ -73,7 +67,7 @@ export const AddNewFacilities = ({
             alertManagerActions.setAlert({
               message: {
                 type: "error",
-                content: "Có lỗi xảy ra, vui lòng thử lại!",
+                content: "Đã xảy ra lỗi! Vui lòng thử lại sau!",
               },
             }),
           );
@@ -101,49 +95,16 @@ export const AddNewFacilities = ({
           className="fixed inset-0 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow"
           onClick={handleCloseModal}
         />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+        <Dialog.Content className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
             <Dialog.Title className="font-medium text-black dark:text-white">
-              Thêm cơ sở vật chất
+              Thêm phòng
             </Dialog.Title>
           </div>
+
           <Dialog.Description className=""></Dialog.Description>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <div>
-                <label
-                  className={clsx(
-                    "mb-3 block text-sm font-medium text-black dark:text-white",
-                    {
-                      "text-red": errors.name,
-                    },
-                  )}
-                >
-                  Tên cơ sở vật chất
-                </label>
-                <input
-                  type="text"
-                  placeholder="Nhập tên cơ sở vật chất"
-                  className={clsx(
-                    "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
-                    {
-                      "focus:border-red": errors.name,
-                    },
-                  )}
-                  disabled={isPending}
-                  {...register("name")}
-                />
-                <p
-                  className={clsx(
-                    `font-smblock mt-1 text-sm text-black dark:text-white`,
-                    {
-                      "text-red": errors.name,
-                    },
-                  )}
-                >
-                  {errors.name?.message}
-                </p>
-              </div>
               <div className="flex gap-4">
                 <div className="w-full">
                   <label
@@ -201,26 +162,27 @@ export const AddNewFacilities = ({
                     {errors.branchId?.message}
                   </p>
                 </div>
+
                 <div className="w-full">
                   <label
                     className={clsx(
                       "mb-3 block text-sm font-medium text-black dark:text-white",
                       {
-                        "text-red": errors.facilitiesTypeCode,
+                        "text-red": errors.roomTypeCode,
                       },
                     )}
                   >
-                    Loại cơ sở vật chất
+                    Loại phòng
                   </label>
                   <Select.Root
-                    {...register("facilitiesTypeCode")}
-                    onValueChange={(e) => setValue("facilitiesTypeCode", e)}
+                    {...register("roomTypeCode")}
+                    onValueChange={(e) => setValue("roomTypeCode", e)}
                   >
                     <Select.Trigger
                       className="flex w-full items-center justify-between rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       aria-label="branchId"
                     >
-                      <Select.Value placeholder="Chọn loại cơ sở vật chất" />
+                      <Select.Value placeholder="Chọn phòng" />
                       <Select.Icon className="text-black">
                         <IoChevronDownCircleOutline />
                       </Select.Icon>
@@ -232,7 +194,7 @@ export const AddNewFacilities = ({
                         </Select.ScrollUpButton>
                         <Select.Viewport className=" p-[5px]">
                           <Select.Group className="z-10">
-                            {facilitiesType.map((type, index) => (
+                            {roomTypes.map((type, index) => (
                               <Select.Item
                                 value={type.code}
                                 className="px-5 py-3 hover:cursor-pointer hover:bg-gray"
@@ -250,55 +212,93 @@ export const AddNewFacilities = ({
                     className={clsx(
                       `font-smblock mt-1 text-sm text-black dark:text-white`,
                       {
-                        "text-red": errors.facilitiesTypeCode,
+                        "text-red": errors.roomTypeCode,
                       },
                     )}
                   >
-                    {errors.facilitiesTypeCode?.message}
+                    {errors.roomTypeCode?.message}
                   </p>
                 </div>
               </div>
-              <div>
-                <label
-                  className={clsx(
-                    `mb-3 block text-sm font-medium text-black dark:text-white`,
-                    {
-                      "text-red": errors.count,
-                    },
-                  )}
-                >
-                  Số lượng
-                </label>
-                <input
-                  type="number"
-                  placeholder="Nhập số lượng cơ sở vật chất"
-                  className={clsx(
-                    "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
-                    {
-                      "focus:border-red": errors.count,
-                    },
-                  )}
-                  disabled={isPending}
-                  {...register("count")}
-                />
-                <p
-                  className={clsx(
-                    `font-smblock text-sm text-black dark:text-white`,
-                    {
-                      "text-red": errors.count,
-                    },
-                  )}
-                >
-                  {errors.count?.message}
-                </p>
+              <div className="flex gap-4">
+                <div className="w-full">
+                  <label
+                    className={clsx(
+                      `mb-3 block text-sm font-medium text-black dark:text-white`,
+                      {
+                        "text-red": errors.floor,
+                      },
+                    )}
+                  >
+                    Tầng
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Nhập số lượng cơ sở vật chất"
+                    className={clsx(
+                      "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+                      {
+                        "focus:border-red": errors.floor,
+                      },
+                    )}
+                    disabled={isPending}
+                    {...register("floor")}
+                  />
+                  <p
+                    className={clsx(
+                      `font-smblock text-sm text-black dark:text-white`,
+                      {
+                        "text-red": errors.floor,
+                      },
+                    )}
+                  >
+                    {errors.floor?.message}
+                  </p>
+                </div>
+
+                <div className="w-full">
+                  <label
+                    className={clsx(
+                      `mb-3 block text-sm font-medium text-black dark:text-white`,
+                      {
+                        "text-red": errors.floor,
+                      },
+                    )}
+                  >
+                    Số phòng
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Nhập số lượng cơ sở vật chất"
+                    className={clsx(
+                      "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+                      {
+                        "focus:border-red": errors.count,
+                      },
+                    )}
+                    disabled={isPending}
+                    {...register("count")}
+                  />
+                  <p
+                    className={clsx(
+                      `font-smblock text-sm text-black dark:text-white`,
+                      {
+                        "text-red": errors.count,
+                      },
+                    )}
+                  >
+                    {errors.count?.message}
+                  </p>
+                </div>
               </div>
+
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                   Mô tả
                 </label>
                 <textarea
                   rows={6}
-                  placeholder="Nhập mô tả cơ sở vật chất ..."
+                  placeholder="Nhập mô tả loại phòng ..."
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   {...register("description")}
                   disabled={isPending}
@@ -306,23 +306,15 @@ export const AddNewFacilities = ({
               </div>
             </div>
             <div className="border-t border-stroke px-6.5 py-4">
-              <Dialog.Close className="w-full">
-                <button
-                  disabled={isPending}
-                  className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
-                  aria-label="Close"
-                >
-                  Lưu
-                </button>
-              </Dialog.Close>
+              <button
+                disabled={isPending}
+                className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
+                aria-label="Close"
+              >
+                Lưu
+              </button>
             </div>
           </form>
-          <Dialog.Close asChild>
-            <button
-              className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close"
-            ></button>
-          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

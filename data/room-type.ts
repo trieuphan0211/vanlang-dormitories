@@ -6,6 +6,15 @@ interface ROOMTYPE {
   description: string;
   code: string;
 }
+export const getRoomTypesAll = async () => {
+  try {
+    const roomTypes = await db.roomType.findMany();
+    return roomTypes;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const getRoomTypeById = async (id: string) => {
   try {
     const roomType = await db.roomType.findUnique({ where: { id } });

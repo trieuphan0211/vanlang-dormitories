@@ -1,4 +1,5 @@
 import { StatusFacilities, StatusMaintenance, UserRole } from "@prisma/client";
+import { count } from "console";
 import * as z from "zod";
 
 // Branch Schema
@@ -45,6 +46,40 @@ export const RoomTypeSchema = z
     {
       message: "Số lượng thành viên phải lớn hơn 0",
       path: ["members"],
+    },
+  );
+
+export const RoomSchema = z
+  .object({
+    roomTypeCode: z.string().min(1, "Tên loại phòng không được để trống"),
+    description: z.optional(z.string()),
+    code: z.optional(z.string()),
+    branchId: z.string().min(1, "Chi nhánh không đc để trống"),
+    floor: z.string(),
+    count: z.optional(z.string()),
+  })
+  .refine(
+    (data) => {
+      if (Number(data.floor) < 1) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Số tầng phải lớn hơn 0",
+      path: ["floor"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (Number(data.count) < 1) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Nhập số phòng ít nhất là 1",
+      path: ["count"],
     },
   );
 
@@ -107,13 +142,32 @@ export const FacilitiesTypeSchema = z.object({
   code: z.optional(z.string()),
 });
 
-export const MaintenanceSchema = z.object({
-  code: z.string().min(1, "Mã bảo trì không được để trống"),
-  description: z.optional(z.string()),
-  startDate: z.optional(z.date()),
-  endDate: z.optional(z.date()),
-  status: z.enum([StatusMaintenance.FINISHED, StatusMaintenance.INPROGRESS]),
-});
+export const MaintenanceSchema = z
+  .object({
+    code: z.optional(z.string().min(1, "Mã bảo trì không được để trống")),
+    mantainanceName: z.string().min(1, "Tên bảo trì không được để trống"),
+    description: z.optional(z.string()),
+    listFacilities: z.optional(z.array(z.string())), // Fix: Added empty object as argument
+
+    startDate: z.optional(z.date()), // Fix: Added optional
+    status: z.enum([
+      StatusMaintenance.CREATED,
+      StatusMaintenance.FINISHED,
+      StatusMaintenance.INPROGRESS,
+    ]),
+  })
+  .refine(
+    (data) => {
+      if (data.startDate === undefined) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Ngày bắt đầu không được để trống",
+      path: ["startDate"],
+    },
+  );
 
 export const ServiceSchema = z
   .object({

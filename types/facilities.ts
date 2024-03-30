@@ -11,5 +11,6 @@ export type FACILITIES = {
   branchId?: string;
   code: string;
   branch?: BRANCH;
+  roomId?: string;
   facilitiesType?: FACILITIESTYPE;
 };

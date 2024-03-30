@@ -5,8 +5,9 @@ export type MAINTENNANCES = {
   id: string;
   code: string;
   startDate: Date;
-  endDate?: Date;
+  mantainanceName: string;
   description?: string;
   status: StatusMaintenance;
   createDate: Date;
+  facilities?: FACILITIES[];
 };

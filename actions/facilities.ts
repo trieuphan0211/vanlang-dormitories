@@ -3,11 +3,23 @@
 import {
   createFacilities,
   deleteFacilities,
+  getFacilitiesById,
   updateFacilities,
 } from "@/data/facilities";
 import { FacilitiesSchema } from "@/schema";
 import * as z from "zod";
 import crypto from "crypto";
+
+export const getFacilities = async (id: string) => {
+  try {
+    const response = await getFacilitiesById(id);
+    console.log("response: ", response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
+  }
+};
 
 export const addFacilities = async (
   value: z.infer<typeof FacilitiesSchema>,

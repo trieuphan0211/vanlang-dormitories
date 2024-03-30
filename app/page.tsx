@@ -8,11 +8,7 @@ import { BiCabinet } from "react-icons/bi";
 import Image from "next/image";
 import { Footer } from "@/components/Footer/Footer";
 
-export default async function Home({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function Home() {
   return (
     <main className="relative min-h-screen w-screen overflow-hidden">
       <InfoHeader />
@@ -31,10 +27,10 @@ export default async function Home({
           <div className="mb-25 max-w-[500px] text-justify text-lg">
             <p className="text-black">
               Ký túc xá Trường đại học Văn Lang với sứ mệnh không chỉ đáp ứng
-              nơi học tập sinh hoạt phù hợp, mà còn là nơi "hội tụ" những đặc
-              trưng đầy{" "}
+              nơi học tập sinh hoạt phù hợp, mà còn là nơi &ldquo;hội tụ&rdquo;
+              những đặc trưng đầy
               <strong className="uppercase text-[#f57b20]">cảm hứng</strong> và
-              bản sắc{" "}
+              bản sắc
               <strong className="uppercase text-[#f57b20]">tự hào</strong>, tạo
               bước đệm cho sự phát triển toàn diện của sinh viên Văn Lang
             </p>
@@ -172,14 +168,14 @@ export default async function Home({
 
         <div className=" absolute right-0 top-0 z-1 max-w-[600px] space-y-4 rounded-bl-[50px] bg-gradient-to-r from-[rgba(255,166,65,0.8)] to-[rgba(0,0,0,0.5)] p-6 text-white">
           <h1 className="font-satoshi text-8xl font-semibold uppercase">
-            “3 an”:
+            &ldquo;3 an&rdquo;:
           </h1>
           <div className="flex gap-3">
             <div className="mt-2 h-8 w-7 min-w-7 rounded-b-full bg-white"></div>
             <div className="">
               <h3 className="text-xl font-medium">
-                “<strong> AN NINH</strong> là ưu tiên, không phân biệt bạn ở khu
-                vực nào”
+                &ldquo;<strong> AN NINH</strong> là ưu tiên, không phân biệt bạn
+                ở khu vực nào&rdquo;
               </h3>
               <p className=" text-sm font-light">
                 Trang bị hệ thống Camera giám sát và đội ngũ quản lý chuyên
@@ -191,7 +187,8 @@ export default async function Home({
             <div className="mt-2 h-8 w-7 min-w-7 rounded-b-full bg-white"></div>
             <div>
               <h3 className="text-xl font-medium">
-                "Đảm bảo <strong> AN TOÀN</strong> cho bạn và tài sản cá nhân"
+                &ldquo;Đảm bảo <strong> AN TOÀN</strong> cho bạn và tài sản cá
+                nhân&rdquo;
               </h3>
 
               <p className=" text-sm font-light">
@@ -204,7 +201,8 @@ export default async function Home({
             <div className="mt-2 h-8 w-7 min-w-7 rounded-b-full bg-white"></div>
             <div>
               <h3 className="text-xl font-medium">
-                "<strong>AN TÂM</strong> sống và tận hưởng hành trình của bạn"
+                &ldquo;<strong>AN TÂM</strong> sống và tận hưởng hành trình của
+                bạn&rdquo;
               </h3>
 
               <p className=" text-sm font-light">

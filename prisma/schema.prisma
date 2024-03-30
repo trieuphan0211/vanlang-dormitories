@@ -85,6 +85,7 @@ model Branch {
   ServiceOnBranch ServiceOnBranch[]
   createDate      DateTime          @default(now())
   facilities      Facilities[]
+  Room            Room[]
 }
 
 model Services {
@@ -97,6 +98,19 @@ model Services {
   createDate      DateTime          @default(now())
 }
 
+model Room {
+  id           String       @id @default(cuid())
+  code         String       @unique
+  description  String?
+  branchId     String
+  roomTypeCode String
+  floor        Int
+  branch       Branch       @relation(fields: [branchId], references: [id])
+  roomType     RoomType     @relation(fields: [roomTypeCode], references: [code])
+  Facilities   Facilities[]
+  createDate   DateTime     @default(now())
+}
+
 model RoomType {
   id          String   @id @default(cuid())
   name        String
@@ -104,6 +118,7 @@ model RoomType {
   description String?
   createDate  DateTime @default(now())
   code        String   @unique
+  Room        Room[]
 }
 
 model FacilitiesType {
@@ -130,28 +145,31 @@ model Facilities {
   status             StatusFacilities @default(INACTIVE)
   branchId           String?
   code               String           @unique
+  roomId             String?
   branch             Branch?          @relation(fields: [branchId], references: [id])
   facilitiesType     FacilitiesType   @relation(fields: [facilitiesTypeCode], references: [code], onDelete: Cascade)
   createDate         DateTime         @default(now())
   maintenanceId      String?
   maintenance        Maintenance?     @relation(fields: [maintenanceId], references: [id])
+  room               Room?            @relation(fields: [roomId], references: [id])
 }
 
 // Maintenance
 enum StatusMaintenance {
+  CREATED
   INPROGRESS
   FINISHED
 }
 
 model Maintenance {
-  id          String            @id @default(cuid())
-  code        String            @unique
-  startDate   DateTime
-  endDate     DateTime?
-  description String?
-  facilities  Facilities[]
-  status      StatusMaintenance @default(INPROGRESS)
-  createDate  DateTime          @default(now())
+  id              String            @id @default(cuid())
+  code            String            @unique
+  mantainanceName String
+  startDate       DateTime
+  description     String?
+  facilities      Facilities[]
+  status          StatusMaintenance @default(INPROGRESS)
+  createDate      DateTime          @default(now())
 }
 
 // Services + Branch

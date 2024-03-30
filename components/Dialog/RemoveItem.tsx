@@ -2,6 +2,8 @@
 import { removeBranch } from "@/actions/branch";
 import { removeFacilities } from "@/actions/facilities";
 import { removeFacilitiesType } from "@/actions/facilitiesType";
+import { removeMaintenance } from "@/actions/mantainance";
+import { removeRoom } from "@/actions/room";
 import { removeRoomType } from "@/actions/roomType";
 import { removeService } from "@/actions/service";
 import { removeStudent } from "@/actions/student";
@@ -22,6 +24,8 @@ export const RemoveItem = ({
   facilityId,
   userId,
   studentId,
+  roomId,
+  maintenanceId,
   title,
 }: {
   isPending: boolean;
@@ -33,6 +37,8 @@ export const RemoveItem = ({
   facilityId?: string;
   userId?: string;
   studentId?: string;
+  roomId?: string;
+  maintenanceId?: string;
   title?: string;
 }) => {
   const router = useRouter();
@@ -219,7 +225,6 @@ export const RemoveItem = ({
         });
       }
       if (studentId) {
-        console.log(studentId);
         removeStudent(studentId).then((res) => {
           if (res.success) {
             // Refesh data
@@ -242,6 +247,64 @@ export const RemoveItem = ({
                 message: {
                   type: "error",
                   content: "Xóa sinh viên thất bại!",
+                },
+              }),
+            );
+          }
+        });
+      }
+      if (roomId) {
+        removeRoom(roomId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setOpen(false);
+            // Show alert
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Phòng đã được xóa thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Xóa Phòng thất bại!",
+                },
+              }),
+            );
+          }
+        });
+      }
+      if (maintenanceId) {
+        removeMaintenance(maintenanceId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setOpen(false);
+            // Show alert
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Đơn bảo trì đã được xóa thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Xóa Đơn bảo trì thất bại!",
                 },
               }),
             );
@@ -319,6 +382,8 @@ export const RemoveItem = ({
                 {facilityId && "Có, xóa cơ sở vật chất"}
                 {userId && "Có, xóa người dùng"}
                 {studentId && "Có, xóa sinh viên"}
+                {roomId && "Có, xóa phòng"}
+                {maintenanceId && "Có, xóa đơn bảo trì"}
               </button>
             </AlertDialog.Action>
           </div>

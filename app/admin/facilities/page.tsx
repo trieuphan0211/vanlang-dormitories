@@ -1,7 +1,10 @@
+import { getBranchsAll } from "@/actions/branch";
+import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { FacilitiesTable } from "@/components/Tables/FacilitiesTable";
 import { getCountFacilities, getFilterFacilities } from "@/data/facilities";
 import { FACILITIES } from "@/types/facilities";
+import { Branch, FacilitiesType } from "@prisma/client";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,12 +29,18 @@ const FacilitiesPage = async ({
     currentPage,
     entries,
   )) as FACILITIES[];
-
+  const branchs = (await getBranchsAll()) as Branch[];
+  const facilitiesType = (await getFacilitiesTypeAll()) as FacilitiesType[];
   const count = await getCountFacilities(query);
   return (
     <div>
       <Breadcrumb pageName="Quản lý cơ sở vật chất" />
-      <FacilitiesTable facilities={facilities} count={Number(count)} />
+      <FacilitiesTable
+        facilities={facilities}
+        count={Number(count)}
+        branchs={branchs}
+        facilitiesType={facilitiesType}
+      />
     </div>
   );
 };

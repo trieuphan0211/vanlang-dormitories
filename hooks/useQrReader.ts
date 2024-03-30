@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { isMediaDevicesSupported, isValidType } from "@/lib/ultis";
 import { UseQrReaderHook } from "@/types/qr-code";
+import { Result } from "@zxing/library";
 
 // TODO: add support for debug logs
 export const useQrReader: UseQrReaderHook = ({
@@ -15,7 +16,7 @@ export const useQrReader: UseQrReaderHook = ({
   const codeReader = new BrowserQRCodeReader(undefined, {
     delayBetweenScanAttempts,
   });
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<Result>();
 
   if (
     !isMediaDevicesSupported() &&
@@ -27,25 +28,28 @@ export const useQrReader: UseQrReaderHook = ({
       onResult(null, new Error(message), codeReader);
     }
   }
-  console.log(videoId, video, "videoId, video");
   if (isValidType(video, "constraints", "object")) {
     const controls = codeReader.decodeFromConstraints(
       { video },
       videoId,
       (result, error) => {
-        console.log(result, "result, error");
         if (isValidType(onResult, "onResult", "function")) {
-          if (onResult && result !== undefined) {
-            onResult(result, error, codeReader);
+          if (result !== undefined) {
+            setResult(result);
           }
         }
       },
     );
-      useEffect(() => {
-        if(result) {
-          setResult(result);
+    const stopCamera = async () => {
+      (await controls).stop();
+    };
+    useEffect(() => {
+      if (result) {
+        if (onResult) {
+          onResult(result, null, codeReader);
+          stopCamera();
         }
-      }, [result]);
-    // setTimeout(async () => (await controls).stop(), 10000);
+      }
+    }, [result]);
   }
 };

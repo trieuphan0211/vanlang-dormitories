@@ -3,7 +3,8 @@ import { MaintenancesTable } from "@/components/Tables/MaintenancesTable";
 import {
   getCountMaintenances,
   getFilterMaintenances,
-} from "@/data/maintenance";
+} from "@/data/mantainance";
+
 import { MAINTENNANCES } from "@/types/maintenances";
 import { Metadata } from "next";
 

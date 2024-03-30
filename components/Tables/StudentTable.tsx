@@ -65,7 +65,7 @@ export const StudentTable = ({
                       className="rounded-xl p-2 text-green-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                       disabled={isPending}
                       onClick={() => {
-                        router.push(`/admin/branch/detail/${student.id}`);
+                        router.push(`/admin/student/detail/${student.id}`);
                       }}
                     >
                       <svg
@@ -90,7 +90,7 @@ export const StudentTable = ({
                       className="rounded-xl p-2 text-yellow-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                       disabled={isPending}
                       onClick={() => {
-                        router.push(`/admin/branch/${student.id}`);
+                        router.push(`/admin/student/${student.id}`);
                       }}
                     >
                       <FaRegEdit />

@@ -12,13 +12,18 @@ import clsx from "clsx";
 import { useAppDispatch } from "@/hooks/redux";
 import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
 import { FaQrcode } from "react-icons/fa6";
+import { Branch, FacilitiesType } from "@prisma/client";
 
 export const FacilitiesTable = ({
   facilities,
   count,
+  branchs,
+  facilitiesType,
 }: {
   facilities: FACILITIES[];
   count: number;
+  branchs: Branch[];
+  facilitiesType: FacilitiesType[];
 }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -35,6 +40,8 @@ export const FacilitiesTable = ({
         <AddNewFacilities
           isPending={isPending}
           startTransition={startTransition}
+          branchs={branchs}
+          facilitiesType={facilitiesType}
         />
       </div>
       <div className="my-3 border-t-[1px] border-graydark"></div>

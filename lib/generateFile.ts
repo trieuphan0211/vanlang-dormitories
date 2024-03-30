@@ -1,6 +1,6 @@
 "use server";
 import { Document, ImageRun, Packer, Paragraph, TextRun } from "docx";
-export const generateFile = async (qrList?: Array<Promise<any>>) => {
+export const generateFile = async (qrList?: Array<Promise<string>>) => {
   const img: ImageRun[] = [];
   const images = qrList?.map(async (qr) => {
     qr.then((res) => {
