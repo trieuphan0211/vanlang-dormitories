@@ -12,6 +12,7 @@ import { Alert } from "@/components/common/Alert";
 import { useAppSelector } from "@/hooks/redux";
 import { alertSeletor } from "@/lib/features/alert/alert-selector";
 import NotFound from "../not-found";
+import VerifiedInfo from "@/components/FormElements/VerifiedInfo";
 
 export default function AdminLayout({
   children,
@@ -24,19 +25,27 @@ export default function AdminLayout({
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);
   }, []);
-  if (session.data?.user?.role !== "USER") {
-    return (
-      <main className=" dark:bg-boxdark-2 dark:text-bodydark">
-        {loading ? <Loader /> : <DefaultLayout>{children}</DefaultLayout>}
-        <Alert />
+  if (
+    session.data?.user?.role === "ADMIN" ||
+    session.data?.user?.role === "STAFF" ||
+    session.data?.user?.role === "DIRECRTOR"
+  ) {
+    if (session.data.user.verifiedInfo) {
+      return (
+        <main className=" dark:bg-boxdark-2 dark:text-bodydark">
+          {loading ? <Loader /> : <DefaultLayout>{children}</DefaultLayout>}
+          <Alert />
 
-        {status && (
-          <div className="absolute bottom-0 left-0 right-0 top-0 z-99">
-            <Loader />
-          </div>
-        )}
-      </main>
-    );
+          {status && (
+            <div className="absolute bottom-0 left-0 right-0 top-0 z-99">
+              <Loader />
+            </div>
+          )}
+        </main>
+      );
+    } else {
+      return <VerifiedInfo />;
+    }
   }
   return <NotFound />;
 }

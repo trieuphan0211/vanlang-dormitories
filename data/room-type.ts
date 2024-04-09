@@ -5,6 +5,7 @@ interface ROOMTYPE {
   members: number;
   description: string;
   code: string;
+  cost: number;
 }
 export const getRoomTypesAll = async () => {
   try {

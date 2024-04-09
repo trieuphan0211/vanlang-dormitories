@@ -265,7 +265,7 @@ export const AddNewRoom = ({
                       },
                     )}
                   >
-                    Số phòng
+                    Số lượng
                   </label>
                   <input
                     type="number"

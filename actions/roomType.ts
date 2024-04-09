@@ -14,7 +14,7 @@ export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { roomTypeName, members, description } = validateValue.data;
+  const { roomTypeName, members, description, cost } = validateValue.data;
   const token = "RT" + crypto.randomInt(100_000, 1_000_000).toString();
   console.log(token);
   try {
@@ -23,6 +23,7 @@ export const addRoomType = async (value: z.infer<typeof RoomTypeSchema>) => {
       members: Number(members),
       description: description || "",
       code: token,
+      cost: Number(cost),
     });
     return { success: "Room type is created!" };
   } catch (error) {

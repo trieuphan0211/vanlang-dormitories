@@ -38,6 +38,19 @@ export const StudentTable = ({
                 Họ và tên
               </th>
 
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                Ngày sinh
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                Giới tính
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                Khoa
+              </th>
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                SV Năm
+              </th>
+
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
@@ -56,6 +69,27 @@ export const StudentTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {student.fullName}
+                  </p>
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {student.brithday || "Chưa cập nhật"}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {student.gender || "Chưa cập nhật"}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {student.major || "Chưa cập nhật"}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {student.schoolYear || "Chưa cập nhật"}
                   </p>
                 </td>
 

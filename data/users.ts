@@ -121,8 +121,9 @@ export const deleteUser = async (id: string) => {
 export const updateUser = async (
   id: string,
   fields: {
-    name: string;
-    role: UserRole;
+    name?: string;
+    role?: UserRole;
+    verifiedInfo?: boolean;
   },
 ) => {
   try {

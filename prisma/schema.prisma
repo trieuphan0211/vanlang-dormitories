@@ -52,6 +52,7 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
+  verifiedInfo  Boolean   @default(false)
   signinTime    DateTime?
   image         String?
   role          UserRole  @default(USER)
@@ -60,17 +61,46 @@ model User {
 }
 
 model Student {
-  id         String    @id @default(cuid())
-  email      String    @unique
-  fullName   String
-  major      String?
-  schoolYear Int?
-  brithday   DateTime?
-  gender     String?
-  address    String?
-  phone      String?
-  createDate DateTime  @default(now())
-  userId     String?
+  id                 String     @id @default(cuid())
+  cccdCode           String?    @unique
+  cccdOfDate         String?
+  cccdPlace          String?
+  fullName           String
+  gender             String?
+  brithday           String?
+  nation             String?
+  roomId             String?
+  religion           String?
+  email              String     @unique
+  phone              Int?
+  studentCode        String?    @unique
+  major              String?
+  schoolYear         Int?
+  bankName           String?
+  bankBranch         String?
+  bankAccount        String?
+  bankNumber         String?
+  permanentResidence String?
+  familiInfo         String?
+  contactinfo        String?
+  createDate         DateTime   @default(now())
+  Register           Register[]
+  room               Room?      @relation(fields: [roomId], references: [id])
+}
+
+// Register Dormitory
+model Register {
+  id           String   @id @default(cuid())
+  studentId    String
+  branchId     String
+  roomId       String
+  registerDate DateTime
+  status       String
+
+  createDate DateTime @default(now())
+  student    Student  @relation(fields: [studentId], references: [id])
+  branch     Branch   @relation(fields: [branchId], references: [id])
+  room       Room     @relation(fields: [roomId], references: [id])
 }
 
 // Branch Dormitory
@@ -86,6 +116,7 @@ model Branch {
   createDate      DateTime          @default(now())
   facilities      Facilities[]
   Room            Room[]
+  Register        Register[]
 }
 
 model Services {
@@ -109,6 +140,8 @@ model Room {
   roomType     RoomType     @relation(fields: [roomTypeCode], references: [code])
   Facilities   Facilities[]
   createDate   DateTime     @default(now())
+  Register     Register[]
+  Student      Student[]
 }
 
 model RoomType {
@@ -118,6 +151,7 @@ model RoomType {
   description String?
   createDate  DateTime @default(now())
   code        String   @unique
+  cost        Int
   Room        Room[]
 }
 

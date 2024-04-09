@@ -28,13 +28,19 @@ const menuData: Menu[] = [
   {
     id: 3,
     title: "Phòng ở",
-    path: "/contact",
+    path: "/room",
     newTab: false,
   },
   {
     id: 3,
     title: "Dịch vụ",
-    path: "/contact",
+    path: "/services",
+    newTab: false,
+  },
+  {
+    id: 3,
+    title: "Nội quy",
+    path: "/rules",
     newTab: false,
   },
   // {

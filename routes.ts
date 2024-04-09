@@ -13,6 +13,19 @@ export const publicRoutes = ["/", "/room"];
 export const authRouters = ["/auth/signin", "/error"];
 
 /**
+ * An array of routes that are only accessible to admin users
+ * @type {string}
+ */
+
+export const adminRoutes = "/admin";
+
+/**
+ * An array of routes that are only accessible to user users
+ * @type {string}
+ */
+export const userRoutes = "/home";
+
+/**
  * The prefix for the API routes
  * Routers that start with this prefix are considered API routes
  * @type {string}

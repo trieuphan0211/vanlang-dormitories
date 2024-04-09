@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { Student } from "@prisma/client";
 
 export const getStudentByEmail = async (email: string) => {
   try {
@@ -71,16 +72,6 @@ export const getFilterStudents = async (
               contains: query,
             },
           },
-          {
-            address: {
-              contains: query,
-            },
-          },
-          {
-            phone: {
-              contains: query,
-            },
-          },
         ],
       },
 
@@ -129,16 +120,6 @@ export const getCountStudents = async (query: string) => {
               contains: query,
             },
           },
-          {
-            address: {
-              contains: query,
-            },
-          },
-          {
-            phone: {
-              contains: query,
-            },
-          },
         ],
       },
     });
@@ -156,21 +137,10 @@ export const deleteStudent = async (id: string) => {
     console.error(e);
   }
 };
-export const updateStudent = async (
-  id: string,
-  fields: {
-    fullName: string;
-    major: string;
-    schoolYear: number;
-    brithday: Date;
-    gender: string;
-    address: string;
-    phone: string;
-  },
-) => {
+export const updateStudent = async (email: string, fields: Student) => {
   try {
     const student = await db.student.update({
-      where: { id },
+      where: { email },
       data: fields,
     });
     return student;

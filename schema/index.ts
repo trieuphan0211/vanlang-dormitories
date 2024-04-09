@@ -35,6 +35,7 @@ export const RoomTypeSchema = z
     description: z.optional(z.string()),
     members: z.string(),
     code: z.optional(z.string()),
+    cost: z.string(),
   })
   .refine(
     (data) => {
@@ -92,6 +93,46 @@ export const UserSchema = z.object({
     UserRole.DIRECTOR,
     UserRole.STAFF,
   ]),
+});
+export const StudentInfoSchema = z.object({
+  cccdCode: z.string().min(1, "Số CCCD không được để trống"),
+  cccdOfDate: z.string().min(1, "Ngày cấp không được để trống"),
+  cccdPlace: z.string().min(1, "Nơi cấp không được để trống"),
+  fullName: z.string().min(1, "Họ tên không được để trống"),
+  gender: z.string().min(1, "Giới tính không được để trống"),
+  brithday: z.string().min(1, "Ngày sinh không được để trống"),
+  nation: z.string().min(1, "Dân tộc không được để trống"),
+  religion: z.string().min(1, "Tôn giáo không được để trống"),
+  phone: z.string().min(1, "Số điện thoại không được để trống"),
+  studentCode: z.string().min(1, "Mã sinh viên không được để trống"),
+  major: z.string().min(1, "Ngành học không được để trống"),
+  schoolYear: z.string().min(1, "Năm học không được để trống"),
+  bankName: z.string().min(1, "Tên ngân hàng không được để trống"),
+  bankBranch: z.string().min(1, "Chi nhánh ngân hàng không được để trống"),
+  bankAccount: z.string().min(1, "Số tài khoản không được để trống"),
+  bankNumber: z.string().min(1, "Số thẻ không được để trống"),
+  permanentResidence: z.object({
+    address: z.string().min(1, "Địa chỉ không được để trống"),
+    district: z.string().min(1, "Quận/Huyện không được để trống"),
+    city: z.string().min(1, "Tỉnh/Thành phố không được để trống"),
+    ward: z.string().min(1, "Phường/Xã không được để trống"),
+  }),
+  familiInfo: z.array(
+    z.object({
+      name: z.string().min(1, "Tên không được để trống"),
+      birthYear: z.string().min(1, "Năm sinh không được để trống"),
+      phone: z.string().min(1, "Số điện thoại không được để trống"),
+      job: z.string().min(1, "Nghề nghiệp không được để trống"),
+      address: z.string().min(1, "Địa chỉ không được để trống"),
+    }),
+  ),
+  contactinfo: z.object({
+    name: z.string().min(1, "Tên không được để trống"),
+    phone: z.string().min(1, "Số điện thoại không được để trống"),
+    address: z.string().min(1, "Địa chỉ không được để trống"),
+    city: z.string().min(1, "Tỉnh/Thành phố không được để trống"),
+    district: z.string().min(1, "Quận/Huyện không được để trống"),
+  }),
 });
 export const FacilitiesSchema = z
   .object({

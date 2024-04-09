@@ -1,10 +1,9 @@
 "use client";
-import Image from "next/image";
+import clsx from "clsx";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import menuData from "./menuData";
-import clsx from "clsx";
-import { usePathname } from "next/navigation";
 
 export const InfoHeader = () => {
   // Navbar toggle
@@ -37,15 +36,16 @@ export const InfoHeader = () => {
   };
 
   const pathname = usePathname();
-  console.log(pathname);
   return (
     <>
       <header
-        className={`header left-0 top-0 z-40 flex w-full items-center bg-transparent ${
-          sticky
-            ? "shadow-sticky !fixed !z-[9999] !bg-[rgba(255,255,255,0.5)] !bg-opacity-80 backdrop-blur-sm !transition dark:!bg-primary dark:!bg-opacity-20"
-            : "absolute !bg-[rgba(255,255,255,0.2)]"
-        }`}
+        className={clsx(
+          `header absolute left-0 top-0 z-40 flex w-full items-center !bg-[#2d334d]`,
+          {
+            "shadow-sticky !fixed !z-[9999]  !bg-opacity-80 backdrop-blur-sm !transition ":
+              sticky,
+          },
+        )}
       >
         <div className="container mx-auto p-2">
           <div className="relative flex items-center justify-between">
@@ -104,9 +104,7 @@ export const InfoHeader = () => {
                                 "text-[#d72134] after:right-0":
                                   pathname === menuItem.path,
                                 "text-white after:right-0":
-                                  pathname !== menuItem.path && !sticky,
-                                "text-[#2d334d] after:right-0":
-                                  pathname !== menuItem.path && sticky,
+                                  pathname !== menuItem.path,
                               },
                             )}
                           >

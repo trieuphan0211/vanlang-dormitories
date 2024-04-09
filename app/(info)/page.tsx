@@ -10,9 +10,12 @@ import { Footer } from "@/components/Footer/Footer";
 
 export default async function Home() {
   return (
-    <main className="relative min-h-screen w-screen overflow-hidden">
-      <InfoHeader />
-      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpg')] bg-cover bg-fixed "></div>
+    <main className="absolute left-0 right-0 top-0 min-h-screen w-screen overflow-hidden">
+      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpg')] bg-cover bg-fixed ">
+        <h1 className="absolute right-20 top-[140px] text-5xl font-semibold tracking-widest text-white">
+          Ký túc xá Trường Đại học Văn Lang
+        </h1>
+      </div>
       <div className="mt-[1000px] flex items-center justify-center gap-20 p-10">
         <iframe
           className="aspect-video h-[450px]  rounded-2xl"
@@ -98,9 +101,7 @@ export default async function Home() {
             className="rounded-xl"
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
-            <h1 className="text-4xl font-bold">
-              Trang phục ngát hương ngày dài tận hưởng
-            </h1>
+            <h1 className="text-4xl font-bold">Khu vực giặt - sấy hiện đại</h1>
             <p className="text-xl">
               Khu vực giặt - sấy hiện đại đem lại co sinh viên sự thuận tiện
               trong nếp sống, bất kể thười tiết nắng mưa vẫn tự tin sạch sẽ,
@@ -117,9 +118,7 @@ export default async function Home() {
             className="rounded-xl"
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
-            <h1 className="text-4xl font-bold">
-              Ngày dài đến trường đầy đủ dinh dưỡng
-            </h1>
+            <h1 className="text-4xl font-bold">Khu bếp chung</h1>
             <p className="text-xl">
               Khu bếp chung với lối thiết kế chỉnh chu, gọn gàng, tinh tế, trang
               bị đầy đủ các thiết bị phục vụ cho nhu cầu chuẩn bị bữa ăn ngon.
@@ -137,9 +136,7 @@ export default async function Home() {
             className="rounded-xl"
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
-            <h1 className="text-4xl font-bold">
-              Vô vàn trải nghiệm chạm ngàn khám phá
-            </h1>
+            <h1 className="text-4xl font-bold">Trải nghiệm vô vàn tiện ích</h1>
             <p className="text-xl">
               Trải nghiệm các tiện ích không thể bỏ lỡ được mở ra trong chính
               không gian sống của bạn.

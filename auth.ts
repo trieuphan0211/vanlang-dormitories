@@ -4,6 +4,7 @@ import GitHub from "next-auth/providers/github";
 import { db } from "./lib/db";
 import authConfig from "./auth.config";
 import { getUserById } from "./data/users";
+import { JwkKeyExportOptions } from "crypto";
 
 export const {
   handlers: { GET, POST },
@@ -60,6 +61,9 @@ export const {
         if (token.role) {
           session.user.role = token.role;
         }
+        if (token.verifiedInfo) {
+          session.user.verifiedInfo = token.verifiedInfo as boolean;
+        }
         session.user.name = token.name;
         session.user.email = token.email as string;
       }
@@ -76,12 +80,31 @@ export const {
       // Set user details to token
       token.name = existingUser.name;
       token.email = existingUser.email;
+      token.verifiedInfo = existingUser.verifiedInfo;
       // Set user role to token
       token.role = existingUser.role;
 
       return token;
     },
   },
+
+  // jwt: {
+  //   async encode(params: {
+  //     token: JwkKeyExportOptions;
+  //     secret: string;
+  //     maxAge: number;
+  //   }): Promise<string> {
+  //     // return a custom encoded JWT string
+  //     return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+  //   },
+  //   async decode(params: {
+  //     token: string;
+  //     secret: string;
+  //   }): Promise<JWT | null> {
+  //     // return a `JWT` object, or `null` if decoding failed
+  //     return {};
+  //   },
+  // },
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,

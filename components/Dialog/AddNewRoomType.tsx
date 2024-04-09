@@ -158,6 +158,40 @@ export const AddNewRoomType = () => {
                 </p>
               </div>
               <div>
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.members,
+                    },
+                  )}
+                >
+                  Giá
+                </label>
+                <input
+                  type="number"
+                  placeholder="Nhập số thành viên"
+                  className={clsx(
+                    "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
+                    {
+                      "focus:border-red": errors.members,
+                    },
+                  )}
+                  disabled={isPending}
+                  {...register("cost")}
+                />
+                <p
+                  className={clsx(
+                    `font-smblock mt-1 text-sm text-black dark:text-white`,
+                    {
+                      "text-red": errors.members,
+                    },
+                  )}
+                >
+                  {errors.members?.message}
+                </p>
+              </div>
+              <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                   Mô tả
                 </label>

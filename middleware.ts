@@ -1,5 +1,11 @@
 import authConfig from "@/auth.config";
-import { apiAuthPrefix, authRouters, publicRoutes } from "@/routes";
+import {
+  apiAuthPrefix,
+  authRouters,
+  publicRoutes,
+  adminRoutes,
+  userRoutes,
+} from "@/routes";
 import NextAuth from "next-auth";
 
 const { auth } = NextAuth(authConfig);
@@ -7,8 +13,11 @@ export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isAdminRoute = nextUrl.pathname.startsWith(adminRoutes);
+  const isUserRoute = nextUrl.pathname.startsWith(userRoutes);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRouters.includes(nextUrl.pathname);
+
   if (isApiAuthRoute) {
     return;
   }
@@ -17,7 +26,7 @@ export default auth(async (req) => {
     return;
   }
 
-  if (!isLoggedIn && !isPublicRoute) {
+  if (!isLoggedIn && (isAdminRoute || isUserRoute)) {
     let callbackUrk = nextUrl.pathname;
     if (nextUrl.search) {
       callbackUrk += nextUrl.search;

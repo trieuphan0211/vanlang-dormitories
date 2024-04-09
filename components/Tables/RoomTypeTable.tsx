@@ -41,6 +41,9 @@ export const RoomTypeTable = ({
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Mã loại phòng
               </th>
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Giá
+              </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
@@ -63,6 +66,9 @@ export const RoomTypeTable = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{roomType.code}</p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">{roomType.cost}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">

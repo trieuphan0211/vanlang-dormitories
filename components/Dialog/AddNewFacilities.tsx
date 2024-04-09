@@ -1,7 +1,5 @@
 "use client";
-import { getBranchsAll } from "@/actions/branch";
 import { addFacilities } from "@/actions/facilities";
-import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { FacilitiesSchema } from "@/schema";
@@ -11,7 +9,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   IoAdd,

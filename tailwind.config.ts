@@ -9,9 +9,6 @@ const config: Config = {
   ],
   darkMode: "class",
   theme: {
-    fontFamily: {
-      satoshi: ["Satoshi", "sans-serif"],
-    },
     screens: {
       "2xsm": "375px",
       xsm: "425px",
@@ -19,6 +16,9 @@ const config: Config = {
       ...defaultTheme.screens,
     },
     extend: {
+      fontFamily: {
+        satoshi: ["Satoshi", "sans-serif"],
+      },
       colors: {
         current: "currentColor",
         transparent: "transparent",

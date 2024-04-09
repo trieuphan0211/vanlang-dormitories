@@ -19,7 +19,7 @@ export default async function DetailPage({
   const user = (await getUserByEmail(student.email)) as USER;
   return (
     <div>
-      {/* <Breadcrumb pageName={`Chi tiết sinh viên`} />
+      <Breadcrumb pageName={`Chi tiết sinh viên`} />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
@@ -29,7 +29,7 @@ export default async function DetailPage({
         <div className="p-7">
           {student && <StudentDetailForm student={student} user={user} />}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

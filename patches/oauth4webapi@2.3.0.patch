@@ -1,0 +1,23 @@
+diff --git a/build/index.js b/build/index.js
+index 83b47de6deb017635e180e2ae88af2febe95f6bb..013c5592f870939a960343a5a12210d101e08501 100644
+--- a/build/index.js
++++ b/build/index.js
+@@ -1001,10 +1001,15 @@ function validateOptionalIssuer(expected, result) {
+     return result;
+ }
+ function validateIssuer(expected, result) {
+-    if (result.claims.iss !== expected) {
+-        throw new OPE('unexpected JWT "iss" (issuer) claim value');
+-    }
++  if (result.claims.iss === expected) {
++    return result
++  }
++  if (expected === 'https://login.microsoftonline.com/common/v2.0'
++    && result.claims.tid !== undefined
++    && result.claims.iss === `https://login.microsoftonline.com/${result.claims.tid}/v2.0`) {
+     return result;
++  }
++  throw new OPE('unexpected JWT "iss" (issuer) claim value')
+ }
+ const branded = new WeakSet();
+ function brand(searchParams) {

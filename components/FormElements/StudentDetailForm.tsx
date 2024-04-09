@@ -56,6 +56,24 @@ export const StudentDetailForm = ({
           />
         </div>
       </div>
+      <div className="mb-5.5 flex w-full flex-col gap-5.5 sm:flex-row">
+        <div className="w-full ">
+          <label
+            className="mb-3 block text-sm font-medium text-black dark:text-white"
+            htmlFor="branchName"
+          >
+            MSSV
+          </label>
+          <input
+            className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            type="text"
+            id="branchName"
+            placeholder="Địa chỉ"
+            value={student?.studentCode}
+            disabled
+          />
+        </div>
+      </div>
       <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
         <div className="w-full ">
           <label
@@ -106,7 +124,7 @@ export const StudentDetailForm = ({
               type="text"
               id="branchName"
               placeholder="Ngày sinh"
-              value={student?.birthDate?.toLocaleDateString()}
+              value={student?.brithday}
               disabled
             />
           </div>
@@ -148,24 +166,7 @@ export const StudentDetailForm = ({
           />
         </div>
       </div>
-      <div className="mb-5.5 flex w-full flex-col gap-5.5 sm:flex-row">
-        <div className="w-full ">
-          <label
-            className="mb-3 block text-sm font-medium text-black dark:text-white"
-            htmlFor="branchName"
-          >
-            Địa chỉ
-          </label>
-          <input
-            className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            type="text"
-            id="branchName"
-            placeholder="Địa chỉ"
-            value={student?.address}
-            disabled
-          />
-        </div>
-      </div>
+
       <div className="mb-5.5 flex w-full flex-col gap-5.5 sm:flex-row">
         <div className="w-full ">
           <label
