@@ -1,4 +1,4 @@
-import { FACILITIES } from "@/types/facilities";
+import { FACILITIES } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface qrState {

@@ -25,9 +25,9 @@ export const MenuItem = (item: MenuItemProps) => {
     <Link
       href={item.href}
       className={clsx(
-        "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4",
+        "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-semibold uppercase text-white duration-300 ease-in-out hover:bg-meta-1/80 ",
         {
-          "bg-graydark dark:bg-meta-4": pathname === item.href,
+          "bg-meta-1/35": pathname === item.href,
         },
       )}
       key={item.title}
@@ -51,10 +51,12 @@ export const MenuItemList = (item: MenuItemListProps) => {
   );
   return (
     <SidebarLinkGroup
-      activeCondition={item.list
-        .map((i) => i.href)
-        .join(",")
-        .includes(pathname)}
+      activeCondition={
+        item.list
+          .map((i) => i.href)
+          .join(",")
+          .includes(pathname) && pathname !== "/admin"
+      }
     >
       {(handleClick, open) => {
         return (
@@ -62,12 +64,13 @@ export const MenuItemList = (item: MenuItemListProps) => {
             <Link
               href="#"
               className={clsx(
-                "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4",
+                "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-semibold uppercase text-white duration-300 ease-in-out hover:bg-meta-1/80 ",
                 {
-                  "bg-graydark dark:bg-meta-4": item.list
-                    .map((i) => i.href)
-                    .join(",")
-                    .includes(pathname),
+                  "bg-meta-1/35":
+                    item.list
+                      .map((i) => i.href)
+                      .join(",")
+                      .includes(pathname) && pathname !== "/admin",
                 },
               )}
               onClick={(e) => {
@@ -102,7 +105,7 @@ export const MenuItemList = (item: MenuItemListProps) => {
               </svg>
               {item.title}
               <svg
-                className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current transition-all ${
                   open && "rotate-180"
                 }`}
                 width="20"
@@ -131,9 +134,11 @@ export const MenuItemList = (item: MenuItemListProps) => {
                     <Link
                       href={subItem.href}
                       className={clsx(
-                        "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white",
+                        "group relative flex items-center gap-2.5 rounded-md px-4 font-semibold  text-white duration-300 ease-in-out hover:text-meta-1",
                         {
-                          "text-white": pathname.includes(subItem.href),
+                          "!text-meta-1":
+                            pathname.includes(subItem.href) &&
+                            pathname === subItem.href,
                         },
                       )}
                     >

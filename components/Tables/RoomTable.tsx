@@ -2,35 +2,51 @@
 import { removeRoomType } from "@/actions/roomType";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { ROOMTYPE } from "@/types/room-type";
-import { useTransition } from "react";
-import { AddNewRoomType } from "../Dialog/AddNewRoomType";
+import { ROOMTYPE, SERVICES } from "@/types";
+import { useState, useTransition } from "react";
+import { AddNewRoomType } from "../Form/AddNewRoomType";
 import { useRouter } from "next/navigation";
 import { RemoveItem } from "../Dialog/RemoveItem";
 import { FaRegEdit } from "react-icons/fa";
-import { ROOM } from "@/types/room";
-import { AddNewRoom } from "@/components//Dialog/AddNewRoom";
-import { BRANCH } from "@/types/branch";
+import { ROOM } from "@/types";
+import { AddNewRoom } from "@/components/Form/AddNewRoom";
+import { BRANCH } from "@/types";
+import { DialogButton } from "../Button";
 
 export const RoomTable = ({
   rooms,
   count,
   branchs,
   roomTypes,
+  services,
 }: {
   rooms: ROOM[];
   count: number;
   branchs: BRANCH[];
   roomTypes: ROOMTYPE[];
+  services: SERVICES[];
 }) => {
-  console.log("rooms: ", rooms);
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
         <SearchTable placeholder="Tìm kiếm phòng ..." />
-        <AddNewRoom branchs={branchs} roomTypes={roomTypes} />
+        <DialogButton
+          open={open}
+          setOpen={setOpen}
+          childrens={
+            <AddNewRoom
+              branchs={branchs}
+              roomTypes={roomTypes}
+              services={services}
+              isPending={isPending}
+              startTransition={startTransition}
+              setOpen={setOpen}
+            />
+          }
+        />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -68,7 +84,7 @@ export const RoomTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {room.roomType.code + " - " + room.roomType.name}
+                    {room?.roomType?.code + " - " + room?.roomType?.name}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

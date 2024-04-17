@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { BranchTable } from "@/components/Tables/BranchTable";
 import { getFilterBranchs, getCountBranchs } from "@/data/branch";
-import { BRANCH } from "@/types/branch";
+import { BRANCH } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

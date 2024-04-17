@@ -7,6 +7,7 @@ import {
   userRoutes,
 } from "@/routes";
 import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 export default auth(async (req) => {
@@ -15,7 +16,6 @@ export default auth(async (req) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoutes);
   const isUserRoute = nextUrl.pathname.startsWith(userRoutes);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRouters.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
@@ -32,7 +32,7 @@ export default auth(async (req) => {
       callbackUrk += nextUrl.search;
     }
     const encodedCallbackUrl = encodeURIComponent(callbackUrk);
-    return Response.redirect(
+    return NextResponse.redirect(
       new URL(`/auth/signin?callback=${encodedCallbackUrl}`, nextUrl),
     );
   }

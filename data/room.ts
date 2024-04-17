@@ -10,9 +10,44 @@ export const getRoomById = async (id: string) => {
   try {
     const room = await db.room.findUnique({
       where: { id },
-      include: { branch: true, roomType: true },
+      include: {
+        branch: true,
+        roomType: true,
+        Services: {
+          include: {
+            service: true,
+          },
+        },
+        Student: true,
+      },
     });
     return room;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getRoomsAllHaveStudents = async () => {
+  try {
+    const rooms = await db.room.findMany({
+      where: {
+        Student: {
+          some: {},
+        },
+      },
+
+      include: {
+        branch: true,
+        roomType: true,
+        Services: {
+          include: {
+            service: true,
+          },
+        },
+        Student: true,
+      },
+    });
+    return rooms;
   } catch (e) {
     console.error(e);
   }
@@ -56,7 +91,23 @@ export const getFilterRooms = async (
     console.error(e);
   }
 };
-
+export const getRoomsByFields = async (
+  roomTypesCode?: string,
+  branchId?: string,
+) => {
+  try {
+    const rooms = await db.room.findMany({
+      where: {
+        roomTypeCode: roomTypesCode,
+        branchId,
+      },
+      include: { branch: true, roomType: true, Services: true },
+    });
+    return rooms;
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const getCountRoom = async (query: string) => {
   try {
     const count = await db.room.count({
@@ -81,10 +132,19 @@ export const getCountRoom = async (query: string) => {
   }
 };
 
-export const createRooms = async (fields: ROOM[]) => {
+export const createRooms = async (fields: ROOM[], services?: string[]) => {
   try {
-    const rooms = await db.room.createMany({
-      data: fields,
+    const rooms = fields.map(async (room) => {
+      return await db.room.create({
+        data: {
+          ...room,
+          Services: {
+            create: services?.map((service) => {
+              return { serviceId: service };
+            }),
+          },
+        },
+      });
     });
     return rooms;
   } catch (e) {
@@ -100,11 +160,20 @@ export const deleteRoom = async (id: string) => {
   }
 };
 
-export const updateRoom = async (id: string, fields: ROOM) => {
+export const updateRoom = async (
+  id: string,
+  fields: ROOM,
+  services?: string[],
+) => {
   try {
     const response = await db.room.update({
       where: { id },
-      data: fields,
+      data: {
+        ...fields,
+        Services: {
+          create: services?.map((service) => ({ serviceId: service })),
+        },
+      },
     });
     return response;
   } catch (e) {

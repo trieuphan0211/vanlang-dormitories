@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { MaintenanceDetailForm } from "@/components/FormElements/MaintenanceDetailForm";
+import { MaintenanceDetailForm } from "@/components/Form/MaintenanceDetailForm";
 import { getMaintenancesById } from "@/data/mantainance";
-import { MAINTENNANCES } from "@/types/maintenances";
+import { MAINTENNANCES } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -5,7 +5,7 @@ import {
   getFilterMaintenances,
 } from "@/data/mantainance";
 
-import { MAINTENNANCES } from "@/types/maintenances";
+import { MAINTENNANCES } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -36,14 +36,6 @@ const MaintenancePage = async ({
       <Breadcrumb pageName="Quản lý bảo trì" />
       <MaintenancesTable maintenances={maintenances} count={Number(count)} />
     </div>
-    // <div>
-    //   {open && (
-    //
-    //   )}
-
-    //   <p>{data}</p>
-    //   <button onClick={() => setOpen(!open)}>OPEN</button>
-    // </div>
   );
 };
 

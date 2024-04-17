@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { UserTable } from "@/components/Tables/UserTable";
 import { getCountUsers, getFilterUsers } from "@/data/users";
-import { USER } from "@/types/user";
+import { USER } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

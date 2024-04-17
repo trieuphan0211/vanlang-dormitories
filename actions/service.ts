@@ -10,14 +10,19 @@ export const addService = async (value: z.infer<typeof ServiceSchema>) => {
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { serviceName, cost, description } = validateValue.data;
+  const { serviceName, cost, description, unit } = validateValue.data;
   try {
     const service = await createService({
       name: serviceName,
       cost: Number(cost),
       description,
+      unit,
     });
-    return { success: "Service is created!" };
+    console.log(`Service is created! ${JSON.stringify(service)}`);
+    if (service?.id) {
+      return { success: "Service is created!" };
+    }
+    return { error: "An error occurred!" };
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };
@@ -26,8 +31,11 @@ export const addService = async (value: z.infer<typeof ServiceSchema>) => {
 export const removeService = async (id: string) => {
   try {
     const service = await deleteService(id);
-    console.log("Service is removed!");
-    return { success: "Service is removed!" };
+    console.log(`Service is removed! ${JSON.stringify(service)}`);
+    if (service?.id) {
+      return { success: "Service is removed!" };
+    }
+    return { error: "An error occurred!" };
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };
@@ -41,14 +49,19 @@ export const updateServiceById = async (
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { serviceName, cost, description } = validateValue.data;
+  const { serviceName, cost, description, unit } = validateValue.data;
   try {
-    const branch = await updateService(id, {
+    const service = await updateService(id, {
       name: serviceName,
       cost: Number(cost),
       description,
+      unit,
     });
-    return { success: "Branch is updated!" };
+    console.log(`Service is updated! ${JSON.stringify(service)}`);
+    if (service?.id) {
+      return { success: "Service is updated!" };
+    }
+    return { error: "An error occurred!" };
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };

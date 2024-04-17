@@ -1,13 +1,5 @@
 import { db } from "@/lib/db";
 
-interface Branch {
-  name: string;
-  address: string;
-  floorNumber: number;
-  description?: string;
-  img?: string;
-}
-
 export const getBranchById = async (id: string) => {
   try {
     const branch = await db.branch.findUnique({
@@ -127,7 +119,13 @@ export const getCountBranchs = async (query: string) => {
     console.error(e);
   }
 };
-export const createBranch = async (fields: Branch) => {
+export const createBranch = async (fields: {
+  name: string;
+  address: string;
+  floorNumber: number;
+  description?: string;
+  img?: string;
+}) => {
   console.log(fields, "fields");
   try {
     const branch = await db.branch.create({ data: fields });
@@ -145,7 +143,16 @@ export const deleteBranch = async (id: string) => {
   }
 };
 
-export const updateBranch = async (id: string, fields: Branch) => {
+export const updateBranch = async (
+  id: string,
+  fields: {
+    name: string;
+    address: string;
+    floorNumber: number;
+    description?: string;
+    img?: string;
+  },
+) => {
   try {
     const branch = await db.branch.update({ where: { id }, data: fields });
     return branch;

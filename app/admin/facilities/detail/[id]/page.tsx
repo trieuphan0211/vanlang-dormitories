@@ -1,9 +1,9 @@
 import { getBranchsAll } from "@/actions/branch";
 import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { FacilityDetailForm } from "@/components/FormElements/FacilityDetailForm";
+import { FacilityDetailForm } from "@/components/Form/FacilityDetailForm";
 import { getFacilitiesById } from "@/data/facilities";
-import { FACILITIES } from "@/types/facilities";
+import { BRANCH, FACILITIES } from "@/types";
 import { Branch, FacilitiesType } from "@prisma/client";
 import { Metadata } from "next";
 
@@ -17,9 +17,8 @@ export default async function DetailPage({
   params: { id: string };
 }) {
   const facilities = (await getFacilitiesById(params.id)) as FACILITIES;
-  const branchs = (await getBranchsAll()) as Branch[];
-  const facilitiesType = (await getFacilitiesTypeAll()) as FacilitiesType[];
-  console.log(facilities);
+  const branchs = (await getBranchsAll()) as BRANCH[];
+
   return (
     <div>
       <Breadcrumb pageName={`Chi tiết cơ sở vật chất`} />
@@ -33,7 +32,6 @@ export default async function DetailPage({
           {facilities && (
             <FacilityDetailForm
               facilities={facilities}
-              facilitiesType={facilitiesType}
               branchs={branchs}
               type="detail"
             />

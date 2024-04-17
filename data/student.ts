@@ -137,7 +137,45 @@ export const deleteStudent = async (id: string) => {
     console.error(e);
   }
 };
-export const updateStudent = async (email: string, fields: Student) => {
+export const updateStudentInRoom = async (id: string, roomId: string) => {
+  try {
+    const student = await db.student.update({
+      where: { id },
+      data: {
+        roomId,
+      },
+    });
+    return student;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const updateStudent = async (
+  email: string,
+  fields: {
+    bankAccount: string;
+    bankBranch: string;
+    bankName: string;
+    bankNumber: string;
+    brithday: string;
+    cccdCode: string;
+    cccdOfDate: string;
+    cccdPlace: string;
+    fullName: string;
+    gender: string;
+    major: string;
+    nation: string;
+    phone: number;
+    religion: string;
+    schoolYear: number;
+    studentCode: string;
+    createDate: Date;
+
+    permanentResidence: string;
+    contactinfo: string;
+    familiInfo: string;
+  },
+) => {
   try {
     const student = await db.student.update({
       where: { email },

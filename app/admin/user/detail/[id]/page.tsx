@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { UserDetailForm } from "@/components/FormElements/UserDetailForm";
+import { UserDetailForm } from "@/components/Form/UserDetailForm";
 import { getUserById } from "@/data/users";
-import { USER } from "@/types/user";
+import { USER } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

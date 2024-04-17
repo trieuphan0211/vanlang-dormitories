@@ -1,0 +1,124 @@
+import { UserRole } from "@prisma/client";
+import { StatusFacilities } from "@prisma/client";
+import { StatusMaintenance } from "@prisma/client";
+
+export type BRANCH = {
+  id: string;
+  img?: string;
+  name: string;
+  address: string;
+  floorNumber?: number;
+  description?: string;
+};
+export type INVOICE = {
+  id: string;
+  roomId: string;
+  total: number;
+  room: ROOM;
+  createDate: Date;
+  status: number;
+  detail: string;
+  invoiceDate: string;
+};
+export type SERVICES = {
+  id: string;
+  unit: string;
+  name: string;
+  cost: number;
+  description?: string;
+};
+
+export type ROOMTYPE = {
+  id: string;
+  name: string;
+  members: number;
+  description?: string;
+  code: string;
+  cost: number;
+};
+
+export type ROOM = {
+  id: string;
+  code: string;
+  floor: number;
+  branchId: string;
+  roomTypeCode: string;
+  branch: BRANCH;
+  roomType?: ROOMTYPE;
+  Services?: Array<any>;
+  Student?: Array<any>;
+  description?: string;
+};
+
+export type STUDENT = {
+  id: string;
+  cccdCode?: string;
+  cccdOfDate?: string;
+  cccdPlace?: string;
+  fullName: string;
+  gender?: string;
+  brithday?: string;
+  nation?: string;
+  religion?: string;
+  email: string;
+  phone?: number;
+  studentCode?: string;
+  major?: string;
+  schoolYear?: number;
+  bankName?: string;
+  bankBranch?: string;
+  bankAccount?: string;
+  bankNumber?: string;
+  permanentResidence?: string;
+  familiInfo?: string;
+  contactinfo?: string;
+};
+
+export type REGISTER = {
+  id: string;
+  studentId: string;
+  registerDate: Date;
+  status: number;
+  createDate: Date;
+  student: STUDENT;
+};
+
+export type USER = {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  image: string;
+  signinTime: Date;
+};
+
+export type FACILITIESTYPE = {
+  id: string;
+  name: string;
+  description?: string;
+  code: string;
+};
+
+export type FACILITIES = {
+  id: string;
+  name: string;
+  description?: string;
+  facilitiesTypeCode: string;
+  status: StatusFacilities;
+  branchId?: string;
+  code: string;
+  branch?: BRANCH;
+  roomId?: string;
+  facilitiesType?: FACILITIESTYPE;
+};
+
+export type MAINTENNANCES = {
+  id: string;
+  code: string;
+  startDate: Date;
+  mantainanceName: string;
+  description?: string;
+  status: StatusMaintenance;
+  createDate: Date;
+  facilities?: FACILITIES[];
+};

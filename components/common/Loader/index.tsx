@@ -1,7 +1,7 @@
 import "@/css/loader.css";
 const Loader = () => {
   return (
-    <div className="flex h-screen items-center justify-center bg-[rgba(0,0,0,0.3)]">
+    <div className="flex h-screen items-center justify-center bg-transparent">
       <div className="scale-150">
         <div className="loader">
           <svg viewBox="0 0 80 80">

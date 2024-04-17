@@ -4,7 +4,7 @@ import {
   getCountFacilitiestypes,
   getFilterFacilitiesTypes,
 } from "@/data/facilities-type";
-import { FACILITIESTYPE } from "@/types/facilitie-type";
+import { FACILITIESTYPE } from "@/types";
 import { Metadata } from "next";
 import React from "react";
 

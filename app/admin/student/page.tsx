@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { StudentTable } from "@/components/Tables/StudentTable";
 import { getCountStudents, getFilterStudents } from "@/data/student";
-import { STUDENT } from "@/types/student";
+import { STUDENT } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -11,8 +11,9 @@ export const addRooms = async (value: z.infer<typeof RoomSchema>) => {
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { roomTypeCode, description, branchId, floor, count } =
+  const { roomTypeCode, description, branchId, floor, count, services } =
     validateValue.data;
+  console.log("floor: ", validateValue.data);
   const currentRooms = await db.room.findMany({
     orderBy: [
       {
@@ -41,10 +42,8 @@ export const addRooms = async (value: z.infer<typeof RoomSchema>) => {
         : nextCode + index + 1),
     floor: Number(floor),
   }));
-  console.log("rooms: ", rooms);
   try {
-    console.log("rooms: ", rooms);
-    const res = await createRooms(rooms);
+    const res = await createRooms(rooms, services);
     if (res) {
       return {
         success: "Rooms is created!",
@@ -81,16 +80,20 @@ export const updateRoomById = async (
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { roomTypeCode, branchId, description, floor, code } =
+  const { roomTypeCode, branchId, description, floor, code, services } =
     validateValue.data;
   try {
-    const room = await updateRoom(id, {
-      roomTypeCode,
-      branchId,
-      description,
-      floor: Number(floor),
-      code: code as string,
-    });
+    const room = await updateRoom(
+      id,
+      {
+        roomTypeCode,
+        branchId,
+        description,
+        floor: Number(floor),
+        code: code as string,
+      },
+      services,
+    );
     if (room) {
       return { success: "Room is updated!" };
     } else {

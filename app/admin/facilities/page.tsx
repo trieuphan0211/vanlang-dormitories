@@ -3,7 +3,7 @@ import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { FacilitiesTable } from "@/components/Tables/FacilitiesTable";
 import { getCountFacilities, getFilterFacilities } from "@/data/facilities";
-import { FACILITIES } from "@/types/facilities";
+import { BRANCH, FACILITIES, FACILITIESTYPE } from "@/types";
 import { Branch, FacilitiesType } from "@prisma/client";
 import { Metadata } from "next";
 
@@ -29,8 +29,8 @@ const FacilitiesPage = async ({
     currentPage,
     entries,
   )) as FACILITIES[];
-  const branchs = (await getBranchsAll()) as Branch[];
-  const facilitiesType = (await getFacilitiesTypeAll()) as FacilitiesType[];
+  const branchs = (await getBranchsAll()) as BRANCH[];
+  const facilitiesType = (await getFacilitiesTypeAll()) as FACILITIESTYPE[];
   const count = await getCountFacilities(query);
   return (
     <div>

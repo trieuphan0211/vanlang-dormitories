@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { BranchDetailForm } from "@/components/FormElements/BranchDetailForm";
+import { BranchDetailForm } from "@/components/Form/BranchDetailForm";
 import { getBranchById } from "@/data/branch";
-import { BRANCH } from "@/types/branch";
+import { BRANCH } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

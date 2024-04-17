@@ -1,11 +1,5 @@
 import { Metadata } from "next";
-import { FaInternetExplorer } from "react-icons/fa";
-import { FiTrash2 } from "react-icons/fi";
-import { GiElectric } from "react-icons/gi";
-import { IoWaterOutline } from "react-icons/io5";
-import { IconBaseProps } from "react-icons/lib";
-import { MdOutlineSecurity } from "react-icons/md";
-import { TbWashDry3 } from "react-icons/tb";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Loại phòng",
@@ -18,9 +12,14 @@ interface ServiceItem {
 }
 const serviceItems: ServiceItem[] = [
   {
-    img: "",
-    title: "Phòng 1 giường",
-    cost: "1,000,000đ/tháng",
+    img: "/images/room/double-room.webp",
+    title: "Phòng đôi",
+    cost: "2,000,000đ/tháng",
+  },
+  {
+    img: "/images/room/four-room.webp",
+    title: "Phòng 4 người",
+    cost: "1,500,000đ/tháng",
   },
 ];
 const RoomPage = () => {
@@ -33,9 +32,9 @@ const RoomPage = () => {
         {serviceItems.map((item, index) => (
           <div
             key={index}
-            className="flex gap-5 rounded-lg bg-white p-3 shadow-9 transition-all hover:z-10 hover:scale-110 hover:cursor-pointer hover:shadow-14"
+            className=" flex flex-col items-center rounded-lg bg-white p-3 shadow-9 transition-all hover:z-10 hover:scale-110 hover:cursor-pointer hover:shadow-14"
           >
-            <>{item.img}</>
+            <Image src={item.img} alt={item.title} width={300} height={200} />
             <div>
               <h2 className="mb-2 text-2xl font-semibold">{item.title}</h2>
               <p className="text-lg font-medium">{item.cost}</p>

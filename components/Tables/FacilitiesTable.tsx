@@ -1,11 +1,11 @@
 "use client";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { FACILITIES } from "@/types/facilities";
+import { BRANCH, FACILITIES, FACILITIESTYPE } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaCheck, FaRegEdit } from "react-icons/fa";
-import { AddNewFacilities } from "../Dialog/AddNewFacilities";
+import { AddNewFacilities } from "../Form/AddNewFacilities";
 import { RemoveItem } from "../Dialog/RemoveItem";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import clsx from "clsx";
@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
 import { FaQrcode } from "react-icons/fa6";
 import { Branch, FacilitiesType } from "@prisma/client";
+import { DialogButton } from "../Button";
 
 export const FacilitiesTable = ({
   facilities,
@@ -22,13 +23,14 @@ export const FacilitiesTable = ({
 }: {
   facilities: FACILITIES[];
   count: number;
-  branchs: Branch[];
-  facilitiesType: FacilitiesType[];
+  branchs: BRANCH[];
+  facilitiesType: FACILITIESTYPE[];
 }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [code, setCode] = useState<FACILITIES[]>([]);
+  const [open, setOpen] = useState(false);
   const getQrCode = () => {
     dispatch(qrManagerActions.setQrCode({ qrList: code }));
     router.push("facilities/qr-code");
@@ -37,11 +39,19 @@ export const FacilitiesTable = ({
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
         <SearchTable placeholder="Tìm kiếm cơ sở vật chất" />
-        <AddNewFacilities
-          isPending={isPending}
-          startTransition={startTransition}
-          branchs={branchs}
-          facilitiesType={facilitiesType}
+
+        <DialogButton
+          open={open}
+          setOpen={setOpen}
+          childrens={
+            <AddNewFacilities
+              isPending={isPending}
+              startTransition={startTransition}
+              setOpen={setOpen}
+              branchs={branchs}
+              facilitiesType={facilitiesType}
+            />
+          }
         />
       </div>
       <div className="my-3 border-t-[1px] border-graydark"></div>

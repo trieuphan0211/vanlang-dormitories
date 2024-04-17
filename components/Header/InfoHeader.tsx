@@ -3,8 +3,52 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import menuData from "./menuData";
+export type Menu = {
+  id: number;
+  title: string;
+  path?: string;
+  newTab: boolean;
+  submenu?: Menu[];
+};
 
+const menuData: Menu[] = [
+  {
+    id: 1,
+    title: "Trang chủ",
+    path: "/",
+    newTab: false,
+  },
+  {
+    id: 2,
+    title: "Giới thiệu",
+    path: "/about",
+    newTab: false,
+  },
+  {
+    id: 33,
+    title: "Tin tức",
+    path: "/blog",
+    newTab: false,
+  },
+  {
+    id: 3,
+    title: "Phòng ở",
+    path: "/room",
+    newTab: false,
+  },
+  {
+    id: 3,
+    title: "Dịch vụ",
+    path: "/services",
+    newTab: false,
+  },
+  {
+    id: 3,
+    title: "Nội quy",
+    path: "/rules",
+    newTab: false,
+  },
+];
 export const InfoHeader = () => {
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);

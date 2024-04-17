@@ -1,13 +1,13 @@
 "use client";
-import { removeRoomType } from "@/actions/roomType";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { ROOMTYPE } from "@/types/room-type";
-import { useTransition } from "react";
-import { AddNewRoomType } from "../Dialog/AddNewRoomType";
+import { ROOMTYPE } from "@/types";
 import { useRouter } from "next/navigation";
-import { RemoveItem } from "../Dialog/RemoveItem";
+import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
+import { RemoveItem } from "@/components/Dialog/RemoveItem";
+import { DialogButton } from "@/components/Button";
+import { AddNewRoomType } from "@/components/Form/AddNewRoomType";
 
 export const RoomTypeTable = ({
   roomTypes,
@@ -16,13 +16,24 @@ export const RoomTypeTable = ({
   roomTypes: ROOMTYPE[];
   count: number;
 }) => {
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
         <SearchTable placeholder="Tìm kiếm loại phòng ..." />
-        <AddNewRoomType />
+        <DialogButton
+          open={open}
+          setOpen={setOpen}
+          childrens={
+            <AddNewRoomType
+              isPending={isPending}
+              startTransition={startTransition}
+              setOpen={setOpen}
+            />
+          }
+        />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -68,7 +79,12 @@ export const RoomTypeTable = ({
                   <p className="text-black dark:text-white">{roomType.code}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{roomType.cost}</p>
+                  <p className="text-black dark:text-white">
+                    {roomType.cost.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    đ
+                  </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">

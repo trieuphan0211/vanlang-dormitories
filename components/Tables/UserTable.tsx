@@ -3,13 +3,12 @@ import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
-import { USER } from "@/types/user";
+import { USER } from "@/types";
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RemoveItem } from "../Dialog/RemoveItem";
-import clsx from "clsx";
-import { useSession } from "next-auth/react";
 
 export const UserTable = ({
   users,

@@ -2,8 +2,8 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { StudentDetailForm } from "@/components/FormElements/StudentDetailForm";
 import { getStudentById } from "@/data/student";
 import { getUserByEmail } from "@/data/users";
-import { STUDENT } from "@/types/student";
-import { USER } from "@/types/user";
+import { STUDENT } from "@/types";
+import { USER } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,7 +27,9 @@ export default async function DetailPage({
           </h3>
         </div>
         <div className="p-7">
-          {student && <StudentDetailForm student={student} user={user} />}
+          {student && (
+            <StudentDetailForm student={student} user={user} type="detail" />
+          )}
         </div>
       </div>
     </div>

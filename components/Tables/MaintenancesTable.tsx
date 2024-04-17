@@ -1,12 +1,13 @@
 "use client";
-import { AddNewMaintenance } from "@/components/Dialog/AddNewMaintenance";
+import { AddNewMaintenance } from "@/components/Form/AddNewMaintenance";
 import { RemoveItem } from "@/components/Dialog/RemoveItem";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { MAINTENNANCES } from "@/types/maintenances";
+import { MAINTENNANCES } from "@/types";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
+import { DialogButton } from "../Button";
 
 export const MaintenancesTable = ({
   maintenances,
@@ -15,13 +16,24 @@ export const MaintenancesTable = ({
   maintenances: MAINTENNANCES[];
   count: number;
 }) => {
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
         <SearchTable placeholder="Tìm kiếm đơn bảo trì ..." />
-        <AddNewMaintenance />
+        <DialogButton
+          open={open}
+          setOpen={setOpen}
+          childrens={
+            <AddNewMaintenance
+              isPending={isPending}
+              startTransition={startTransition}
+              setOpen={setOpen}
+            />
+          }
+        />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">

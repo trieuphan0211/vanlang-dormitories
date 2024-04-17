@@ -24,11 +24,27 @@ export const getFacilitiesAll = async () => {
   }
 };
 
+export const getFacilitiesByCodes = async (code: string) => {
+  try {
+    const facilities = await db.facilities.findUnique({
+      where: {
+        code,
+      },
+      include: {
+        branch: true,
+        facilitiesType: true,
+      },
+    });
+    return facilities;
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const getFacilitiesById = async (id: string) => {
   try {
     const facilities = await db.facilities.findUnique({
       where: {
-        code: id,
+        id,
       },
       include: {
         branch: true,

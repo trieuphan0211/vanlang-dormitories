@@ -141,6 +141,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           title: "Đăng ký Ký túc xá",
           href: "/admin/register-dormitory",
         },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Lập hóa đơn",
+          href: "/admin/invoice",
+        },
       ],
     },
   ];
@@ -148,15 +153,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-1 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-40 flex h-screen w-72.5 flex-col overflow-y-hidden  bg-[url('/images/background/h1.jpg')] bg-cover bg-center duration-300 ease-linear before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-rose-900 before:to-black before:opacity-75 before:blur-sm lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 pb-5.5 lg:pb-6.5">
-        <Link href="/" className="flex h-22 items-center overflow-hidden">
+      <div className="z-10 flex items-center justify-between gap-2 px-6 py-2 lg:justify-center ">
+        <Link href="/" className="flex items-center overflow-hidden">
           <Image
-            width={176}
+            width={200}
             height={32}
             src={"/images/logo/logo.png"}
             alt="Logo"
@@ -180,7 +185,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           >
             <path
               d="M19 8.175H2.98748L9.36248 1.6875C9.69998 1.35 9.69998 0.825 9.36248 0.4875C9.02498 0.15 8.49998 0.15 8.16248 0.4875L0.399976 8.3625C0.0624756 8.7 0.0624756 9.225 0.399976 9.5625L8.16248 17.4375C8.31248 17.5875 8.53748 17.7 8.76248 17.7C8.98748 17.7 9.17498 17.625 9.36248 17.475C9.69998 17.1375 9.69998 16.6125 9.36248 16.275L3.02498 9.8625H19C19.45 9.8625 19.825 9.4875 19.825 9.0375C19.825 8.55 19.45 8.175 19 8.175Z"
-              fill=""
+              fill="#000"
             />
           </svg>
         </button>

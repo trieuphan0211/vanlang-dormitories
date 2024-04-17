@@ -1,13 +1,7 @@
-import { getBranchsAll } from "@/actions/branch";
-import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { FacilityDetailForm } from "@/components/FormElements/FacilityDetailForm";
-import { MaintenanceDetailForm } from "@/components/FormElements/MaintenanceDetailForm";
-import { getFacilitiesById } from "@/data/facilities";
+import { MaintenanceDetailForm } from "@/components/Form/MaintenanceDetailForm";
 import { getMaintenancesById } from "@/data/mantainance";
-import { FACILITIES } from "@/types/facilities";
-import { MAINTENNANCES } from "@/types/maintenances";
-import { Branch, FacilitiesType } from "@prisma/client";
+import { MAINTENNANCES } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

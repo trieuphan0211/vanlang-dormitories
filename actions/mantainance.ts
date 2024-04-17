@@ -2,7 +2,6 @@
 import crypto from "crypto";
 import * as z from "zod";
 
-import { MaintenanceSchema } from "@/schema";
 import { updateFacilities } from "@/data/facilities";
 import {
   createMaintenance,
@@ -10,8 +9,8 @@ import {
   getMaintenancesById,
   updateMaintenance,
 } from "@/data/mantainance";
-import { MAINTENNANCES } from "@/types/maintenances";
-import { FACILITIES } from "@/types/facilities";
+import { MaintenanceSchema } from "@/schema";
+import { MAINTENNANCES } from "@/types";
 
 export const addManitainance = async (
   value: z.infer<typeof MaintenanceSchema>,

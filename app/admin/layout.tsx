@@ -44,7 +44,12 @@ export default function AdminLayout({
         </main>
       );
     } else {
-      return <VerifiedInfo />;
+      return (
+        <>
+          <VerifiedInfo />
+          <Alert />
+        </>
+      );
     }
   }
   return <NotFound />;

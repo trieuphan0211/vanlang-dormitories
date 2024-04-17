@@ -2,21 +2,22 @@
 import { updateStudentByEmail } from "@/actions/student";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
-import { FacilitiesSchema, StudentInfoSchema } from "@/schema";
+import { StudentInfoSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Input } from "../Input";
 
 const VerifiedInfo = () => {
   const logout = async (e: any) => {
     e.preventDefault();
     await signOut();
   };
-  const [pending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const session = useSession();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -60,7 +61,7 @@ const VerifiedInfo = () => {
               alertManagerActions.setAlert({
                 message: {
                   type: "success",
-                  content: "Cơ sở vật chất đã được thêm thành công!",
+                  content: "Sinh viên đã được thêm thành công!",
                 },
               }),
             );
@@ -70,7 +71,7 @@ const VerifiedInfo = () => {
               alertManagerActions.setAlert({
                 message: {
                   type: "error",
-                  content: "Có lỗi xảy ra, vui lòng thử lại!",
+                  content: "Mã CCCD và Mã số sinh viên đã tồn tại!",
                 },
               }),
             );
@@ -99,180 +100,307 @@ const VerifiedInfo = () => {
             </div>
             <div className="p-6.5">
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.cccdCode,
+                    },
+                  )}
+                >
                   Mã CCCD <span className="text-meta-1">*</span>
                 </label>
-                <input
-                  type="text"
-                  {...register("cccdCode")}
-                  placeholder="Enter your email address"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                <Input
+                  type="number"
+                  placeholder="Nhập mã CCCD"
+                  errors={errors.cccdCode}
+                  isPending={isPending}
+                  register={register("cccdCode")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.cccdOfDate,
+                    },
+                  )}
+                >
                   Ngày cấp CCCD<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("cccdOfDate")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập ngày cấp CCCD"
+                  errors={errors.cccdOfDate}
+                  isPending={isPending}
+                  register={register("cccdOfDate")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.cccdPlace,
+                    },
+                  )}
+                >
                   Nơi cấp CCCD<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("cccdPlace")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập nơi cấp CCCD"
+                  errors={errors.cccdPlace}
+                  isPending={isPending}
+                  register={register("cccdPlace")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.fullName,
+                    },
+                  )}
+                >
                   Họ & Tên<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("fullName")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập họ và tên"
+                  errors={errors.fullName}
+                  isPending={isPending}
+                  register={register("fullName")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.gender,
+                    },
+                  )}
+                >
                   Giới tính<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("gender")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập giới tính"
+                  errors={errors.gender}
+                  isPending={isPending}
+                  register={register("gender")}
                 />
-              </div>{" "}
+              </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.brithday,
+                    },
+                  )}
+                >
                   Ngày sinh<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("brithday")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập ngày sinh"
+                  errors={errors.brithday}
+                  isPending={isPending}
+                  register={register("brithday")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.nation,
+                    },
+                  )}
+                >
                   Dân tộc<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("nation")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập dân tộc"
+                  errors={errors.nation}
+                  isPending={isPending}
+                  register={register("nation")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.religion,
+                    },
+                  )}
+                >
                   Tôn giáo <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("religion")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tôn giáo"
+                  errors={errors.religion}
+                  isPending={isPending}
+                  register={register("religion")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.phone,
+                    },
+                  )}
+                >
                   Số điện thoại <span className="text-meta-1">*</span>
                 </label>
-                <input
-                  type="number"
-                  {...register("phone")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                <Input
+                  type="text"
+                  placeholder="Nhập số điện thoại"
+                  errors={errors.phone}
+                  isPending={isPending}
+                  register={register("phone")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.studentCode,
+                    },
+                  )}
+                >
                   Mã số sinh viên <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("studentCode")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập mã số sinh viên"
+                  errors={errors.studentCode}
+                  isPending={isPending}
+                  register={register("studentCode")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.major,
+                    },
+                  )}
+                >
                   Khoa <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("major")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập khoa"
+                  errors={errors.major}
+                  isPending={isPending}
+                  register={register("major")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.schoolYear,
+                    },
+                  )}
+                >
                   SV năm<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="number"
-                  {...register("schoolYear")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập năm sinh viên"
+                  errors={errors.schoolYear}
+                  isPending={isPending}
+                  register={register("schoolYear")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.bankName,
+                    },
+                  )}
+                >
                   Ngân hàng bạn đã có thẻ
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("bankName")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tên ngân hàng bạn đã có thẻ"
+                  errors={errors.bankName}
+                  isPending={isPending}
+                  register={register("bankName")}
                 />
-                {/* <SelectRadix /> */}
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.bankBranch,
+                    },
+                  )}
+                >
                   Chi nhánh ngân hàng
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("bankBranch")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập chi nhánh ngân hàng bạn đã có thẻ"
+                  errors={errors.bankBranch}
+                  isPending={isPending}
+                  register={register("bankBranch")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.bankNumber,
+                    },
+                  )}
+                >
                   Số tài khoản
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("bankAccount")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập Số tài khoản ngân hàng của bạn"
+                  errors={errors.bankNumber}
+                  isPending={isPending}
+                  register={register("bankNumber")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.bankAccount,
+                    },
+                  )}
+                >
                   Chủ tài khoản
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("bankNumber")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tên chủ tài khoản ngân hàng của bạn"
+                  errors={errors.bankNumber}
+                  isPending={isPending}
+                  register={register("bankAccount")}
                 />
               </div>
               <p className="italic text-red">
@@ -291,48 +419,80 @@ const VerifiedInfo = () => {
             </div>
             <div className="p-6.5">
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.permanentResidence?.city,
+                    },
+                  )}
+                >
                   Tỉnh/Thành phố <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("permanentResidence.city")}
-                  placeholder="Enter your email address"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tỉnh/thành phố bạn đang sống"
+                  errors={errors.permanentResidence?.city}
+                  isPending={isPending}
+                  register={register("permanentResidence.city")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.permanentResidence?.district,
+                    },
+                  )}
+                >
                   Quận/Huyện<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("permanentResidence.district")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập quận/huyện bạn đang sống"
+                  errors={errors.permanentResidence?.district}
+                  isPending={isPending}
+                  register={register("permanentResidence.district")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.permanentResidence?.ward,
+                    },
+                  )}
+                >
                   Phường/Xã<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("permanentResidence.ward")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập phường/xã bạn đang sống"
+                  errors={errors.permanentResidence?.ward}
+                  isPending={isPending}
+                  register={register("permanentResidence.ward")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.permanentResidence?.address,
+                    },
+                  )}
+                >
                   Số nhà, tên đường, tổ/xóm, khu phố/thôn/ấp
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("permanentResidence.address")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập địa chỉ của bạn"
+                  errors={errors.permanentResidence?.address}
+                  isPending={isPending}
+                  register={register("permanentResidence.address")}
                 />
               </div>
             </div>
@@ -345,120 +505,200 @@ const VerifiedInfo = () => {
             </div>
             <div className="p-6.5">
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[0]?.name,
+                    },
+                  )}
+                >
                   Họ tên cha <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.0.name")}
-                  placeholder="Enter your email address"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập họ tên cha của bạn"
+                  errors={errors.familiInfo?.[0]?.name}
+                  isPending={isPending}
+                  register={register("familiInfo.0.name")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[0]?.birthYear,
+                    },
+                  )}
+                >
                   Năm sinh<span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.0.birthYear")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập năm sinh cha của bạn"
+                  errors={errors.familiInfo?.[0]?.birthYear}
+                  isPending={isPending}
+                  register={register("familiInfo.0.birthYear")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[0]?.phone,
+                    },
+                  )}
+                >
                   Số điện thoại <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.0.phone")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập số điện thoại cha của bạn"
+                  errors={errors.familiInfo?.[0]?.phone}
+                  isPending={isPending}
+                  register={register("familiInfo.0.phone")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[0]?.job,
+                    },
+                  )}
+                >
                   Nghề nghiệp
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.0.job")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập nghề nghiệp cha của bạn"
+                  errors={errors.familiInfo?.[0]?.job}
+                  isPending={isPending}
+                  register={register("familiInfo.0.job")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[0]?.address,
+                    },
+                  )}
+                >
                   Nơi ở (hoặc nơi công tác) hiện nay
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.0.address")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập nơi ở của cha của bạn"
+                  errors={errors.familiInfo?.[0]?.address}
+                  isPending={isPending}
+                  register={register("familiInfo.0.address")}
                 />
               </div>{" "}
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[1]?.name,
+                    },
+                  )}
+                >
                   Họ tên mẹ
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.1.name")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập họ tên mẹ của bạn"
+                  errors={errors.familiInfo?.[1]?.name}
+                  isPending={isPending}
+                  register={register("familiInfo.1.name")}
                 />
-              </div>{" "}
+              </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[1]?.birthYear,
+                    },
+                  )}
+                >
                   Năm sinh
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.1.birthYear")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập năm sinh mẹ của bạn"
+                  errors={errors.familiInfo?.[1]?.birthYear}
+                  isPending={isPending}
+                  register={register("familiInfo.1.birthYear")}
                 />
               </div>{" "}
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[1]?.phone,
+                    },
+                  )}
+                >
                   Số điện thoại
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.1.phone")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập số điện thoại mẹ của bạn"
+                  errors={errors.familiInfo?.[1]?.phone}
+                  isPending={isPending}
+                  register={register("familiInfo.1.phone")}
                 />
               </div>{" "}
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[1]?.job,
+                    },
+                  )}
+                >
                   Nghề nghiệp
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.1.job")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập nghề nghiệp mẹ của bạn"
+                  errors={errors.familiInfo?.[1]?.job}
+                  isPending={isPending}
+                  register={register("familiInfo.1.job")}
                 />
               </div>{" "}
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.familiInfo?.[1]?.address,
+                    },
+                  )}
+                >
                   Nơi ở (hoặc nơi công tác) hiện nay
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("familiInfo.1.address")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập nơi ở của mẹ của bạn"
+                  errors={errors.familiInfo?.[1]?.address}
+                  isPending={isPending}
+                  register={register("familiInfo.1.address")}
                 />
               </div>{" "}
             </div>
@@ -471,64 +711,104 @@ const VerifiedInfo = () => {
             </div>
             <div className="p-6.5">
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.contactinfo?.name,
+                    },
+                  )}
+                >
                   Khi cần liên lạc báo tin cho ai{" "}
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("contactinfo.name")}
-                  placeholder="Enter your email address"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tên người liên lạc"
+                  errors={errors.contactinfo?.name}
+                  isPending={isPending}
+                  register={register("contactinfo.name")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.contactinfo?.phone,
+                    },
+                  )}
+                >
                   Điện thoại liên hệ với người thân/gia đình
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
-                  type="text"
-                  {...register("contactinfo.phone")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                <Input
+                  type="number"
+                  placeholder="Nhập số điện thoại liên lạc với người thân/gia đình"
+                  errors={errors.contactinfo?.phone}
+                  isPending={isPending}
+                  register={register("contactinfo.phone")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.contactinfo?.address,
+                    },
+                  )}
+                >
                   Địa chỉ liên lạc (ghi rõ: Số nhà, tên đường, thôn/xóm/buôn/ấp,
                   phường/xã/thị trấn, quận/huyện/thành phố, tỉnh/thành phố)
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("contactinfo.address")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập địa chỉ liên lạc với người thân/gia đình"
+                  errors={errors.contactinfo?.address}
+                  isPending={isPending}
+                  register={register("contactinfo.address")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.contactinfo?.city,
+                    },
+                  )}
+                >
                   Tỉnh/Thành phố
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("contactinfo.city")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập tỉnh/thành phố liên lạc với người thân/gia đình"
+                  errors={errors.contactinfo?.city}
+                  isPending={isPending}
+                  register={register("contactinfo.city")}
                 />
               </div>
               <div className="mb-4.5">
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                <label
+                  className={clsx(
+                    `mb-3 block text-sm font-medium text-black dark:text-white`,
+                    {
+                      "text-red": errors.contactinfo?.district,
+                    },
+                  )}
+                >
                   Quận/Huyện
                   <span className="text-meta-1">*</span>
                 </label>
-                <input
+                <Input
                   type="text"
-                  {...register("contactinfo.district")}
-                  placeholder="Select subject"
-                  className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  placeholder="Nhập quận/huyện liên lạc với người thân/gia đình"
+                  errors={errors.contactinfo?.district}
+                  isPending={isPending}
+                  register={register("contactinfo.district")}
                 />
               </div>
             </div>

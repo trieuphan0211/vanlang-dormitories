@@ -1,5 +1,4 @@
 import { StatusFacilities, StatusMaintenance, UserRole } from "@prisma/client";
-import { count } from "console";
 import * as z from "zod";
 
 // Branch Schema
@@ -48,6 +47,18 @@ export const RoomTypeSchema = z
       message: "Số lượng thành viên phải lớn hơn 0",
       path: ["members"],
     },
+  )
+  .refine(
+    (data) => {
+      if (Number(data.cost) < 1000) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Số tiền phải lớn hơn 1000 đồng",
+      path: ["cost"],
+    },
   );
 
 export const RoomSchema = z
@@ -58,6 +69,7 @@ export const RoomSchema = z
     branchId: z.string().min(1, "Chi nhánh không đc để trống"),
     floor: z.string(),
     count: z.optional(z.string()),
+    services: z.optional(z.array(z.string())),
   })
   .refine(
     (data) => {
@@ -81,6 +93,18 @@ export const RoomSchema = z
     {
       message: "Nhập số phòng ít nhất là 1",
       path: ["count"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.services?.length === 0) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Chọn ít nhất 1 dịch vụ",
+      path: ["services"],
     },
   );
 
@@ -147,7 +171,7 @@ export const FacilitiesSchema = z
         StatusFacilities.LIQUIDATION,
       ]),
     ),
-    branchId: z.optional(z.string()),
+    branchId: z.string(),
     facilitiesTypeCode: z.string(),
     count: z.optional(z.string()),
   })
@@ -173,6 +197,18 @@ export const FacilitiesSchema = z
     {
       message: "Loại cơ sở vật chất không được để trống",
       path: ["facilitiesTypeCode"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.branchId === "") {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Chi nhánh không được để trống",
+      path: ["branchId"],
     },
   );
 export const FacilitiesTypeSchema = z.object({
@@ -215,6 +251,7 @@ export const ServiceSchema = z
     serviceName: z.string().min(1, "Tên dịch vụ không được để trống"),
     description: z.string(),
     cost: z.string(),
+    unit: z.string().min(1, "Đơn vị rỗng"),
   })
   .refine(
     (data) => {

@@ -1,13 +1,11 @@
 "use client";
-import { AddNewItem } from "@/components/Dialog/AddNewItem";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { BRANCH } from "@/types/branch";
+import { STUDENT } from "@/types";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RemoveItem } from "../Dialog/RemoveItem";
-import { STUDENT } from "@/types/student";
 
 export const StudentTable = ({
   students,

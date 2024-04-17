@@ -1,11 +1,26 @@
 import { db } from "@/lib/db";
-import { equal } from "assert";
 
 interface Services {
   name: string;
   description?: string;
   cost: number;
+  unit: string;
 }
+
+export const getServicesAll = async () => {
+  try {
+    const services = await db.services.findMany({
+      orderBy: [
+        {
+          createDate: "desc",
+        },
+      ],
+    });
+    return services;
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const getServiceById = async (id: string) => {
   try {

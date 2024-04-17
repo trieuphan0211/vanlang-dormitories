@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { ServicesTable } from "@/components/Tables/ServicesTable";
 import { getCountServices, getFilterServices } from "@/data/services";
-import { SERVICES } from "@/types/services";
+import { SERVICES } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

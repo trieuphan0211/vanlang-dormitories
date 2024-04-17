@@ -1,9 +1,9 @@
 import { getBranchsAll } from "@/actions/branch";
 import { getFacilitiesTypeAll } from "@/actions/facilitiesType";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { FacilityDetailForm } from "@/components/FormElements/FacilityDetailForm";
+import { FacilityDetailForm } from "@/components/Form/FacilityDetailForm";
 import { getFacilitiesById } from "@/data/facilities";
-import { FACILITIES } from "@/types/facilities";
+import { BRANCH, FACILITIES } from "@/types";
 import { Branch, FacilitiesType } from "@prisma/client";
 import { Metadata } from "next";
 
@@ -17,7 +17,7 @@ export default async function DetailPage({
   params: { id: string };
 }) {
   const facilities = (await getFacilitiesById(params.id)) as FACILITIES;
-  const branchs = (await getBranchsAll()) as Branch[];
+  const branchs = (await getBranchsAll()) as BRANCH[];
   const facilitiesType = (await getFacilitiesTypeAll()) as FacilitiesType[];
   return (
     <div>
@@ -30,11 +30,7 @@ export default async function DetailPage({
         </div>
         <div className="p-7">
           {facilities && (
-            <FacilityDetailForm
-              facilities={facilities}
-              facilitiesType={facilitiesType}
-              branchs={branchs}
-            />
+            <FacilityDetailForm facilities={facilities} branchs={branchs} />
           )}
         </div>
       </div>

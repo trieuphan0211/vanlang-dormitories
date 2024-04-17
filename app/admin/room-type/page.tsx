@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { RoomTypeTable } from "@/components/Tables/RoomTypeTable";
 import { getCountRoomtypes, getFilterRoomTypes } from "@/data/room-type";
-import { ROOMTYPE } from "@/types/room-type";
+import { ROOMTYPE } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

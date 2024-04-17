@@ -3,6 +3,7 @@
 import {
   createFacilities,
   deleteFacilities,
+  getFacilitiesByCodes,
   getFacilitiesById,
   updateFacilities,
 } from "@/data/facilities";
@@ -10,6 +11,16 @@ import { FacilitiesSchema } from "@/schema";
 import * as z from "zod";
 import crypto from "crypto";
 
+export const getFacilitiesByCode = async (code: string) => {
+  try {
+    const response = await getFacilitiesByCodes(code);
+    console.log("response: ", response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
+  }
+};
 export const getFacilities = async (id: string) => {
   try {
     const response = await getFacilitiesById(id);

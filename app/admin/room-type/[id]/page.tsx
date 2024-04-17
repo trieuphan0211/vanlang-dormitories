@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { RoomTypeDetailForm } from "@/components/FormElements/RoomTypeDetailForm";
+import { RoomTypeDetailForm } from "@/components/Form/RoomTypeDetailForm";
 import { getRoomTypeById } from "@/data/room-type";
-import { ROOMTYPE } from "@/types/room-type";
+import { ROOMTYPE } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

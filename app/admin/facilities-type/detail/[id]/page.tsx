@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { FacilitiesTypeDetailForm } from "@/components/FormElements/FacilitiesTypeDetailForm";
+import { FacilitiesTypeDetailForm } from "@/components/Form/FacilitiesTypeDetailForm";
 import { getFacilitiesTypeById } from "@/data/facilities-type";
-import { FACILITIESTYPE } from "@/types/facilitie-type";
+import { FACILITIESTYPE } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
