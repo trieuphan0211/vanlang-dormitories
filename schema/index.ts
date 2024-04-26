@@ -158,6 +158,11 @@ export const StudentInfoSchema = z.object({
     district: z.string().min(1, "Quận/Huyện không được để trống"),
   }),
 });
+export const ViolateSchema = z.object({
+  violateName: z.string().min(1, "Tên vi phạm không được để trống"),
+  description: z.string().min(1, "Mô tả không được để trống"),
+  studentId: z.string().min(1, "Mã sinh viên không được để trống"),
+});
 export const FacilitiesSchema = z
   .object({
     name: z.string().min(1, "Tên cơ sở vật chất không được để trống"),

@@ -50,7 +50,6 @@ export const AddNewRoom = ({
       console.log(value);
       addRooms(value).then((res) => {
         if (res?.success) {
-          router.refresh();
           handleCloseModal();
           dispatch(
             alertManagerActions.setAlert({
@@ -60,6 +59,7 @@ export const AddNewRoom = ({
               },
             }),
           );
+          router.refresh();
         }
         if (res?.error) {
           dispatch(

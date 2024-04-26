@@ -1,20 +1,21 @@
 "use client";
-import { DialogButton } from "@/components/Button";
 import { RemoveItem } from "@/components/Dialog/RemoveItem";
-import { AddNewBranch } from "@/components/Form/AddNewBranch";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
 import { REGISTER } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
+import { IoAdd } from "react-icons/io5";
 
 export const RegistersTable = ({
   registers,
   count,
+  role,
 }: {
   registers: REGISTER[];
   count: number;
+  role?: string;
 }) => {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -22,7 +23,16 @@ export const RegistersTable = ({
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
-        <SearchTable placeholder="Tìm tiếm chi nhánh ..." />
+        <SearchTable placeholder="Tìm tiếm đăng ký ..." />
+        {role === "user" && (
+          <button
+            onClick={() => router.push("/home/register-dormitory/create")}
+            className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            <IoAdd className="text-2xl" />
+            Đăng ký
+          </button>
+        )}
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -34,11 +44,12 @@ export const RegistersTable = ({
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Tên
               </th>
+
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                MSSV
+                Phòng
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                Khoa
+                Thời hạn đăng ký
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Ngày đăng ký
@@ -65,12 +76,12 @@ export const RegistersTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {register.student.studentCode}
+                    {register.room?.code || "Chưa có phòng"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {register.student.major}
+                    {register.registerdeadline} năm
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -91,9 +102,13 @@ export const RegistersTable = ({
                       className="rounded-xl p-2 text-green-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                       disabled={isPending}
                       onClick={() => {
-                        router.push(
-                          `/admin/register-dormitory/detail/${register.id}`,
-                        );
+                        role === "user"
+                          ? router.push(
+                              `/home/register-dormitory/detail/${register.id}`,
+                            )
+                          : router.push(
+                              `/admin/register-dormitory/detail/${register.id}`,
+                            );
                       }}
                     >
                       <svg
@@ -114,7 +129,7 @@ export const RegistersTable = ({
                         />
                       </svg>
                     </button>
-                    {register.status !== 2 && (
+                    {register.status === 0 && role !== "user" && (
                       <>
                         <button
                           className="rounded-xl p-2 text-yellow-600 shadow-14 hover:bg-gray-3 focus:outline-none"
@@ -127,15 +142,17 @@ export const RegistersTable = ({
                         >
                           <FaRegEdit />
                         </button>
-                        <RemoveItem
-                          isPending={isPending}
-                          startTransition={startTransition}
-                          registerId={register.id}
-                          title={
-                            "Bạn có chắc chắn muốn hủy đơn đăng ký này không?"
-                          }
-                        />
                       </>
+                    )}
+                    {register.status === 0 && (
+                      <RemoveItem
+                        isPending={isPending}
+                        startTransition={startTransition}
+                        registerId={register.id}
+                        title={
+                          "Bạn có chắc chắn muốn hủy đơn đăng ký này không?"
+                        }
+                      />
                     )}
                   </div>
                 </td>

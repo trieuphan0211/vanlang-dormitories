@@ -71,12 +71,6 @@ export const Footer = () => {
     <div className="flex flex-col items-center bg-[#2d334d] p-5">
       <div className=" flex items-center gap-4">
         <Image
-          src="/images/logo/vanlanglogo.png"
-          alt="Van Lang University"
-          width={100}
-          height={100}
-        />
-        <Image
           src="/images/logo/logo.png"
           alt="Van Lang University"
           width={200}
@@ -95,6 +89,14 @@ export const Footer = () => {
       </div>
       <div className="my-5 w-full border-t-[1px] border-[rgba(255,255,255,0.4)]"></div>
       <div className="flex gap-10">
+        <div className="m-auto">
+          <Image
+            src="/images/logo/vanlanglogo.png"
+            alt="Van Lang University"
+            width={100}
+            height={100}
+          />
+        </div>
         {info.map((item, index) => (
           <div key={index} className="space-y-5">
             <h3 className="text-white">{item.title}</h3>

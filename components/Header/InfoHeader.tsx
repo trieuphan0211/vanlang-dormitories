@@ -25,12 +25,6 @@ const menuData: Menu[] = [
     newTab: false,
   },
   {
-    id: 33,
-    title: "Tin tức",
-    path: "/blog",
-    newTab: false,
-  },
-  {
     id: 3,
     title: "Phòng ở",
     path: "/room",

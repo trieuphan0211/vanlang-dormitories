@@ -86,16 +86,42 @@ model Student {
   createDate         DateTime   @default(now())
   Register           Register[]
   room               Room?      @relation(fields: [roomId], references: [id])
+  Violate            Violate[]
+  InOut              InOut[]
+}
+
+model Violate {
+  id          String   @id @default(cuid())
+  name        String
+  studentId   String?
+  description String
+  Student     Student? @relation(fields: [studentId], references: [id])
+  createDate  DateTime @default(now())
+}
+
+enum StatusInOut {
+  IN
+  OUT
+}
+
+model InOut {
+  id         String      @id @default(cuid())
+  studentId  String
+  status     StatusInOut
+  Student    Student     @relation(fields: [studentId], references: [id])
+  createDate DateTime    @default(now())
 }
 
 // Register Dormitory
 model Register {
-  id           String   @id @default(cuid())
-  studentId    String
-  registerDate DateTime
-  status       Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy
-  createDate   DateTime @default(now())
-  student      Student  @relation(fields: [studentId], references: [id])
+  id               String   @id @default(cuid())
+  studentEmail     String
+  roomId           String
+  registerdeadline Int
+  status           Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy
+  createDate       DateTime @default(now())
+  student          Student  @relation(fields: [studentEmail], references: [email])
+  room             Room     @relation(fields: [roomId], references: [id])
 }
 
 model Invoice {
@@ -149,6 +175,7 @@ model Room {
   Student      Student[]
   Services     ServiceOnRoom[]
   Invoice      Invoice[]
+  Register     Register[]
 
   @@map("room")
 }
@@ -219,8 +246,8 @@ model Maintenance {
 model ServiceOnRoom {
   serviceId  String // relation scalar field (used in the `@relation` attribute above)
   roomId     String
-  service    Services @relation(fields: [serviceId], references: [id])
-  room       Room     @relation(fields: [roomId], references: [id])
+  service    Services @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
   createDate DateTime @default(now())
 
   @@id([serviceId, roomId])

@@ -21,6 +21,9 @@ const SignInPage = async () => {
   return (
     <div className="flex h-screen items-center justify-center bg-[url('/images/background/h1.jpg')] bg-cover bg-center">
       <div className="flex flex-col items-center gap-5">
+        <h1 className=" text-center text-6xl font-bold italic leading-normal text-rose-500">
+          Chào mừng để với ký túc xá đại học Văn Lang
+        </h1>
         <SigninForm />
         <p className="text-xl text-white">
           © 2024 - Bản Quyền Thuộc Phòng Đào Tạo, Trường Đại Học Văn Lang.

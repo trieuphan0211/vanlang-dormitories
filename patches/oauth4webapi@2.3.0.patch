@@ -2,6 +2,7 @@ diff --git a/build/index.js b/build/index.js
 index 83b47de6deb017635e180e2ae88af2febe95f6bb..013c5592f870939a960343a5a12210d101e08501 100644
 --- a/build/index.js
 +++ b/build/index.js
+
 @@ -1001,10 +1001,15 @@ function validateOptionalIssuer(expected, result) {
      return result;
  }

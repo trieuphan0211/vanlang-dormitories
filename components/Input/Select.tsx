@@ -1,15 +1,24 @@
-import { BRANCH, FACILITIESTYPE, ROOM, ROOMTYPE, SERVICES } from "@/types";
+import {
+  BRANCH,
+  FACILITIESTYPE,
+  ROOM,
+  ROOMTYPE,
+  SERVICES,
+  STUDENT,
+} from "@/types";
 import { Box, Chip, OutlinedInput } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import clsx from "clsx";
 import { useState } from "react";
+import { Controller } from "react-hook-form";
 
 export const FormSelect = ({
   errors,
+  control,
   placeholder,
   isPending,
-  register,
+  name,
   branchs,
   roomTypes,
   facilitiesType,
@@ -17,13 +26,16 @@ export const FormSelect = ({
   facilifiesStatus,
   rooms,
   month,
+  years,
   defaultValue,
+  students,
   disabled,
 }: {
   errors?: { message?: string };
+  control?: any;
   placeholder?: string;
   isPending: boolean;
-  register: any;
+  name: string;
   branchs?: BRANCH[];
   roomTypes?: ROOMTYPE[];
   services?: SERVICES[];
@@ -31,73 +43,94 @@ export const FormSelect = ({
   facilifiesStatus?: string[];
   rooms?: ROOM[];
   month?: string[];
+  years?: number[];
   defaultValue?: string;
+  students?: STUDENT[];
   disabled?: boolean;
 }) => {
   return (
     <>
-      <Select
-        {...register}
-        fullWidth
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        disabled={isPending || disabled}
-        error={errors?.message}
-      >
-        {branchs &&
-          branchs.map((branch, key) => (
-            <MenuItem key={key} value={branch.id}>
-              {branch.name}
-            </MenuItem>
-          ))}
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Select
+            {...field}
+            fullWidth
+            defaultValue={defaultValue}
+            placeholder={placeholder}
+            disabled={isPending || disabled}
+            error={errors?.message ? true : false}
+            sx={{ fontSize: "16px" }}
+          >
+            {branchs &&
+              branchs.map((branch, key) => (
+                <MenuItem key={key} value={branch.id}>
+                  {branch.name}
+                </MenuItem>
+              ))}
+            {students &&
+              students.map((student, key) => (
+                <MenuItem key={key} value={student.id}>
+                  {student.fullName}
+                </MenuItem>
+              ))}
+            {roomTypes &&
+              roomTypes.map((roomType, key) => (
+                <MenuItem key={key} value={roomType.code}>
+                  {roomType.name}
+                </MenuItem>
+              ))}
+            {facilifiesStatus &&
+              facilifiesStatus.map((facilifiesStatus, key) => (
+                <MenuItem key={key} value={facilifiesStatus}>
+                  {facilifiesStatus === "ACTIVE" && "Hoạt động"}
+                  {facilifiesStatus === "INACTIVE" && "Ngưng hoạt động"}
+                  {facilifiesStatus === "MAINTENANCE" && "Bảo trì"}
+                  {facilifiesStatus === "LIQUIDATION" && "Thanh lý"}
+                  {facilifiesStatus === "CREATED" && "Đã tạo"}
+                  {facilifiesStatus === "INPROGRESS" && "Đang xử lý"}
+                  {facilifiesStatus === "FINISHED" && "Hoàn thành"}
+                  {facilifiesStatus === "ADMIN" && "Quản trị viên"}
+                  {facilifiesStatus === "DIRECTOR" && "Giám đốc"}
+                  {facilifiesStatus === "STAFF" && "Nhân viên"}
+                  {facilifiesStatus === "USER" && "Người dùng"}
+                </MenuItem>
+              ))}
+            {month &&
+              month.map((month, key) => (
+                <MenuItem key={key} value={month}>
+                  {"Tháng " + month}
+                </MenuItem>
+              ))}
+            {facilitiesType &&
+              facilitiesType.map((facilitiesType, key) => (
+                <MenuItem key={key} value={facilitiesType.code}>
+                  {facilitiesType.name}
+                </MenuItem>
+              ))}
+            {services &&
+              services.map((service, key) => (
+                <MenuItem key={key} value={service.id}>
+                  {service.name}
+                </MenuItem>
+              ))}
+            {rooms &&
+              rooms.map((room, key) => (
+                <MenuItem key={key} value={room.id}>
+                  {room?.roomType?.name} - {room.code}
+                </MenuItem>
+              ))}
+            {years &&
+              years.map((year, key) => (
+                <MenuItem key={key} value={year}>
+                  {year} năm
+                </MenuItem>
+              ))}
+          </Select>
+        )}
+      />
 
-        {roomTypes &&
-          roomTypes.map((roomType, key) => (
-            <MenuItem key={key} value={roomType.code}>
-              {roomType.name}
-            </MenuItem>
-          ))}
-        {facilifiesStatus &&
-          facilifiesStatus.map((facilifiesStatus, key) => (
-            <MenuItem key={key} value={facilifiesStatus}>
-              {facilifiesStatus === "ACTIVE" && "Hoạt động"}
-              {facilifiesStatus === "INACTIVE" && "Ngưng hoạt động"}
-              {facilifiesStatus === "MAINTENANCE" && "Bảo trì"}
-              {facilifiesStatus === "LIQUIDATION" && "Thanh lý"}
-              {facilifiesStatus === "CREATED" && "Đã tạo"}
-              {facilifiesStatus === "INPROGRESS" && "Đang xử lý"}
-              {facilifiesStatus === "FINISHED" && "Hoàn thành"}
-              {facilifiesStatus === "ADMIN" && "Quản trị viên"}
-              {facilifiesStatus === "DIRECTOR" && "Giám đốc"}
-              {facilifiesStatus === "STAFF" && "Nhân viên"}
-              {facilifiesStatus === "USER" && "Người dùng"}
-            </MenuItem>
-          ))}
-        {month &&
-          month.map((month, key) => (
-            <MenuItem key={key} value={month}>
-              {"Tháng " + month}
-            </MenuItem>
-          ))}
-        {facilitiesType &&
-          facilitiesType.map((facilitiesType, key) => (
-            <MenuItem key={key} value={facilitiesType.code}>
-              {facilitiesType.name}
-            </MenuItem>
-          ))}
-        {services &&
-          services.map((service, key) => (
-            <MenuItem key={key} value={service.id}>
-              {service.name}
-            </MenuItem>
-          ))}
-        {rooms &&
-          rooms.map((room, key) => (
-            <MenuItem key={key} value={room.id}>
-              {room?.roomType?.name} - {room.code}
-            </MenuItem>
-          ))}
-      </Select>
       <p
         className={clsx(
           `font-smblock mt-1 text-sm text-black dark:text-white`,

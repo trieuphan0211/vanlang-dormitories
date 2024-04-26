@@ -1,10 +1,14 @@
 "use server";
 
-import * as z from "zod";
-import crypto from "crypto";
-import { RoomSchema } from "@/schema";
-import { createRooms, deleteRoom, updateRoom } from "@/data/room";
+import {
+  createRooms,
+  deleteRoom,
+  getRoomsByFields,
+  updateRoom,
+} from "@/data/room";
 import { db } from "@/lib/db";
+import { RoomSchema } from "@/schema";
+import * as z from "zod";
 
 export const addRooms = async (value: z.infer<typeof RoomSchema>) => {
   const validateValue = RoomSchema.safeParse(value);
@@ -103,4 +107,11 @@ export const updateRoomById = async (
     console.error(error);
     return { error: "An error occurred!" };
   }
+};
+export const getRoomByBranchIdAndRoomTypeCode = async (
+  branchId: string,
+  roomTypeCode: string,
+) => {
+  const rooms = await getRoomsByFields(roomTypeCode, branchId);
+  return rooms;
 };

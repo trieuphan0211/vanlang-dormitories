@@ -27,10 +27,10 @@ export const SigninForm = () => {
         Đăng nhập với tài khoản Văn Lang
       </p>
       <button
-        className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-rose-500 bg-rose-500 p-4 text-xl font-bold text-white hover:border-rose-600 hover:bg-rose-600 "
+        className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-[#d72134] bg-[#d72134] p-4 text-xl font-bold text-white hover:border-rose-600 hover:bg-rose-600 "
         onClick={(e) => {
           e.preventDefault();
-          onClick("azure-ad");
+          onClick("microsoft-entra-id");
         }}
       >
         Đăng nhập

@@ -1,19 +1,18 @@
 "use client";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
+import { useAppDispatch } from "@/hooks/redux";
+import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
 import { BRANCH, FACILITIES, FACILITIESTYPE } from "@/types";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaCheck, FaRegEdit } from "react-icons/fa";
-import { AddNewFacilities } from "../Form/AddNewFacilities";
-import { RemoveItem } from "../Dialog/RemoveItem";
-import * as Checkbox from "@radix-ui/react-checkbox";
-import clsx from "clsx";
-import { useAppDispatch } from "@/hooks/redux";
-import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
 import { FaQrcode } from "react-icons/fa6";
-import { Branch, FacilitiesType } from "@prisma/client";
 import { DialogButton } from "../Button";
+import { RemoveItem } from "../Dialog/RemoveItem";
+import { AddNewFacilities } from "../Form/AddNewFacilities";
 
 export const FacilitiesTable = ({
   facilities,

@@ -47,6 +47,7 @@ export const getRoomsAllHaveStudents = async () => {
         Student: true,
       },
     });
+    console.log("rooms", rooms);
     return rooms;
   } catch (e) {
     console.error(e);
@@ -101,7 +102,15 @@ export const getRoomsByFields = async (
         roomTypeCode: roomTypesCode,
         branchId,
       },
-      include: { branch: true, roomType: true, Services: true },
+      include: { branch: true, roomType: true, Services: true, Student: true },
+      orderBy: [
+        {
+          floor: "asc",
+        },
+        {
+          code: "asc",
+        },
+      ],
     });
     return rooms;
   } catch (e) {
@@ -166,6 +175,11 @@ export const updateRoom = async (
   services?: string[],
 ) => {
   try {
+    await db.serviceOnRoom.deleteMany({
+      where: {
+        roomId: id,
+      },
+    });
     const response = await db.room.update({
       where: { id },
       data: {

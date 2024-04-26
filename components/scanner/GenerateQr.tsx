@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 "use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";

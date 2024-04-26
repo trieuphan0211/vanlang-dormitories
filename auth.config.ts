@@ -1,6 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
-import AzureAd from "next-auth/providers/azure-ad";
+import Entra from "next-auth/providers/microsoft-entra-id";
 
 export default {
   providers: [
@@ -8,7 +8,7 @@ export default {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    AzureAd({
+    Entra({
       clientId: process.env.AZURE_AD_CLIENT_ID,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
       // tenantId: process.env.AZURE_AD_TENANT_ID,

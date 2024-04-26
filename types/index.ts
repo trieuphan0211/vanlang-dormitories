@@ -36,6 +36,13 @@ export type ROOMTYPE = {
   code: string;
   cost: number;
 };
+export type VIOLATE = {
+  id: string;
+  name: string;
+  studentId?: string;
+  description: string;
+  Student?: STUDENT;
+};
 
 export type ROOM = {
   id: string;
@@ -76,11 +83,13 @@ export type STUDENT = {
 
 export type REGISTER = {
   id: string;
-  studentId: string;
-  registerDate: Date;
+  studentEmail: string;
+  roomId: string;
+  registerdeadline: number;
   status: number;
   createDate: Date;
   student: STUDENT;
+  room?: ROOM;
 };
 
 export type USER = {

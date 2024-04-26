@@ -17,8 +17,7 @@ export const sendInvoiceEmail = async (
 ) => {
   console.log(email);
   const transporter = nodemailer.createTransport({
-    host: "gmail",
-
+    service: "gmail",
     auth: {
       user: "trieuphan0211@gmail.com",
       pass: "onxllpvzqjyrgtaj",

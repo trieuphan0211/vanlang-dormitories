@@ -10,6 +10,7 @@ import { sendInvoiceEmail } from "@/lib/mail";
 
 export const createInvoice = async (data: any) => {
   try {
+    console.log(data);
     let room: Array<any> = [];
     const roomId = Object.keys(data.detail);
     const detail = Object.values(data.detail);
@@ -31,7 +32,7 @@ export const createInvoice = async (data: any) => {
         detail: roomDetail,
       });
     });
-    const response = room.map(async (room) => {
+    const response = await room.map(async (room) => {
       let mailBody: {
         name: string;
         detail: Array<{

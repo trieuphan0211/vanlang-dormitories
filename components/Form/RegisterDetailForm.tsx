@@ -41,9 +41,9 @@ export const RegisterDetailForm = ({
     watch,
   } = useForm({
     defaultValues: {
-      roomId: "",
-      branchId: "",
-      roomTypesCode: "",
+      roomId: registers.roomId || "",
+      branchId: registers.room?.branchId || "",
+      roomTypesCode: registers.room?.roomTypeCode || "",
     },
   });
   const onSubmit = (value: {
@@ -54,12 +54,12 @@ export const RegisterDetailForm = ({
     console.log(value);
     startTransition(() => {
       updateStudentInRoomById(
-        registers.studentId,
+        registers.student.id,
         value.roomId,
         registers.id,
       ).then((res) => {
         if (res?.success) {
-          router.refresh();
+          router.push("/admin/register-dormitory");
           dispatch(
             alertManagerActions.setAlert({
               message: {
@@ -82,8 +82,8 @@ export const RegisterDetailForm = ({
       });
     });
   };
-  const roomTypesCode = watch("roomTypesCode");
-  const branchId = watch("branchId");
+  const { roomId, roomTypesCode, branchId } = watch();
+
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     if (roomTypesCode) {
@@ -104,7 +104,6 @@ export const RegisterDetailForm = ({
       >
         {open ? "Ẩn thông tin sinh viên" : "Hiển thị thông tin sinh viên"}
       </button>
-
       {open && (
         <div className="rounded-xl border border-[rgba(0,0,0,0.3)] p-3">
           <StudentDetailForm
@@ -114,7 +113,28 @@ export const RegisterDetailForm = ({
             removeButton={true}
           />
         </div>
-      )}
+      )}{" "}
+      <div className="w-full">
+        {/* <label
+          className={clsx(
+            "mb-3 block text-sm font-medium text-black dark:text-white",
+            {
+              "text-red": errors.branchId,
+            },
+          )}
+        >
+          Thời hạn đăng ký
+        </label> */}
+        {/* <FormSelect
+          register={register("year")}
+          isPending={isPending}
+          years={[0.5, 1, 2, 3]}
+          errors={errors?.year}
+          placeholder={"Chọn năm đăng ký"}
+          //   defaultValue={year}
+          disabled={false}
+        /> */}
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="my-5.5">
           <label
@@ -130,6 +150,8 @@ export const RegisterDetailForm = ({
             isPending={isPending}
             branchs={branchs}
             errors={errors?.branchId}
+            // defaultValue={registers.room?.branchId || ""}
+            defaultValue={branchId || ""}
             placeholder={"Chọn chi nhánh"}
             disabled={type === "detail" ? true : null || isPending}
           />
@@ -149,6 +171,7 @@ export const RegisterDetailForm = ({
             roomTypes={roomTypes}
             errors={errors?.roomTypesCode}
             placeholder={"Chọn loại phòng"}
+            defaultValue={roomTypesCode || ""}
             disabled={type === "detail" ? true : null || isPending}
           />
         </div>
@@ -166,6 +189,7 @@ export const RegisterDetailForm = ({
             isPending={isPending}
             rooms={rooms}
             errors={errors?.roomId}
+            defaultValue={roomId || ""}
             placeholder={"Chọn loại phòng"}
             disabled={type === "detail" ? true : null || isPending}
           />

@@ -8,6 +8,11 @@ export const getRegisterById = async (id: string) => {
       },
       include: {
         student: true,
+        room: {
+          include: {
+            branch: true,
+          },
+        },
       },
     });
     return register;
@@ -33,6 +38,7 @@ export const getFilterRegister = async (
   query: string,
   currentPage: number,
   entries: number,
+  email?: string,
 ) => {
   try {
     const register = await db.register.findMany({
@@ -62,12 +68,24 @@ export const getFilterRegister = async (
                   },
                 },
               ],
+              AND: [
+                {
+                  email: {
+                    contains: email,
+                  },
+                },
+              ],
             },
           },
         ],
       },
       include: {
         student: true,
+        room: {
+          include: {
+            branch: true,
+          },
+        },
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -77,7 +95,7 @@ export const getFilterRegister = async (
     console.error(e);
   }
 };
-export const getCountRegister = async (query: string) => {
+export const getCountRegister = async (query: string, email?: string) => {
   try {
     const register = await db.register.count({
       orderBy: [
@@ -89,17 +107,48 @@ export const getCountRegister = async (query: string) => {
         OR: [
           {
             student: {
-              fullName: {
-                contains: query,
-              },
-              studentCode: {
-                contains: query,
-              },
+              OR: [
+                {
+                  fullName: {
+                    contains: query,
+                  },
+                },
+                {
+                  studentCode: {
+                    contains: query,
+                  },
+                },
+              ],
+              AND: [
+                {
+                  email: {
+                    contains: email,
+                  },
+                },
+              ],
             },
           },
         ],
       },
     });
+    return register;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const createRegisterById = async (data: {
+  roomId: string;
+  registerdeadline: number;
+  studentEmail: string;
+}) => {
+  try {
+    const register = await db.register.create({
+      data: {
+        ...data,
+        status: 0,
+      },
+    });
+    console.log(register);
     return register;
   } catch (e) {
     console.error(e);

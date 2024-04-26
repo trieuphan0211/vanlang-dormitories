@@ -3,24 +3,15 @@ import { addFacilities } from "@/actions/facilities";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { FacilitiesSchema } from "@/schema";
+import { BRANCH, FACILITIESTYPE } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@mui/material";
-import { Branch, FacilitiesType } from "@prisma/client";
-import * as Dialog from "@radix-ui/react-dialog";
-import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  IoAdd,
-  IoChevronDownCircleOutline,
-  IoChevronUpCircleOutline,
-} from "react-icons/io5";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
 import { FormSelect, Input } from "../Input";
-import { BRANCH, FACILITIESTYPE } from "@/types";
 
 export const AddNewFacilities = ({
   isPending,
@@ -41,6 +32,7 @@ export const AddNewFacilities = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
     setValue,
@@ -129,7 +121,8 @@ export const AddNewFacilities = ({
                 Chi nhánh
               </label>
               <FormSelect
-                register={register("branchId")}
+                name="branchId"
+                control={control}
                 isPending={isPending}
                 branchs={branchs}
                 errors={errors?.branchId}
@@ -148,8 +141,9 @@ export const AddNewFacilities = ({
                 Loại cơ sở vật chất
               </label>
               <FormSelect
-                register={register("facilitiesTypeCode")}
+                name="facilitiesTypeCode"
                 isPending={isPending}
+                control={control}
                 facilitiesType={facilitiesType}
                 errors={errors?.facilitiesTypeCode}
                 placeholder={"Chọn loại cơ sở vật chất"}

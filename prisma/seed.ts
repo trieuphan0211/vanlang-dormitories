@@ -129,7 +129,6 @@ const facilitiesTypes: FacilitiesType[] = [
     name: "Máy nước lạnh",
   },
 ];
-
 //  handle seeding data
 async function seedBranch() {
   try {
@@ -180,9 +179,9 @@ async function seedFacilitiesType() {
 }
 
 async function main() {
-  // await seedBranch();
-  // await seedService();
-  // await seedRoomType();
+  await seedBranch();
+  await seedService();
+  await seedRoomType();
   await seedFacilitiesType();
 }
 main()

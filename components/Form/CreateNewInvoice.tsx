@@ -22,75 +22,95 @@ export const CreateNewInvoice = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      invoiceDate: "",
+      invoiceMonth: "",
+      invoiceYear: "",
       detail: "",
     },
   });
   const onSubmit = (data: any) => {
     console.log(data);
-    startTransition(() => {
-      createInvoice(data).then((res) => {
-        if (res?.success) {
-          router.refresh();
-          dispatch(
-            alertManagerActions.setAlert({
-              message: {
-                type: "success",
-                content: "Hóa đơn đã được lập và gửi mail cho sinh viên!",
-              },
-            }),
-          );
-        }
-        if (res?.error) {
-          dispatch(
-            alertManagerActions.setAlert({
-              message: {
-                type: "error",
-                content: "Có lỗi xảy ra! Vui lòng thử lại sau!",
-              },
-            }),
-          );
-        }
-      });
-    });
+    // startTransition(() => {
+    //   createInvoice(data).then((res) => {
+    //     if (res?.success) {
+    //       router.push("/admin/invoice");
+    //       dispatch(
+    //         alertManagerActions.setAlert({
+    //           message: {
+    //             type: "success",
+    //             content: "Hóa đơn đã được lập và gửi mail cho sinh viên!",
+    //           },
+    //         }),
+    //       );
+    //     }
+    //     if (res?.error) {
+    //       dispatch(
+    //         alertManagerActions.setAlert({
+    //           message: {
+    //             type: "error",
+    //             content: "Có lỗi xảy ra! Vui lòng thử lại sau!",
+    //           },
+    //         }),
+    //       );
+    //     }
+    //   });
+    // });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-5.5">
-        <label
-          className="mb-3 block text-sm font-medium text-black dark:text-white"
-          htmlFor="emailAddress"
-        >
-          Hóa đơn tháng
-        </label>
-        <FormSelect
-          register={register("invoiceDate")}
-          isPending={isPending}
-          month={[
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-          ]}
-          errors={errors?.invoiceDate}
-          placeholder={"Chọn chi nhánh"}
-          disabled={type === "detail" ? true : null || isPending}
-        />
+      <div className="flex w-full gap-5">
+        <div className="mb-5.5 w-full">
+          <label
+            className="mb-3 block text-base font-semibold text-black dark:text-white"
+            htmlFor="emailAddress"
+          >
+            Tháng
+          </label>
+          <FormSelect
+            isPending={isPending}
+            name="invoiceMonth"
+            month={[
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+            ]}
+            control={control}
+            errors={errors?.invoiceMonth}
+            placeholder={"Chọn chi nhánh"}
+            disabled={type === "detail" ? true : null || isPending}
+          />
+        </div>
+        <div className="mb-5.5 w-full">
+          <label
+            className="mb-3 block text-base font-semibold text-black dark:text-white"
+            htmlFor="emailAddress"
+          >
+            Năm
+          </label>
+          <Input
+            type="text"
+            register={register("invoiceYear")}
+            isPending={isPending}
+            placeholder={"Nhập năm"}
+            errors={errors?.invoiceYear}
+            disabled={type === "detail" ? true : null || isPending}
+          />
+        </div>
       </div>
-      {/* {room.map((room, keys) => (
+      {room.map((room, keys) => (
         <div key={keys}>
-          <div className="my-10 w-full border-t-2"></div>
           <h4>
             Phòng: {room.code} - {room?.roomType?.name} - {room.branch.name}
           </h4>
@@ -121,7 +141,7 @@ export const CreateNewInvoice = ({
                 ),
             )}
         </div>
-      ))} */}
+      ))}
       <div className="flex justify-end gap-4.5">
         <button
           onClick={(e) => {

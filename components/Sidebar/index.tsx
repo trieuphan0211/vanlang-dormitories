@@ -1,20 +1,18 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import SidebarLinkGroup from "./SidebarLinkGroup";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { MenuItem, MenuItemList } from "./MenuItem";
-import { list } from "postcss";
-import path from "path";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  role?: string;
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   // Begin: Handle UI
   const pathname = usePathname();
   const trigger = useRef<any>(null);
@@ -148,6 +146,46 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         },
       ],
     },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Ra / vào",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Đăng ký ra vào",
+          href: "/admin/out-in",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Vi phạm",
+      href: "/admin/violate",
+    },
+  ];
+  const menuUser = [
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Thông tin cá nhân",
+      href: "/home/profile",
+    },
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Danh sách vi phạm",
+      href: "/home/violate",
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Dịch vụ",
+
+      list: [
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Đăng ký ký túc xá",
+          href: "/home/register-dormitory",
+        },
+      ],
+    },
   ];
   // End: Handle Logic
   return (
@@ -199,29 +237,54 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              {menu.map((item, index) => {
-                if (item.list) {
+              {role !== "user" &&
+                menu.map((item, index) => {
+                  if (item.list) {
+                    return (
+                      <div key={index}>
+                        <MenuItemList
+                          icon={item.icon}
+                          title={item.title}
+                          list={item.list}
+                          index={index}
+                        />
+                      </div>
+                    );
+                  }
                   return (
-                    <div key={index}>
-                      <MenuItemList
+                    <li key={index}>
+                      <MenuItem
                         icon={item.icon}
                         title={item.title}
-                        list={item.list}
-                        index={index}
+                        href={item.href}
                       />
-                    </div>
+                    </li>
                   );
-                }
-                return (
-                  <li key={index}>
-                    <MenuItem
-                      icon={item.icon}
-                      title={item.title}
-                      href={item.href}
-                    />
-                  </li>
-                );
-              })}
+                })}
+              {role === "user" &&
+                menuUser.map((item, index) => {
+                  if (item.list) {
+                    return (
+                      <div key={index}>
+                        <MenuItemList
+                          icon={item.icon}
+                          title={item.title}
+                          list={item.list}
+                          index={index}
+                        />
+                      </div>
+                    );
+                  }
+                  return (
+                    <li key={index}>
+                      <MenuItem
+                        icon={item.icon}
+                        title={item.title}
+                        href={item.href}
+                      />
+                    </li>
+                  );
+                })}
             </ul>
           </div>
         </nav>

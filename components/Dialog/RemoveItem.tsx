@@ -10,6 +10,7 @@ import { removeRoomType } from "@/actions/roomType";
 import { removeService } from "@/actions/service";
 import { removeStudent } from "@/actions/student";
 import { removeUser } from "@/actions/user";
+import { deleteViolateById } from "@/actions/violate";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { Dialog, DialogTitle } from "@mui/material";
@@ -30,6 +31,7 @@ export const RemoveItem = ({
   roomId,
   maintenanceId,
   registerId,
+  violateId,
   invoiceId,
 }: {
   isPending: boolean;
@@ -45,6 +47,7 @@ export const RemoveItem = ({
   roomId?: string;
   maintenanceId?: string;
   registerId?: string;
+  violateId?: string;
   invoiceId?: string;
 }) => {
   const router = useRouter();
@@ -375,6 +378,35 @@ export const RemoveItem = ({
           }
         });
       }
+      if (violateId) {
+        deleteViolateById(violateId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setOpen(false);
+            // Show alert
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Vi phạm đã được xóa thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Xóa Vi phạm thất bại!",
+                },
+              }),
+            );
+          }
+        });
+      }
     });
   };
   const handleCloseModal = () => {
@@ -449,6 +481,7 @@ export const RemoveItem = ({
                 {maintenanceId && "Có, xóa đơn bảo trì"}
                 {registerId && "Có, hủy đơn đăng ký"}
                 {invoiceId && "Có, xóa hóa đơn"}
+                {violateId && "Có, xóa vi phạm"}
               </button>
             </div>
           </div>

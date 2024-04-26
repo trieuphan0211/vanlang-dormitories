@@ -3,6 +3,7 @@
 import { updateRegister } from "@/data/register";
 import {
   deleteStudent,
+  getAllStudents,
   updateStudent,
   updateStudentInRoom,
 } from "@/data/student";
@@ -24,7 +25,18 @@ export const removeStudent = async (id: string) => {
     return { error: "An error occurred!" };
   }
 };
-
+export const getStudentsAll = async () => {
+  try {
+    const students = await getAllStudents();
+    if (students) {
+      return students;
+    }
+    return { error: "An error occurred!" };
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
+  }
+};
 export const updateStudentInRoomById = async (
   id: string,
   roomId: string,
