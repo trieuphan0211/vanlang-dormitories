@@ -241,18 +241,20 @@ export const getCountRoom = async (
 
 export const createRooms = async (fields: ROOM[], services?: string[]) => {
   try {
-    const rooms = fields.map(async (room) => {
-      return await db.room.create({
-        data: {
-          ...room,
-          Services: {
-            create: services?.map((service) => {
-              return { serviceId: service };
-            }),
+    const rooms = await Promise.all(
+      fields.map(async (room) => {
+        return await db.room.create({
+          data: {
+            ...room,
+            Services: {
+              create: services?.map((service) => {
+                return { serviceId: service };
+              }),
+            },
           },
-        },
-      });
-    });
+        });
+      }),
+    );
     console.log("rooms", rooms);
     return rooms;
   } catch (e) {
