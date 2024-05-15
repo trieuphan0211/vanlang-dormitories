@@ -12,7 +12,7 @@ import { CgPrinter } from "react-icons/cg";
 export const GenerateQr = () => {
   const { qrList } = useAppSelector(qrSeletor);
   const { Image } = useQRCode();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const dowloadFile = async () => {
     console.log("dowloadFile");
@@ -30,7 +30,6 @@ export const GenerateQr = () => {
   };
 
   const addQrCode = async () => {
-    const qrList = [];
     const qrcode: HTMLCollection = document.getElementsByClassName("qrcode");
     if (qrcode.length === 0) return;
     const generateQr = async (index: number) => {
@@ -40,13 +39,11 @@ export const GenerateQr = () => {
         },
       );
     };
-    const imageBase64 = Array.from({ length: qrcode.length }).map(
-      (v, index: number) => {
-        return generateQr(index);
-      },
+    return await Promise.all(
+      Array.from({ length: qrcode.length }).map(async (v, index: number) => {
+        return await generateQr(index);
+      }),
     );
-
-    return imageBase64;
   };
 
   if (qrList.length === 0) {
