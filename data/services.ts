@@ -5,6 +5,7 @@ interface Services {
   description?: string;
   cost: number;
   unit: string;
+  allow: boolean;
 }
 
 export const getServicesAll = async () => {
@@ -33,10 +34,41 @@ export const getServiceById = async (id: string) => {
 
 export const getFilterServices = async (
   query: string,
+  cost: number,
+  unit: string,
+  description: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    cost &&
+      search.push({
+        cost: {
+          equals: cost,
+        },
+      });
+    unit &&
+      search.push({
+        unit: {
+          contains: unit,
+          mode: "insensitive",
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+          mode: "insensitive",
+        },
+      });
     const services = await db.services.findMany({
       orderBy: [
         {
@@ -44,23 +76,7 @@ export const getFilterServices = async (
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            cost: {
-              equals: Number(query) || undefined,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -89,8 +105,41 @@ export const getServicesByFields = async (fields: {
     console.error(e);
   }
 };
-export const getCountServices = async (query: string) => {
+export const getCountServices = async (
+  query: string,
+  cost: number,
+  unit: string,
+  description: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    cost &&
+      search.push({
+        cost: {
+          equals: cost,
+        },
+      });
+    unit &&
+      search.push({
+        unit: {
+          contains: unit,
+          mode: "insensitive",
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+          mode: "insensitive",
+        },
+      });
     const count = await db.services.count({
       orderBy: [
         {
@@ -98,23 +147,7 @@ export const getCountServices = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            cost: {
-              equals: Number(query) || undefined,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

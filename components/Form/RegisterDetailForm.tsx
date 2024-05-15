@@ -19,6 +19,7 @@ export const RegisterDetailForm = ({
   branchs,
   roomTypes,
   rooms,
+  role,
 }: {
   registers: REGISTER;
   type?: string;
@@ -26,6 +27,7 @@ export const RegisterDetailForm = ({
   branchs: BRANCH[];
   roomTypes: ROOMTYPE[];
   rooms: ROOM[];
+  role?: string;
 }) => {
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
@@ -38,6 +40,7 @@ export const RegisterDetailForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    control,
     watch,
   } = useForm({
     defaultValues: {
@@ -146,7 +149,8 @@ export const RegisterDetailForm = ({
             Chi Nhánh
           </label>
           <FormSelect
-            register={register("branchId")}
+            name="branchId"
+            control={control}
             isPending={isPending}
             branchs={branchs}
             errors={errors?.branchId}
@@ -166,7 +170,8 @@ export const RegisterDetailForm = ({
             Loại phòng
           </label>
           <FormSelect
-            register={register("roomTypesCode")}
+            name="roomTypesCode"
+            control={control}
             isPending={isPending}
             roomTypes={roomTypes}
             errors={errors?.roomTypesCode}
@@ -185,7 +190,8 @@ export const RegisterDetailForm = ({
             Phòng
           </label>
           <FormSelect
-            register={register("roomId")}
+            name="roomId"
+            control={control}
             isPending={isPending}
             rooms={rooms}
             errors={errors?.roomId}
@@ -198,7 +204,10 @@ export const RegisterDetailForm = ({
           <button
             onClick={(e) => {
               e.preventDefault();
-              router.push("/admin/register-dormitory");
+              console.log(user?.role);
+              role === "user"
+                ? router.push("/home/register-dormitory")
+                : router.push("/admin/register-dormitory");
             }}
             className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
             type="submit"

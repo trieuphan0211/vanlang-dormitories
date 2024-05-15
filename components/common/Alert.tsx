@@ -25,8 +25,8 @@ export const Alert = () => {
   return (
     <AlertDialog.Root open={message.type ? true : false}>
       <AlertDialog.Portal>
-        <AlertDialog.Overlay className="fixed inset-0 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow" />
-        <AlertDialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh]   w-[500px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+        <AlertDialog.Overlay className="fixed inset-0 z-9999 bg-[rgba(0,0,0,0.4)]   data-[state=open]:animate-overlayShow" />
+        <AlertDialog.Content className="fixed left-[50%] top-[50%] z-9999 max-h-[85vh]   w-[500px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
           <div className=" flex justify-center">
             {message.type === "success" && (
               <IoCheckmarkCircleOutline className="text-[80px] text-green-600" />

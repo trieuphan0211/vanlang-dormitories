@@ -50,14 +50,20 @@ export const updateRoomTypeById = async (
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { roomTypeName, members, description } = validateValue.data;
+  const { roomTypeName, members, description, cost } = validateValue.data;
   try {
-    const branch = await updateRoomType(id, {
+    const roomType = await updateRoomType(id, {
       name: roomTypeName,
       members: Number(members),
       description: description || "",
+      cost: Number(cost),
     });
-    return { success: "Branch is updated!" };
+    console.log(roomType);
+    if (roomType) {
+      return { success: "RoomType is updated!" };
+    } else {
+      return { error: "An error occurred!" };
+    }
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };

@@ -15,19 +15,28 @@ const InvoicePage = async ({
 }: {
   searchParams?: {
     query?: string;
+    roomCode?: string;
+    branchName?: string;
+    status?: string;
     page?: string;
     entries?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const roomCode = searchParams?.roomCode?.trim() || "";
+  const branchName = searchParams?.branchName?.trim() || "";
+  const status = Number(searchParams?.status?.trim());
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const invoices = (await getFilterInvoices(
     query,
+    roomCode,
+    branchName,
+    status,
     currentPage,
     entries,
   )) as INVOICE[];
-  const count = await getCountInvoices(query);
+  const count = await getCountInvoices(query, roomCode, branchName, status);
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { equal } from "assert";
 interface ROOM {
   code: string;
   description?: string;
@@ -56,29 +57,75 @@ export const getRoomsAllHaveStudents = async () => {
 
 export const getFilterRooms = async (
   query: string,
+  numberFloors: number,
+  roomType: string,
+  branchName: string,
+  description: string,
   currentPage: number,
   entries: number,
 ) => {
+  const search = [];
+  query &&
+    search.push({
+      code: {
+        contains: query,
+        mode: "insensitive",
+      },
+    });
+  numberFloors &&
+    search.push({
+      floor: {
+        equals: numberFloors,
+      },
+    });
+
+  roomType &&
+    search.push({
+      roomType: {
+        OR: [
+          {
+            name: {
+              contains: roomType,
+              mode: "insensitive",
+            },
+          },
+          {
+            code: {
+              contains: roomType,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+    });
+  description &&
+    search.push({
+      description: {
+        contains: description,
+        mode: "insensitive",
+      },
+    });
+  branchName &&
+    search.push({
+      branch: {
+        name: {
+          contains: branchName,
+          mode: "insensitive",
+        },
+      },
+    });
   try {
     const rooms = await db.room.findMany({
       orderBy: [
         {
           createDate: "desc",
         },
+        {
+          code: "desc",
+        },
       ],
       where: {
-        OR: [
-          {
-            code: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       include: {
         branch: true,
@@ -102,7 +149,13 @@ export const getRoomsByFields = async (
         roomTypeCode: roomTypesCode,
         branchId,
       },
-      include: { branch: true, roomType: true, Services: true, Student: true },
+      include: {
+        branch: true,
+        roomType: true,
+        Services: true,
+        Student: true,
+        Register: true,
+      },
       orderBy: [
         {
           floor: "asc",
@@ -117,22 +170,67 @@ export const getRoomsByFields = async (
     console.error(e);
   }
 };
-export const getCountRoom = async (query: string) => {
+export const getCountRoom = async (
+  query: string,
+  numberFloors: number,
+  roomType: string,
+  branchName: string,
+  description: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        code: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    numberFloors &&
+      search.push({
+        floor: {
+          equals: numberFloors,
+        },
+      });
+
+    roomType &&
+      search.push({
+        roomType: {
+          OR: [
+            {
+              name: {
+                contains: roomType,
+                mode: "insensitive",
+              },
+            },
+            {
+              code: {
+                contains: roomType,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+          mode: "insensitive",
+        },
+      });
+    branchName &&
+      search.push({
+        branch: {
+          name: {
+            contains: branchName,
+            mode: "insensitive",
+          },
+        },
+      });
     const count = await db.room.count({
       where: {
-        OR: [
-          {
-            code: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;
@@ -155,6 +253,7 @@ export const createRooms = async (fields: ROOM[], services?: string[]) => {
         },
       });
     });
+    console.log("rooms", rooms);
     return rooms;
   } catch (e) {
     console.error(e);

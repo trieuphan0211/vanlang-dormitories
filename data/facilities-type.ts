@@ -32,10 +32,33 @@ export const getFacilitiesTypeById = async (id: string) => {
 };
 export const getFilterFacilitiesTypes = async (
   query: string,
+  facilitiesTypeCode: string,
+  description: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    facilitiesTypeCode &&
+      search.push({
+        code: {
+          contains: facilitiesTypeCode,
+          mode: "insensitive",
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+        },
+      });
     const facilitiesTypes = await db.facilitiesType.findMany({
       orderBy: [
         {
@@ -43,23 +66,7 @@ export const getFilterFacilitiesTypes = async (
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            code: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -89,8 +96,33 @@ export const getFacilitiesTypeByFields = async (fields: {
   }
 };
 
-export const getCountFacilitiestypes = async (query: string) => {
+export const getCountFacilitiestypes = async (
+  query: string,
+  facilitiesTypeCode: string,
+  description: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    facilitiesTypeCode &&
+      search.push({
+        code: {
+          contains: facilitiesTypeCode,
+          mode: "insensitive",
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+        },
+      });
     const count = await db.facilitiesType.count({
       orderBy: [
         {
@@ -98,23 +130,7 @@ export const getCountFacilitiestypes = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            code: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

@@ -14,15 +14,25 @@ const UserPage = async ({
 }: {
   searchParams?: {
     query?: string;
+    role?: string;
+    email?: string;
     page?: string;
     entries?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const role = searchParams?.role?.trim() || "";
+  const email = searchParams?.email?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
-  const users = (await getFilterUsers(query, currentPage, entries)) as USER[];
-  const count = await getCountUsers(query);
+  const users = (await getFilterUsers(
+    query,
+    role,
+    email,
+    currentPage,
+    entries,
+  )) as USER[];
+  const count = await getCountUsers(query, role, email);
   const session = await auth();
   return (
     <div>

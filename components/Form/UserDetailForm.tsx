@@ -6,16 +6,10 @@ import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { UserSchema } from "@/schema";
 import { USER } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserRole } from "@prisma/client";
-import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import {
-  IoChevronDownCircleOutline,
-  IoChevronUpCircleOutline,
-} from "react-icons/io5";
 import * as z from "zod";
 import { FormSelect, Input } from "../Input";
 
@@ -33,7 +27,7 @@ export const UserDetailForm = ({
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    control,
   } = useForm<z.infer<typeof UserSchema>>({
     resolver: zodResolver(UserSchema),
     defaultValues: {
@@ -106,7 +100,8 @@ export const UserDetailForm = ({
             Vai trò
           </label>
           <FormSelect
-            register={register("role")}
+            name="role"
+            control={control}
             isPending={isPending}
             facilifiesStatus={["ADMIN", "DIRECTOR", "STAFF", "USER"]}
             errors={errors?.role}
@@ -140,7 +135,7 @@ export const UserDetailForm = ({
             placeholder="Nhập mã phòng"
             errors={errors.name}
             isPending={isPending}
-            register={register("name")}
+            register={register("email")}
             disabled={true}
           />
         </div>

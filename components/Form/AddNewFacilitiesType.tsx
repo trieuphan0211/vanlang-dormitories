@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
+import { FormSelect, Input } from "../Input";
 
 export const AddNewFacilitiesType = ({
   isPending,
@@ -27,6 +28,7 @@ export const AddNewFacilitiesType = ({
     register,
     handleSubmit,
     formState: { errors },
+    control,
     reset,
   } = useForm<z.infer<typeof FacilitiesTypeSchema>>({
     resolver: zodResolver(FacilitiesTypeSchema),
@@ -88,41 +90,28 @@ export const AddNewFacilitiesType = ({
             >
               Tên loại cơ sở vật chất
             </label>
-            <input
-              type="text"
+            <Input
+              type="facilitesTypeName"
               placeholder="Nhập tên loại cơ sở vật chất"
-              className={clsx(
-                "w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary",
-                {
-                  "focus:border-red": errors.facilitesTypeName,
-                },
-              )}
-              disabled={isPending}
-              {...register("facilitesTypeName")}
+              errors={errors.facilitesTypeName}
+              isPending={isPending}
+              register={register("facilitesTypeName")}
             />
-            <p
-              className={clsx(
-                `font-smblock mt-1 text-sm text-black dark:text-white`,
-                {
-                  "text-red": errors.facilitesTypeName,
-                },
-              )}
-            >
-              {errors.facilitesTypeName?.message}
-            </p>
           </div>
 
           <div>
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               Mô tả
             </label>
-            <textarea
+            <Input
+              type="text"
+              placeholder="Nhập mô tả phòng ..."
+              errors={errors.description}
+              isPending={isPending}
+              register={register("description")}
+              multiline={true}
               rows={6}
-              placeholder="Nhập mô tả loại cơ sở vật chất ..."
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              {...register("description")}
-              disabled={isPending}
-            ></textarea>
+            />
           </div>
         </div>
         <div className="flex w-full gap-30 border-t border-stroke px-6.5 py-4">

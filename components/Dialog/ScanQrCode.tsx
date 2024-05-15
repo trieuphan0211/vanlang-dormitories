@@ -1,9 +1,8 @@
 "use client";
-import { Result } from "@zxing/library";
-import { IoAdd } from "react-icons/io5";
-import { QrReader } from "../scanner/Scanner";
 import { Dialog, DialogTitle } from "@mui/material";
-import { set } from "zod";
+import { Scanner } from "@yudiel/react-qr-scanner";
+import { useState } from "react";
+import { IoAdd } from "react-icons/io5";
 
 export const ScanQrCode = ({
   setQr,
@@ -21,7 +20,10 @@ export const ScanQrCode = ({
   return (
     <div>
       <button
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen(true);
+        }}
         className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
       >
         <IoAdd className="text-2xl" />
@@ -29,7 +31,7 @@ export const ScanQrCode = ({
       </button>
 
       {open && (
-        <Dialog onClose={handleCloseModal} open={true}>
+        <Dialog onClose={handleCloseModal} open={open}>
           <div className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
             <div className="border-b border-stroke dark:border-strokedark">
               <DialogTitle className="font-medium text-black dark:text-white">
@@ -38,24 +40,37 @@ export const ScanQrCode = ({
             </div>
 
             <form>
-              <QrReader
-                onResult={(
-                  result: Result | undefined | null,
-                  error: Error | undefined | null,
-                ) => {
-                  if (!!result) {
-                    if (Object.keys(result).length > 0) {
-                      setQr(result.getText());
-                      setOpen(false);
-                    }
-                  }
-
-                  if (!!error) {
-                  }
+              <div
+                style={{
+                  width: 400,
+                  height: 400,
+                  margin: "auto",
                 }}
-                scanDelay={1000}
-                // style={{ width: "100%" }}
-              />
+              >
+                <Scanner
+                  onResult={(text, result) => {
+                    if (!text) return;
+                    console.log("text:", text);
+                    setQr(text);
+                  }}
+                  components={{
+                    // count: true,
+                    // audio: true,
+                    // tracker: true,
+                    // torch: true,
+                    onOff: true,
+                  }}
+                  options={{
+                    deviceId: "",
+                    // delayBetweenScanAttempts: 100,
+                    // delayBetweenScanSuccess: 100,
+                    constraints: {
+                      facingMode: "user",
+                    },
+                  }}
+                  onError={(error) => console.log(error?.message)}
+                />
+              </div>
               <div className="border-t border-stroke px-6.5 py-4">
                 <button
                   onClick={() => setOpen(false)}

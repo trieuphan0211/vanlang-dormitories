@@ -1,9 +1,19 @@
 import { db } from "@/lib/db";
 import { Student } from "@prisma/client";
+import { equal } from "assert";
 
 export const getStudentByEmail = async (email: string) => {
   try {
-    const student = await db.student.findUnique({ where: { email } });
+    const student = await db.student.findUnique({
+      where: { email },
+      include: {
+        room: {
+          include: {
+            branch: true,
+          },
+        },
+      },
+    });
 
     return student;
   } catch (e) {
@@ -34,10 +44,57 @@ export const getStudentById = async (id: string) => {
 };
 export const getFilterStudents = async (
   query: string,
+  studentCode: string,
+  email: string,
+  gender: string,
+  major: string,
+  schoolYear: number,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        fullName: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    studentCode &&
+      search.push({
+        studentCode: {
+          contains: studentCode,
+          mode: "insensitive",
+        },
+      });
+    email &&
+      search.push({
+        email: {
+          contains: email,
+          mode: "insensitive",
+        },
+      });
+    gender &&
+      search.push({
+        gender: {
+          contains: gender,
+          mode: "insensitive",
+        },
+      });
+    major &&
+      search.push({
+        major: {
+          contains: major,
+          mode: "insensitive",
+        },
+      });
+    schoolYear &&
+      search.push({
+        schoolYear: {
+          equals: schoolYear,
+        },
+      });
     const students = await db.student.findMany({
       orderBy: [
         {
@@ -45,34 +102,7 @@ export const getFilterStudents = async (
         },
       ],
       where: {
-        OR: [
-          {
-            fullName: {
-              contains: query,
-            },
-          },
-          {
-            email: {
-              contains: query,
-            },
-          },
-          {
-            major: {
-              contains: query,
-            },
-          },
-          {
-            schoolYear: {
-              equals: Number(query),
-            },
-          },
-
-          {
-            gender: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
 
       skip: (currentPage - 1) * entries,
@@ -84,8 +114,57 @@ export const getFilterStudents = async (
   }
 };
 
-export const getCountStudents = async (query: string) => {
+export const getCountStudents = async (
+  query: string,
+  studentCode: string,
+  email: string,
+  gender: string,
+  major: string,
+  schoolYear: number,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        fullName: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    studentCode &&
+      search.push({
+        studentCode: {
+          contains: studentCode,
+          mode: "insensitive",
+        },
+      });
+    email &&
+      search.push({
+        email: {
+          contains: email,
+          mode: "insensitive",
+        },
+      });
+    gender &&
+      search.push({
+        gender: {
+          contains: gender,
+          mode: "insensitive",
+        },
+      });
+    major &&
+      search.push({
+        major: {
+          contains: major,
+          mode: "insensitive",
+        },
+      });
+    schoolYear &&
+      search.push({
+        schoolYear: {
+          equals: schoolYear,
+        },
+      });
     const count = await db.student.count({
       orderBy: [
         {
@@ -93,34 +172,7 @@ export const getCountStudents = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            fullName: {
-              contains: query,
-            },
-          },
-          {
-            email: {
-              contains: query,
-            },
-          },
-          {
-            major: {
-              contains: query,
-            },
-          },
-          {
-            schoolYear: {
-              equals: Number(query),
-            },
-          },
-
-          {
-            gender: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

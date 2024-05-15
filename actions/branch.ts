@@ -33,8 +33,12 @@ export const addBranch = async (value: z.infer<typeof BranchSchema>) => {
 export const removeBranch = async (id: string) => {
   try {
     const branch = await deleteBranch(id);
-    console.log("Branch is removed!");
-    return { success: "Branch is removed!" };
+    if (branch) {
+      console.log("Branch is removed!", branch);
+      return { success: "Branch is removed!" };
+    } else {
+      return { error: "An error occurred!" };
+    }
   } catch (error) {
     console.error(error);
     return { error: "An error occurred!" };

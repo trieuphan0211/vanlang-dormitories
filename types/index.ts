@@ -13,18 +13,21 @@ export type BRANCH = {
 export type INVOICE = {
   id: string;
   roomId: string;
+  studentId: string;
   total: number;
   room: ROOM;
   createDate: Date;
   status: number;
   detail: string;
   invoiceDate: string;
+  Student?: STUDENT;
 };
 export type SERVICES = {
   id: string;
   unit: string;
   name: string;
   cost: number;
+  allow: boolean;
   description?: string;
 };
 
@@ -54,6 +57,7 @@ export type ROOM = {
   roomType?: ROOMTYPE;
   Services?: Array<any>;
   Student?: Array<any>;
+  Register?: Array<any>;
   description?: string;
 };
 
@@ -79,6 +83,7 @@ export type STUDENT = {
   permanentResidence?: string;
   familiInfo?: string;
   contactinfo?: string;
+  room?: ROOM;
 };
 
 export type REGISTER = {

@@ -1,41 +1,18 @@
-/* eslint-disable jsx-a11y/alt-text */
-"use client";
-import { generateKeyIn } from "@/lib/generateKeyInOut";
-import { useQRCode } from "next-qrcode";
-import { useEffect, useState } from "react";
+import { Metadata } from "next";
+import React from "react";
+import { InOutQR } from "./InOutQR";
 
-const OutInPage = () => {
-  const { Image } = useQRCode();
-  const [key, setKey] = useState<string>("");
-  useEffect(() => {
-    setTimeout(async () => {
-      await Promise.resolve(generateKeyIn()).then((res) => {
-        console.log("res: ", res);
-        setKey(res);
-      });
-    }, 2000);
-  }, [key]);
+export const metadata: Metadata = {
+  title: "Quét QR ra/vào",
+  description: "",
+};
+
+const InOutPage = () => {
   return (
     <div>
-      {key && (
-        <Image
-          text={key}
-          options={{
-            type: "image/jpeg",
-            quality: 0.3,
-            errorCorrectionLevel: "M",
-            margin: 3,
-            scale: 2,
-            width: 120,
-            color: {
-              dark: "#000",
-              light: "#FFf",
-            },
-          }}
-        />
-      )}
+      <InOutQR />
     </div>
   );
 };
 
-export default OutInPage;
+export default InOutPage;

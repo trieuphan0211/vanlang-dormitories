@@ -30,6 +30,7 @@ export const FormSelect = ({
   defaultValue,
   students,
   disabled,
+  size,
 }: {
   errors?: { message?: string };
   control?: any;
@@ -47,6 +48,7 @@ export const FormSelect = ({
   defaultValue?: string;
   students?: STUDENT[];
   disabled?: boolean;
+  size?: "small" | "medium";
 }) => {
   return (
     <>
@@ -62,6 +64,7 @@ export const FormSelect = ({
             disabled={isPending || disabled}
             error={errors?.message ? true : false}
             sx={{ fontSize: "16px" }}
+            size={size ? size : "medium"}
           >
             {branchs &&
               branchs.map((branch, key) => (
@@ -95,6 +98,9 @@ export const FormSelect = ({
                   {facilifiesStatus === "DIRECTOR" && "Giám đốc"}
                   {facilifiesStatus === "STAFF" && "Nhân viên"}
                   {facilifiesStatus === "USER" && "Người dùng"}
+                  {facilifiesStatus === "0" && "Chưa thanh toán"}
+                  {facilifiesStatus === "1" && "Đã thanh toán"}
+                  {facilifiesStatus === "2" && "Đã hủy"}
                 </MenuItem>
               ))}
             {month &&

@@ -17,17 +17,35 @@ const RegisterDormitoryPage = async ({
     query?: string;
     page?: string;
     entries?: string;
+    roomCode?: string;
+    branchName?: string;
+    year?: string;
+    date?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const roomCode = searchParams?.roomCode?.trim() || "";
+  const branchName = searchParams?.branchName?.trim() || "";
+  const year = Number(searchParams?.year?.trim()) || 0;
+  // const date = searchParams?.date?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const registers = (await getFilterRegister(
     query,
+    roomCode,
+    branchName,
+    year,
+    // date,
     currentPage,
     entries,
   )) as REGISTER[];
-  const count = await getCountRegister(query);
+  const count = await getCountRegister(
+    query,
+    roomCode,
+    branchName,
+    year,
+    // date,
+  );
   return (
     <div>
       <Breadcrumb pageName="Quản lý đăng ký ký túc xá" />

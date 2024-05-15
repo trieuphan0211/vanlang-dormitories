@@ -136,7 +136,7 @@ export const MenuItemList = (item: MenuItemListProps) => {
                       className={clsx(
                         "group relative flex items-center gap-2.5 rounded-md px-4 font-semibold  text-white duration-300 ease-in-out hover:text-meta-1",
                         {
-                          "!text-meta-1":
+                          "!text-[#f57b20]":
                             pathname.includes(subItem.href) &&
                             pathname === subItem.href,
                         },

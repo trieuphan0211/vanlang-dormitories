@@ -32,19 +32,20 @@ export const AddNewMaintenance = ({
   const [openQr, setOpenQr] = useState(false);
   const [qr, setQr] = useState<string>("");
   const [facilities, setFacilities] = useState<FACILITIES[]>([]);
-  const getFacility = async (qrCode: string) => {
-    const res = (await getFacilitiesByCode(qrCode)) as FACILITIES;
-    facilities.find((item) => item.code === res.code)
-      ? null
-      : setFacilities([...facilities, res]);
-    setQr("");
-    setOpenQr(false);
-  };
+
   useEffect(() => {
-    if (qr) {
+    const getFacility = async (qrCode: string) => {
+      const res = (await getFacilitiesByCode(qrCode)) as FACILITIES;
+      facilities.find((item) => item.code === res.code)
+        ? null
+        : setFacilities([...facilities, res]);
+      setQr("");
+      // setOpenQr(false);
+    };
+    if (qr !== "") {
       getFacility(qr);
     }
-  }, [qr]);
+  }, [qr, facilities]);
   const {
     register,
     handleSubmit,
@@ -185,13 +186,13 @@ export const AddNewMaintenance = ({
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {facilitie.name}
+                          {facilitie?.name}
                         </p>
                       </td>
 
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {facilitie.code}
+                          {facilitie?.code}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -202,7 +203,7 @@ export const AddNewMaintenance = ({
                           onClick={() =>
                             setFacilities(
                               facilities.filter(
-                                (item) => item.id !== facilitie.id,
+                                (item) => item.id !== facilitie?.id,
                               ),
                             )
                           }

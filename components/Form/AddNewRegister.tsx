@@ -28,6 +28,7 @@ export const AddNewRegister = ({
     handleSubmit,
     formState: { errors },
     watch,
+    control,
     reset,
     setValue,
   } = useForm({
@@ -36,7 +37,7 @@ export const AddNewRegister = ({
       branchId: "",
       roomTypeCode: "",
       roomId: "",
-      year: 0,
+      year: 0.5,
     },
   });
   const user = useSession();
@@ -67,64 +68,68 @@ export const AddNewRegister = ({
       }
     });
   }, [branchId, roomTypeCode]);
-  console.log("room", room);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-full">
-        <label
-          className={clsx(
-            "mb-3 block text-sm font-medium text-black dark:text-white",
-            {
-              "text-red": errors.branchId,
-            },
-          )}
-        >
-          Thời hạn đăng ký
-        </label>
-        <FormSelect
-          register={register("year")}
-          isPending={isPending}
-          years={[0.5, 1, 2, 3]}
-          errors={errors?.year}
-          placeholder={"Chọn năm đăng ký"}
-          //   defaultValue={year}
-          disabled={false}
-        />
+      <div className="flex gap-10">
+        <div className="w-full">
+          <label
+            className={clsx(
+              "mb-3 block text-sm font-medium text-black dark:text-white",
+              {
+                "text-red": errors.branchId,
+              },
+            )}
+          >
+            Thời hạn đăng ký
+          </label>
+          <FormSelect
+            name="year"
+            control={control}
+            isPending={isPending}
+            years={[0.5, 1, 2, 3]}
+            errors={errors?.year}
+            placeholder={"Chọn năm đăng ký"}
+            //   defaultValue={year}
+            disabled={false}
+          />
+        </div>
+        <div className="w-full">
+          <label
+            className={clsx(
+              "mb-3 block text-sm font-medium text-black dark:text-white",
+              {
+                "text-red": errors.branchId,
+              },
+            )}
+          >
+            Chi nhánh
+          </label>
+          <FormSelect
+            name="branchId"
+            control={control}
+            isPending={isPending}
+            branchs={branchs}
+            errors={errors?.branchId}
+            placeholder={"Chọn chi nhánh"}
+            defaultValue={branchId}
+            disabled={false}
+          />
+        </div>
       </div>
       <div className="w-full">
         <label
           className={clsx(
-            "mb-3 block text-sm font-medium text-black dark:text-white",
+            "mb-3 mt-6 block text-sm font-medium text-black dark:text-white",
             {
               "text-red": errors.branchId,
             },
           )}
         >
-          Chi nhánh
+          Loại phòng
         </label>
         <FormSelect
-          register={register("branchId")}
-          isPending={isPending}
-          branchs={branchs}
-          errors={errors?.branchId}
-          placeholder={"Chọn chi nhánh"}
-          defaultValue={branchId}
-          disabled={false}
-        />
-      </div>
-      <div className="w-full">
-        <label
-          className={clsx(
-            "mb-3 block text-sm font-medium text-black dark:text-white",
-            {
-              "text-red": errors.branchId,
-            },
-          )}
-        >
-          Chi nhánh
-        </label>
-        <FormSelect
-          register={register("roomTypeCode")}
+          name="roomTypeCode"
+          control={control}
           isPending={isPending}
           roomTypes={roomTypes}
           errors={errors?.roomTypeCode}
@@ -135,14 +140,19 @@ export const AddNewRegister = ({
       <div className="flex items-center gap-10 p-3">
         <p className="flex gap-3 text-red">
           <FaUserGraduate />
-          <span>Chỗ đã có sinh viên đăng ký</span>
+          <span>Chỗ đã có sinh viên</span>
         </p>
         <p className="flex gap-3 text-graydark">
           <FaUserGraduate />
           <span>Chỗ chưa có sinh viên đăng ký</span>
         </p>
+        <p className="flex gap-3 text-blue-500">
+          <FaUserGraduate />
+          <span>Chỗ đã có sinh viên đăng ký</span>
+        </p>
       </div>
       <div>
+        {/* Get room folowing floor */}
         {Array.from({ length: room[room.length - 1]?.floor || 0 }).map(
           (data, index) =>
             room.filter((item) => item.floor === index + 1).length > 0 && (
@@ -153,38 +163,64 @@ export const AddNewRegister = ({
                 <div className="flex w-full flex-wrap gap-3">
                   {room
                     .filter((item) => item.floor === index + 1)
-                    .map((item, key) => (
-                      <div key={key} className="w-1/5">
+                    .map((item, key) => {
+                      const roomCurrent =
+                        (item?.roomType?.members || 0) -
+                        (item?.Student?.length || 0) -
+                        (item?.Register?.filter((e) => e.status === 0).length ||
+                          0);
+                      return (
                         <div
-                          className={clsx(
-                            "flex flex-wrap gap-5 rounded border-2 p-5",
-                            {
-                              "border-blue-500": item.id === roomId,
-                            },
-                          )}
-                          onClick={() => setValue("roomId", item.id)}
-                        >
-                          {item.Student &&
-                            item.Student.map((student, key) => (
-                              <FaUserGraduate className="text-red" key={key} />
-                            ))}
-                          {Array.from({
-                            length:
-                              (item?.roomType?.members || 0) -
-                              (item?.Student?.length || 0),
-                          }).map((data, key) => (
-                            <FaUserGraduate key={key} />
-                          ))}
-                        </div>{" "}
-                        <p
-                          className={clsx("text-center", {
-                            "text-blue-500": item.id === roomId,
+                          key={key}
+                          className={clsx("w-1/5 ", {
+                            "hover:cursor-pointer": roomCurrent > 0,
                           })}
                         >
-                          Phòng {item.code}
-                        </p>
-                      </div>
-                    ))}
+                          <div
+                            className={clsx(
+                              "flex flex-wrap gap-5 rounded border-2 p-5",
+                              {
+                                "border-blue-500": item.id === roomId,
+                              },
+                            )}
+                            onClick={() =>
+                              roomCurrent > 0
+                                ? setValue("roomId", item.id)
+                                : null
+                            }
+                          >
+                            {item.Student &&
+                              item.Student.map((student, key) => (
+                                <FaUserGraduate
+                                  className="text-red"
+                                  key={key}
+                                />
+                              ))}
+                            {item.Register &&
+                              item.Register.filter((e) => e.status === 0).map(
+                                (register, key) => (
+                                  <FaUserGraduate
+                                    className="text-blue-500"
+                                    key={key}
+                                  />
+                                ),
+                              )}
+                            {Array.from({
+                              length: roomCurrent,
+                            }).map((data, key) => (
+                              <FaUserGraduate key={key} />
+                            ))}
+                          </div>{" "}
+                          <p
+                            className={clsx("text-center font-semibold", {
+                              "text-blue-500": item.id === roomId,
+                            })}
+                          >
+                            Phòng {item.code}
+                          </p>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             ),
@@ -198,7 +234,7 @@ export const AddNewRegister = ({
         />
         <SaveButton
           isPending={isPending}
-          name="Lưu"
+          name="Đăng ký"
           disabled={roomId ? false : true}
         />
       </div>

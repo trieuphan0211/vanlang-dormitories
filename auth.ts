@@ -38,7 +38,7 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       const curentUser = await db.user
         .findUniqueOrThrow({
           where: { id: user.id || "" },
@@ -46,7 +46,7 @@ export const {
         .then((res) => res)
         .catch((err) => null);
       if (!curentUser) return true;
-      if (!(account?.provider === "azure-ad")) return true;
+      if (!(account?.provider === "microsoft-entra-id")) return true;
       await db.user.update({
         where: { id: user.id },
         data: { signinTime: new Date() },

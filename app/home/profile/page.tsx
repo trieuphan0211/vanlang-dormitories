@@ -1,11 +1,13 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { getStudentByEmail, getStudentById } from "@/data/student";
 import { currentUser } from "@/lib/auth";
+import { STUDENT } from "@/types";
 import Image from "next/image";
 import React from "react";
 
 const ProfilePage = async () => {
   const user = await currentUser();
-  console.log(user);
+  const student = (await getStudentByEmail(user?.email as string)) as STUDENT;
   return (
     <div className="mx-auto max-w-242.5">
       <Breadcrumb pageName="Thông tin cá nhân" />
@@ -63,10 +65,7 @@ const ProfilePage = async () => {
                 src={user?.image || "/images/avatar/avatar-01.png"}
                 width={160}
                 height={160}
-                style={{
-                  width: "auto",
-                  height: "auto",
-                }}
+                className="rounded-full"
                 alt="profile"
               />
               <label
@@ -102,6 +101,41 @@ const ProfilePage = async () => {
                 />
               </label>
             </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
+              {user?.name}
+            </h3>
+            <p className="font-medium">Khoa {student?.major}</p>
+          </div>
+        </div>
+        <div className="mx-auto grid max-w-180 grid-cols-2 gap-4 pb-10">
+          <div className="flex gap-5">
+            <h4 className="font-semibold text-black dark:text-white">
+              Họ & Tên:{" "}
+            </h4>
+            <p className="">{student?.fullName}</p>
+          </div>
+
+          <div className="flex gap-5">
+            <h4 className="font-semibold text-black dark:text-white">
+              Mã số sinh viên:{" "}
+            </h4>
+            <p className="">{student?.studentCode}</p>
+          </div>
+          <div className="flex gap-5">
+            <h4 className="font-semibold text-black dark:text-white">
+              Đang ở phòng:{" "}
+            </h4>
+            <p className="">
+              {student?.room?.code || "Hiện không ở trong ký túc xá"}
+            </p>
+          </div>
+          <div className="flex gap-5">
+            <h4 className="font-semibold text-black dark:text-white">
+              Email:{" "}
+            </h4>
+            <p className="">{student?.email}</p>
           </div>
         </div>
       </div>

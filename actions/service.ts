@@ -10,13 +10,14 @@ export const addService = async (value: z.infer<typeof ServiceSchema>) => {
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { serviceName, cost, description, unit } = validateValue.data;
+  const { serviceName, cost, description, unit, allow } = validateValue.data;
   try {
     const service = await createService({
       name: serviceName,
       cost: Number(cost),
       description,
       unit,
+      allow,
     });
     console.log(`Service is created! ${JSON.stringify(service)}`);
     if (service?.id) {
@@ -49,13 +50,14 @@ export const updateServiceById = async (
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { serviceName, cost, description, unit } = validateValue.data;
+  const { serviceName, cost, description, unit, allow } = validateValue.data;
   try {
     const service = await updateService(id, {
       name: serviceName,
       cost: Number(cost),
       description,
       unit,
+      allow,
     });
     console.log(`Service is updated! ${JSON.stringify(service)}`);
     if (service?.id) {

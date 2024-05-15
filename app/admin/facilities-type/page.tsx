@@ -19,17 +19,27 @@ const FacilitiesTypePage = async ({
     query?: string;
     page?: string;
     entries?: string;
+    facilitiesTypeCode?: string;
+    description?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const facilitiesTypeCode = searchParams?.facilitiesTypeCode?.trim() || "";
+  const description = searchParams?.description?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const facilitiesTypes = (await getFilterFacilitiesTypes(
     query,
+    facilitiesTypeCode,
+    description,
     currentPage,
     entries,
   )) as FACILITIESTYPE[];
-  const count = await getCountFacilitiestypes(query);
+  const count = await getCountFacilitiestypes(
+    query,
+    facilitiesTypeCode,
+    description,
+  );
   return (
     <div>
       <Breadcrumb pageName="Quản lý loại cơ sở vật chất" />

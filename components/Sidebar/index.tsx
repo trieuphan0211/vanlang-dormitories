@@ -115,7 +115,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       list: [
         {
           icon: "/images/header-icon/user.svg",
-          title: "Cơ sở vật chất",
+          title: "Danh sách CSVC",
           href: "/admin/facilities",
         },
         {
@@ -155,6 +155,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           title: "Đăng ký ra vào",
           href: "/admin/out-in",
         },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Danh sách ra vào",
+          href: "/admin/out-in/list",
+        },
       ],
     },
     {
@@ -184,6 +189,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           title: "Đăng ký ký túc xá",
           href: "/home/register-dormitory",
         },
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Ra / vào",
+          href: "/home/out-in",
+        },
       ],
     },
   ];
@@ -191,7 +201,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-40 flex h-screen w-72.5 flex-col overflow-y-hidden  bg-[url('/images/background/h1.jpg')] bg-cover bg-center duration-300 ease-linear before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-rose-900 before:to-black before:opacity-75 before:blur-sm lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-40 flex h-screen w-72.5 flex-col overflow-y-hidden  bg-[url('/images/background/h1.jpg')] bg-cover bg-center duration-300 ease-linear before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-black before:opacity-75 before:blur-sm lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >

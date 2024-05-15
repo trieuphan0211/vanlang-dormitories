@@ -1,12 +1,15 @@
 "use client";
-import { ROOM } from "@/types";
-import React, { useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { FormSelect, Input } from "../Input";
-import { useRouter } from "next/navigation";
-import clsx from "clsx";
-import { createInvoice } from "@/actions/invoice";
 import { useAppDispatch } from "@/hooks/redux";
+import { InvoceSchema } from "@/schema";
+import { ROOM } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
+import { useRouter } from "next/navigation";
+import { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { FormSelect, Input } from "../Input";
+import { createInvoice } from "@/actions/invoice";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 
 export const CreateNewInvoice = ({
@@ -24,40 +27,56 @@ export const CreateNewInvoice = ({
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm({
+    setValue,
+  } = useForm<z.infer<typeof InvoceSchema>>({
+    resolver: zodResolver(InvoceSchema),
     defaultValues: {
-      invoiceMonth: "",
-      invoiceYear: "",
-      detail: "",
+      invoiceMonth: "1",
+      invoiceYear: new Date().getFullYear().toString(),
+      detail: [],
     },
   });
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // startTransition(() => {
-    //   createInvoice(data).then((res) => {
-    //     if (res?.success) {
-    //       router.push("/admin/invoice");
-    //       dispatch(
-    //         alertManagerActions.setAlert({
-    //           message: {
-    //             type: "success",
-    //             content: "Hóa đơn đã được lập và gửi mail cho sinh viên!",
-    //           },
-    //         }),
-    //       );
-    //     }
-    //     if (res?.error) {
-    //       dispatch(
-    //         alertManagerActions.setAlert({
-    //           message: {
-    //             type: "error",
-    //             content: "Có lỗi xảy ra! Vui lòng thử lại sau!",
-    //           },
-    //         }),
-    //       );
-    //     }
-    //   });
-    // });
+  // Set default value for form
+  useEffect(() => {
+    room.map((room, roomKey) => {
+      setValue(`detail.${roomKey}.roomId`, room.id);
+      room?.Services?.map((service, serviceKey) => {
+        service.service.allow
+          ? setValue(
+              `detail.${roomKey}.service.${serviceKey}.serviceId`,
+              service.service.id,
+            )
+          : console.log("service not allow");
+      });
+    });
+  }, [room, setValue]);
+
+  const onSubmit = (data: z.infer<typeof InvoceSchema>) => {
+    startTransition(() => {
+      createInvoice(data).then((res) => {
+        if (res?.success) {
+          router.push("/admin/invoice");
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "success",
+                content: "Hóa đơn đã được lập và gửi mail cho sinh viên!",
+              },
+            }),
+          );
+        }
+        if (res?.error) {
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "error",
+                content: "Có lỗi xảy ra! Vui lòng thử lại sau!",
+              },
+            }),
+          );
+        }
+      });
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -86,6 +105,7 @@ export const CreateNewInvoice = ({
               "11",
               "12",
             ]}
+            size="small"
             control={control}
             errors={errors?.invoiceMonth}
             placeholder={"Chọn chi nhánh"}
@@ -99,54 +119,67 @@ export const CreateNewInvoice = ({
           >
             Năm
           </label>
+
           <Input
             type="text"
             register={register("invoiceYear")}
             isPending={isPending}
+            size="small"
             placeholder={"Nhập năm"}
             errors={errors?.invoiceYear}
-            disabled={type === "detail" ? true : null || isPending}
+            disabled={true}
           />
         </div>
       </div>
-      {room.map((room, keys) => (
-        <div key={keys}>
-          <h4>
+      {room.map((room, roomKey) => (
+        <div key={roomKey} className="mb-2 rounded-2xl border p-5">
+          <h4 className="mb-5 text-center font-semibold">
             Phòng: {room.code} - {room?.roomType?.name} - {room.branch.name}
           </h4>
-          {room?.Services &&
-            room?.Services.map(
-              (service, key) =>
-                service.service.allow && (
-                  <div className="my-5.5" key={key}>
-                    <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="branchName"
-                    >
-                      {service.service.name}
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="number"
-                        placeholder="Nhập số lượng"
-                        isPending={isPending}
-                        register={register(
-                          `detail.${room.id}.${service.service.id}`,
-                        )}
-                        disabled={type === "detail" ? true : null || isPending}
-                      />
-                      {service.service.unit}
+          <div className="grid grid-cols-2 gap-5">
+            {room?.Services &&
+              room?.Services.map(
+                (service, serviceKey) =>
+                  service.service.allow && (
+                    <div className="mb-2" key={serviceKey}>
+                      <label
+                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        htmlFor="branchName"
+                      >
+                        {service.service.name}
+                      </label>
+                      <div className="flex items-center gap-1">
+                        <div className="w-full">
+                          <Input
+                            type="number"
+                            placeholder="Nhập số lượng"
+                            isPending={isPending}
+                            size="small"
+                            register={register(
+                              `detail.${roomKey}.service.${serviceKey}.quantity` as "detail",
+                            )}
+                            errors={
+                              errors?.detail?.[roomKey]?.service?.[serviceKey]
+                                ?.quantity
+                            }
+                            disabled={
+                              type === "detail" ? true : null || isPending
+                            }
+                          />
+                        </div>
+                        {service.service.unit}
+                      </div>
                     </div>
-                  </div>
-                ),
-            )}
+                  ),
+              )}
+          </div>
         </div>
       ))}
       <div className="flex justify-end gap-4.5">
         <button
           onClick={(e) => {
             e.preventDefault();
-            router.push("/admin/branch");
+            router.push("/admin/invoice");
           }}
           className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
           type="submit"

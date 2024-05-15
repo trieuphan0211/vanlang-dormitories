@@ -11,7 +11,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
-import { DialogTitle } from "@mui/material";
+import { DialogTitle, Switch } from "@mui/material";
+import { useEffect } from "react";
 
 export const AddNewService = ({
   isPending,
@@ -30,17 +31,25 @@ export const AddNewService = ({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<z.infer<typeof ServiceSchema>>({
     resolver: zodResolver(ServiceSchema),
     defaultValues: {
       serviceName: "",
       description: "",
       cost: "",
-      unit: "",
+      unit: "tháng",
+      allow: false,
     },
   });
+  const { allow } = watch();
+  useEffect(() => {
+    if (!allow) {
+      setValue("unit", "tháng");
+    }
+  }, [allow]);
   const onSubmit = (value: z.infer<typeof ServiceSchema>) => {
-    console.log(value);
     startTransition(() => {
       addService(value).then((res) => {
         if (res?.success) {
@@ -74,7 +83,7 @@ export const AddNewService = ({
   };
   return (
     <div className="fixed left-[50%] top-[50%] z-50 max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
-      <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
+      <div className="border-b border-stroke py-4 dark:border-strokedark">
         <DialogTitle className="!font-bold text-black dark:text-white">
           Thêm dịch vụ
         </DialogTitle>
@@ -101,6 +110,19 @@ export const AddNewService = ({
               register={register("serviceName")}
             />
           </div>
+          <div className="mb-3 flex items-center gap-10">
+            <label
+              className={clsx(
+                " block text-sm font-medium text-black dark:text-white",
+                {
+                  "text-red": errors.serviceName,
+                },
+              )}
+            >
+              Cho phép nhập số lượng khi tạo hóa đơn
+            </label>
+            <Switch {...register("allow")} checked={!!allow as boolean} />
+          </div>
           <div>
             <label
               className={clsx(
@@ -112,7 +134,7 @@ export const AddNewService = ({
             >
               Chi phí
             </label>
-            <div className="flex w-full gap-3">
+            <div className="flex w-full items-center gap-3">
               <div className="w-full">
                 <Input
                   type="number"
@@ -122,13 +144,13 @@ export const AddNewService = ({
                   register={register("cost")}
                 />
               </div>
-              <p className="text-5xl">/</p>
+              <p className="mb-3 text-2xl">/</p>
               <div>
                 <Input
                   type="text"
                   placeholder="Nhập đơn vị"
                   errors={errors.unit}
-                  isPending={isPending}
+                  isPending={isPending || !allow}
                   register={register("unit")}
                 />
               </div>

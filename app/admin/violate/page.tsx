@@ -17,17 +17,26 @@ const ViolatePage = async ({
     query?: string;
     page?: string;
     entries?: string;
+    studentName?: string;
+    studentCode?: string;
+    email?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const studentName = searchParams?.studentName?.trim() || "";
+  const studentCode = searchParams?.studentCode?.trim() || "";
+  const email = searchParams?.email?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const violates = (await getFilterViolate(
     query,
+    studentName,
+    studentCode,
+    email,
     currentPage,
     entries,
   )) as VIOLATE[];
-  const count = await getCountViolate(query);
+  const count = await getCountViolate(query, studentName, studentCode, email);
   return (
     <div>
       <Breadcrumb pageName="Quản lý vi phạm" />

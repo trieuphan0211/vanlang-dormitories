@@ -27,6 +27,7 @@ export const MaintenanceDetailForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    control,
     reset,
     setValue,
   } = useForm<z.infer<typeof MaintenanceSchema>>({
@@ -101,7 +102,8 @@ export const MaintenanceDetailForm = ({
             Trạng thái
           </label>
           <FormSelect
-            register={register("status")}
+            name="status"
+            control={control}
             isPending={isPending}
             facilifiesStatus={["CREATED", "INPROGRESS", "FINISHED"]}
             errors={errors?.status}

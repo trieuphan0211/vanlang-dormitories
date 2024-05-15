@@ -82,6 +82,7 @@ export const ViolateDetailForm = ({
           errors={errors.violateName}
           isPending={isPending}
           register={register("violateName")}
+          disabled={type === "detail" ? true : null || isPending}
         />
       </div>
       <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
@@ -104,6 +105,7 @@ export const ViolateDetailForm = ({
             students={students}
             errors={errors?.studentId}
             placeholder={"Chọn chi nhánh"}
+            disabled={type === "detail" ? true : null || isPending}
           />
         </div>
       </div>

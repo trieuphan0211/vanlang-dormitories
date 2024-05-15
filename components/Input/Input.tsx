@@ -12,6 +12,7 @@ export const Input = ({
   required,
   value,
   disabled,
+  size,
 }: {
   type: string;
   errors?: { message?: string };
@@ -23,6 +24,7 @@ export const Input = ({
   required?: boolean;
   disabled?: boolean;
   value?: any;
+  size?: "small" | "medium";
 }) => {
   return (
     <>
@@ -37,6 +39,7 @@ export const Input = ({
         required={required}
         multiline={multiline}
         rows={rows}
+        size={size ? size : "medium"}
         disabled={disabled || isPending}
       />
       <p

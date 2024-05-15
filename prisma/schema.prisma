@@ -88,6 +88,7 @@ model Student {
   room               Room?      @relation(fields: [roomId], references: [id])
   Violate            Violate[]
   InOut              InOut[]
+  Invoice            Invoice[]
 }
 
 model Violate {
@@ -117,7 +118,7 @@ model Register {
   id               String   @id @default(cuid())
   studentEmail     String
   roomId           String
-  registerdeadline Int
+  registerdeadline Float
   status           Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy
   createDate       DateTime @default(now())
   student          Student  @relation(fields: [studentEmail], references: [email])
@@ -127,11 +128,13 @@ model Register {
 model Invoice {
   id          String   @id @default(cuid())
   roomId      String
+  studentId   String
   invoiceDate String
   total       Int
   detail      String
   status      Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy
   room        Room     @relation(fields: [roomId], references: [id])
+  Student     Student  @relation(fields: [studentId], references: [id])
   createDate  DateTime @default(now())
 }
 
@@ -163,15 +166,15 @@ model Services {
 
 model Room {
   id           String          @id @default(cuid())
-  code         String          @unique
+  code         String
   description  String?
   branchId     String
   roomTypeCode String
   floor        Int
+  createDate   DateTime        @default(now())
   branch       Branch          @relation(fields: [branchId], references: [id])
   roomType     RoomType        @relation(fields: [roomTypeCode], references: [code])
   Facilities   Facilities[]
-  createDate   DateTime        @default(now())
   Student      Student[]
   Services     ServiceOnRoom[]
   Invoice      Invoice[]

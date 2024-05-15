@@ -13,19 +13,35 @@ const RegisterPage = async ({
     query?: string;
     page?: string;
     entries?: string;
+    roomCode?: string;
+    branchName?: string;
+    year?: string;
+    date?: string;
   };
 }) => {
   const user = await auth();
   const query = searchParams?.query?.trim() || "";
+  const roomCode = searchParams?.roomCode?.trim() || "";
+  const branchName = searchParams?.branchName?.trim() || "";
+  const year = Number(searchParams?.year?.trim()) || 0;
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const registers = (await getFilterRegister(
     query,
+    roomCode,
+    branchName,
+    year,
     currentPage,
     entries,
     user?.user.email as string,
   )) as REGISTER[];
-  const count = await getCountRegister(query, user?.user.email as string);
+  const count = await getCountRegister(
+    query,
+    roomCode,
+    branchName,
+    year,
+    user?.user.email as string,
+  );
 
   return (
     <div>

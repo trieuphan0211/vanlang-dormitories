@@ -28,6 +28,7 @@ export const FacilityDetailForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     setValue,
   } = useForm<z.infer<typeof FacilitiesSchema>>({
@@ -110,7 +111,8 @@ export const FacilityDetailForm = ({
             Trạng thái
           </label>
           <FormSelect
-            register={register("status")}
+            name="status"
+            control={control}
             isPending={isPending}
             facilifiesStatus={[
               "ACTIVE",
@@ -139,7 +141,8 @@ export const FacilityDetailForm = ({
             Chi nhánh
           </label>
           <FormSelect
-            register={register("branchId")}
+            name="branchId"
+            control={control}
             isPending={isPending}
             branchs={branchs}
             errors={errors?.branchId}

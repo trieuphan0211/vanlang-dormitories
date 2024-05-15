@@ -13,19 +13,29 @@ const ServicePage = async ({
 }: {
   searchParams?: {
     query?: string;
+    cost?: string;
+    unit?: string;
+    description?: string;
     page?: string;
     entries?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const cost = Number(searchParams?.cost?.trim()) || 0;
+  const unit = searchParams?.unit?.trim() || "";
+  const description = searchParams?.description?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const services = (await getFilterServices(
     query,
+    cost,
+    unit,
+    description,
     currentPage,
     entries,
   )) as SERVICES[];
-  const count = await getCountServices(query);
+  const count = await getCountServices(query, cost, unit, description);
+  console.log("services count: ", count);
   return (
     <div>
       <Breadcrumb pageName="Quản lý dịch vụ" />

@@ -20,16 +20,39 @@ const RoomTypePage = async ({
     query?: string;
     page?: string;
     entries?: string;
+    numberFloors?: string;
+    roomType?: string;
+    branchName?: string;
+    description?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
-  const entries = Number(searchParams?.entries) || 10;
-  const rooms = (await getFilterRooms(query, currentPage, entries)) as ROOM[];
+  const entries = Number(searchParams?.entries?.trim()) || 10;
+  const numberFloors = Number(searchParams?.numberFloors?.trim()) || 0;
+  const roomType = searchParams?.roomType?.trim() || "";
+  const branchName = searchParams?.branchName?.trim() || "";
+  const description = searchParams?.description?.trim() || "";
+
+  const rooms = (await getFilterRooms(
+    query,
+    numberFloors,
+    roomType,
+    branchName,
+    description,
+    currentPage,
+    entries,
+  )) as ROOM[];
   const branchs = (await getBranchsAll()) as BRANCH[];
   const roomTypes = (await getRoomTypesAll()) as ROOMTYPE[];
   const services = (await getServicesAll()) as SERVICES[];
-  const count = await getCountRoom(query);
+  const count = await getCountRoom(
+    query,
+    numberFloors,
+    roomType,
+    branchName,
+    description,
+  );
   return (
     <div>
       <Breadcrumb pageName="Quản lý phòng" />

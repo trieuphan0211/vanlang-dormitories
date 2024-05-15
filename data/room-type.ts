@@ -26,10 +26,48 @@ export const getRoomTypeById = async (id: string) => {
 };
 export const getFilterRoomTypes = async (
   query: string,
+  members: number,
+  roomTypeCode: string,
+  cost: number,
+  description: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    roomTypeCode &&
+      search.push({
+        code: {
+          contains: roomTypeCode,
+          mode: "insensitive",
+        },
+      });
+    members &&
+      search.push({
+        members: {
+          equals: members,
+        },
+      });
+    cost &&
+      search.push({
+        cost: {
+          equals: cost,
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+          mode: "insensitive",
+        },
+      });
     const roomTypes = await db.roomType.findMany({
       orderBy: [
         {
@@ -37,28 +75,7 @@ export const getFilterRoomTypes = async (
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            members: {
-              equals: Number(query) || undefined,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-          {
-            code: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -87,8 +104,48 @@ export const getRoomTypeByFields = async (fields: {
     console.error(e);
   }
 };
-export const getCountRoomtypes = async (query: string) => {
+export const getCountRoomtypes = async (
+  query: string,
+  members: number,
+  roomTypeCode: string,
+  cost: number,
+  description: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    roomTypeCode &&
+      search.push({
+        code: {
+          contains: roomTypeCode,
+          mode: "insensitive",
+        },
+      });
+    members &&
+      search.push({
+        members: {
+          equals: members,
+        },
+      });
+    cost &&
+      search.push({
+        cost: {
+          equals: cost,
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+          mode: "insensitive",
+        },
+      });
     const count = await db.roomType.count({
       orderBy: [
         {
@@ -96,23 +153,7 @@ export const getCountRoomtypes = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            members: {
-              equals: Number(query) || undefined,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;
@@ -143,6 +184,7 @@ export const updateRoomType = async (
     name: string;
     members: number;
     description: string;
+    cost: number;
   },
 ) => {
   try {

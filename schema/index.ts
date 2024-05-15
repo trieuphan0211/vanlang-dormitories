@@ -28,6 +28,48 @@ export const BranchSchema = z
       path: ["numberFloors"],
     },
   );
+export const InvoceSchema = z
+  .object({
+    invoiceMonth: z.string(),
+    invoiceYear: z.string().min(1, "Năm không được để trống"),
+    detail: z.array(
+      z.object({
+        roomId: z.string(),
+        service: z.array(
+          z.object({
+            serviceId: z.string(),
+            quantity: z.string().min(1, "Số lượng không được để trống"),
+          }),
+        ),
+      }),
+    ),
+  })
+  .refine(
+    (data) => {
+      if (Number(data.invoiceMonth) < 1) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    {
+      message: "Tháng không được để trống",
+      path: ["invoiceMonth"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (Number(data.invoiceYear) < 1) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    {
+      message: "Năm phải lớn hơn 0",
+      path: ["invoiceYear"],
+    },
+  );
 export const RoomTypeSchema = z
   .object({
     roomTypeName: z.string().min(1, "Tên loại phòng không được để trống"),
@@ -257,6 +299,7 @@ export const ServiceSchema = z
     description: z.string(),
     cost: z.string(),
     unit: z.string().min(1, "Đơn vị rỗng"),
+    allow: z.boolean(),
   })
   .refine(
     (data) => {

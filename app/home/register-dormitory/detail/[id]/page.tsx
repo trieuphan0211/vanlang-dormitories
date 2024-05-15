@@ -53,6 +53,7 @@ export default async function DetailPage({
                   room.Student?.length || 0 < (room.roomType?.members ?? 0),
               )}
               type="detail"
+              role="user"
             />
           )}
         </div>

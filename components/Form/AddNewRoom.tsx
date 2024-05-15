@@ -36,6 +36,7 @@ export const AddNewRoom = ({
     formState: { errors },
     reset,
     setValue,
+    control,
   } = useForm<z.infer<typeof RoomSchema>>({
     resolver: zodResolver(RoomSchema),
     defaultValues: {
@@ -101,7 +102,8 @@ export const AddNewRoom = ({
                 Chi nhánh
               </label>
               <FormSelect
-                register={register("branchId")}
+                name="branchId"
+                control={control}
                 isPending={isPending}
                 branchs={branchs}
                 errors={errors?.branchId}
@@ -121,7 +123,8 @@ export const AddNewRoom = ({
                 Loại phòng
               </label>
               <FormSelect
-                register={register("roomTypeCode")}
+                name="roomTypeCode"
+                control={control}
                 isPending={isPending}
                 roomTypes={roomTypes}
                 errors={errors?.roomTypeCode}

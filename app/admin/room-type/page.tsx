@@ -13,19 +13,38 @@ const RoomTypePage = async ({
 }: {
   searchParams?: {
     query?: string;
+    members?: string;
+    roomTypeCode?: string;
+    cost?: string;
+    description?: string;
     page?: string;
     entries?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
+  const members = Number(searchParams?.members?.trim()) || 0;
+  const roomTypeCode = searchParams?.roomTypeCode?.trim() || "";
+  const cost = Number(searchParams?.cost?.trim()) || 0;
+  const description = searchParams?.description?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
+
   const roomTypes = (await getFilterRoomTypes(
     query,
+    members,
+    roomTypeCode,
+    cost,
+    description,
     currentPage,
     entries,
   )) as ROOMTYPE[];
-  const count = await getCountRoomtypes(query);
+  const count = await getCountRoomtypes(
+    query,
+    members,
+    roomTypeCode,
+    cost,
+    description,
+  );
   return (
     <div>
       <Breadcrumb pageName="Quản lý loại phòng" />

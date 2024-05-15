@@ -8,10 +8,11 @@ import { SERVICES } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Input } from "@/components/Input";
+import { Switch } from "@mui/material";
 
 export const ServiceDetailForm = ({
   service,
@@ -27,6 +28,9 @@ export const ServiceDetailForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    reset,
+    setValue,
   } = useForm<z.infer<typeof ServiceSchema>>({
     resolver: zodResolver(ServiceSchema),
     defaultValues: {
@@ -34,9 +38,16 @@ export const ServiceDetailForm = ({
       description: service.description || "",
       cost: String(service.cost) || "",
       unit: service.unit || "",
+      allow: service.allow || false,
     },
   });
-  console.log(errors);
+  const { allow } = watch();
+  console.log("allow: ", allow);
+  useEffect(() => {
+    if (!allow) {
+      setValue("unit", "tháng");
+    }
+  }, [allow]);
   const onSubmit = (value: z.infer<typeof ServiceSchema>) => {
     console.log(value);
     startTransition(() => {
@@ -86,15 +97,31 @@ export const ServiceDetailForm = ({
           />
         </div>
       </div>
-
+      <div className="mb-3 flex items-center gap-10">
+        <label
+          className={clsx(
+            " block text-sm font-medium text-black dark:text-white",
+            {
+              "text-red": errors.serviceName,
+            },
+          )}
+        >
+          Cho phép nhập số lượng khi tạo hóa đơn
+        </label>
+        <Switch
+          {...register("allow")}
+          checked={allow}
+          disabled={type === "detail" ? true : null || isPending}
+        />
+      </div>
       <div className="mb-5.5">
         <label
           className="mb-3 block text-sm font-medium text-black dark:text-white"
           htmlFor="emailAddress"
         >
-          Chi phí (trên tháng)
+          Chi phí
         </label>
-        <div className="flex w-full gap-3">
+        <div className="flex w-full items-center gap-3">
           <div className="w-full">
             <Input
               type="number"
@@ -105,7 +132,7 @@ export const ServiceDetailForm = ({
               disabled={type === "detail" ? true : null || isPending}
             />
           </div>
-          <p className="text-5xl">/</p>
+          <p className="mb-3 text-3xl">/</p>
           <div>
             <Input
               type="text"
@@ -113,7 +140,7 @@ export const ServiceDetailForm = ({
               errors={errors.unit}
               isPending={isPending}
               register={register("unit")}
-              disabled={type === "detail" ? true : null || isPending}
+              disabled={type === "detail" ? true : null || isPending || !allow}
             />
           </div>
         </div>

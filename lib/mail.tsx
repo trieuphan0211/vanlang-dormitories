@@ -15,12 +15,22 @@ export const sendInvoiceEmail = async (
     }>;
   },
 ) => {
-  console.log(email);
+  console.log("Send to:", email);
+  // config mail server from gmail
+  // const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: "trieuphan0211@gmail.com",
+  //     pass: "onxllpvzqjyrgtaj",
+  //   },
+  // });
+  // config mail server from Ethereal email
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.ethereal.email",
+    port: 587,
     auth: {
-      user: "trieuphan0211@gmail.com",
-      pass: "onxllpvzqjyrgtaj",
+      user: "arch.toy27@ethereal.email",
+      pass: "M1gu3Vuk6ZaUU6pCBk",
     },
   });
 
@@ -34,6 +44,12 @@ export const sendInvoiceEmail = async (
     subject: "Hóa đơn ký túc xá",
     html: emailHtml,
   };
-
-  return await transporter.sendMail(options);
+  try {
+    const responseMail = await transporter.sendMail(options);
+    console.log("Email sent: %s", responseMail.messageId);
+    return responseMail;
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    throw error;
+  }
 };

@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { equal } from "assert";
 
 export const getRegisterById = async (id: string) => {
   try {
@@ -36,11 +37,61 @@ export const getAllRegister = async () => {
 };
 export const getFilterRegister = async (
   query: string,
+  roomCode: string,
+  branchName: string,
+  year: number,
+  // date: string,
   currentPage: number,
   entries: number,
   email?: string,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        student: [
+          {
+            fullName: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        ],
+      });
+    roomCode &&
+      search.push({
+        room: {
+          code: {
+            contains: roomCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    branchName &&
+      search.push({
+        room: {
+          branch: {
+            name: {
+              contains: branchName,
+              mode: "insensitive",
+            },
+          },
+        },
+      });
+    year &&
+      search.push({
+        registerdeadline: {
+          equals: year,
+        },
+      });
+    // const dates = new Date(date);
+    // date &&
+    //   search.push({
+    //     createDate: {
+    //       equals: dates,
+    //     },
+    //   });
+    email && search.push({ studentEmail: email });
     const register = await db.register.findMany({
       orderBy: [
         {
@@ -48,36 +99,14 @@ export const getFilterRegister = async (
         },
       ],
       where: {
-        OR: [
-          {
-            student: {
-              OR: [
-                {
-                  fullName: {
-                    contains: query,
-                  },
-                },
-                {
-                  studentCode: {
-                    contains: query,
-                  },
-                },
-                {
-                  major: {
-                    contains: query,
-                  },
-                },
-              ],
-              AND: [
-                {
-                  email: {
-                    contains: email,
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        // OR: [
+        //   {
+        //     createDate: {
+        //       equals: date,
+        //     },
+        //   },
+        // ],
+        AND: search as Array<any>,
       },
       include: {
         student: true,
@@ -95,8 +124,53 @@ export const getFilterRegister = async (
     console.error(e);
   }
 };
-export const getCountRegister = async (query: string, email?: string) => {
+export const getCountRegister = async (
+  query: string,
+  roomCode: string,
+  branchName: string,
+  year: number,
+  // date: string,
+  email?: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        student: [
+          {
+            fullName: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        ],
+      });
+    roomCode &&
+      search.push({
+        room: {
+          code: {
+            contains: roomCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    branchName &&
+      search.push({
+        room: {
+          branch: {
+            name: {
+              contains: branchName,
+              mode: "insensitive",
+            },
+          },
+        },
+      });
+    year &&
+      search.push({
+        registerdeadline: {
+          equals: year,
+        },
+      });
     const register = await db.register.count({
       orderBy: [
         {
@@ -104,31 +178,7 @@ export const getCountRegister = async (query: string, email?: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            student: {
-              OR: [
-                {
-                  fullName: {
-                    contains: query,
-                  },
-                },
-                {
-                  studentCode: {
-                    contains: query,
-                  },
-                },
-              ],
-              AND: [
-                {
-                  email: {
-                    contains: email,
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return register;

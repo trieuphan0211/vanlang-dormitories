@@ -28,10 +28,40 @@ export const getAllBranchs = async () => {
 };
 export const getFilterBranchs = async (
   query: string,
+  address: string,
+  numberFloors: number,
+  description: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    address &&
+      search.push({
+        address: {
+          contains: address,
+          mode: "insensitive",
+        },
+      });
+    numberFloors &&
+      search.push({
+        floorNumber: {
+          equals: numberFloors,
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+        },
+      });
     const branchs = await db.branch.findMany({
       orderBy: [
         {
@@ -39,23 +69,7 @@ export const getFilterBranchs = async (
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            address: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -86,8 +100,40 @@ export const getBranchByFields = async (fields: {
     console.error(e);
   }
 };
-export const getCountBranchs = async (query: string) => {
+export const getCountBranchs = async (
+  query: string,
+  address: string,
+  numberFloors: number,
+  description: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    address &&
+      search.push({
+        address: {
+          contains: address,
+          mode: "insensitive",
+        },
+      });
+    numberFloors &&
+      search.push({
+        floorNumber: {
+          equals: numberFloors,
+        },
+      });
+    description &&
+      search.push({
+        description: {
+          contains: description,
+        },
+      });
     const count = await db.branch.count({
       orderBy: [
         {
@@ -95,23 +141,7 @@ export const getCountBranchs = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            address: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: [...search] as Array<any>,
       },
     });
     return count;

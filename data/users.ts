@@ -40,10 +40,31 @@ export const getUserById = async (id: string) => {
 };
 export const getFilterUsers = async (
   query: string,
+  role: string,
+  email: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    role &&
+      search.push({
+        role: role as UserRole,
+      });
+    email &&
+      search.push({
+        email: {
+          contains: email,
+          mode: "insensitive",
+        },
+      });
     const users = await db.user.findMany({
       orderBy: [
         {
@@ -59,18 +80,7 @@ export const getFilterUsers = async (
         signinTime: true,
       },
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            email: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -81,8 +91,31 @@ export const getFilterUsers = async (
   }
 };
 
-export const getCountUsers = async (query: string) => {
+export const getCountUsers = async (
+  query: string,
+  role: string,
+  email: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    role &&
+      search.push({
+        role: role as UserRole,
+      });
+    email &&
+      search.push({
+        email: {
+          contains: email,
+          mode: "insensitive",
+        },
+      });
     const count = await db.user.count({
       orderBy: [
         {
@@ -90,18 +123,7 @@ export const getCountUsers = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            email: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

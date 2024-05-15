@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 interface Invoice {
   roomId: string;
   invoiceDate: string;
+  studentId: string;
   total: number;
   detail: string;
   status: number;
@@ -38,10 +39,49 @@ export const createInvoices = async (data: Invoice) => {
 };
 export const getFilterInvoices = async (
   query: string,
+  roomCode: string,
+  branchName: string,
+  status: number,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        Student: {
+          fullName: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+      });
+    roomCode &&
+      search.push({
+        room: {
+          code: {
+            contains: roomCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    branchName &&
+      search.push({
+        room: {
+          branch: {
+            name: {
+              contains: branchName,
+              mode: "insensitive",
+            },
+          },
+        },
+      });
+    status &&
+      search.push({
+        status: {
+          equals: status,
+        },
+      });
     const invoices = await db.invoice.findMany({
       orderBy: [
         {
@@ -49,35 +89,7 @@ export const getFilterInvoices = async (
         },
       ],
       where: {
-        OR: [
-          {
-            total: {
-              equals: Number(query),
-            },
-          },
-          {
-            room: {
-              OR: [
-                {
-                  code: {
-                    contains: query,
-                  },
-                },
-                {
-                  branch: {
-                    OR: [
-                      {
-                        name: {
-                          contains: query,
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       include: {
         room: {
@@ -85,6 +97,7 @@ export const getFilterInvoices = async (
             branch: true,
           },
         },
+        Student: true,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -94,8 +107,49 @@ export const getFilterInvoices = async (
     console.error(e);
   }
 };
-export const getCountInvoices = async (query: string) => {
+export const getCountInvoices = async (
+  query: string,
+  roomCode: string,
+  branchName: string,
+  status: number,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        Student: {
+          fullName: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+      });
+    roomCode &&
+      search.push({
+        room: {
+          code: {
+            contains: roomCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    branchName &&
+      search.push({
+        room: {
+          branch: {
+            name: {
+              contains: branchName,
+              mode: "insensitive",
+            },
+          },
+        },
+      });
+    status &&
+      search.push({
+        status: {
+          equals: status,
+        },
+      });
     const count = await db.invoice.count({
       orderBy: [
         {
@@ -103,35 +157,7 @@ export const getCountInvoices = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            total: {
-              equals: Number(query),
-            },
-          },
-          {
-            room: {
-              OR: [
-                {
-                  code: {
-                    contains: query,
-                  },
-                },
-                {
-                  branch: {
-                    OR: [
-                      {
-                        name: {
-                          contains: query,
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

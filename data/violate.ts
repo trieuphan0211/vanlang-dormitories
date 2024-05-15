@@ -22,12 +22,63 @@ export const getViolateById = async (id: string) => {
     console.error(e);
   }
 };
+export const getViolateByStudentId = async (id: string) => {
+  try {
+    const violate = await db.violate.findMany({
+      where: { studentId: id },
+      include: {
+        Student: true,
+      },
+    });
+    return violate;
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const getFilterViolate = async (
   query: string,
+  studentName: string,
+  studentCode: string,
+  email: string,
   currentPage: number,
   entries: number,
 ) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    studentName &&
+      search.push({
+        Student: {
+          fullName: {
+            contains: studentName,
+            mode: "insensitive",
+          },
+        },
+      });
+    studentCode &&
+      search.push({
+        Student: {
+          studentCode: {
+            contains: studentCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    email &&
+      search.push({
+        Student: {
+          email: {
+            contains: email,
+            mode: "insensitive",
+          },
+        },
+      });
     const violate = await db.violate.findMany({
       orderBy: [
         {
@@ -35,18 +86,7 @@ export const getFilterViolate = async (
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
       include: {
         Student: true,
@@ -77,8 +117,48 @@ export const getViolateByFields = async (fields: {
     console.error(e);
   }
 };
-export const getCountViolate = async (query: string) => {
+export const getCountViolate = async (
+  query: string,
+  studentName: string,
+  studentCode: string,
+  email: string,
+) => {
   try {
+    const search = [];
+    query &&
+      search.push({
+        name: {
+          contains: query,
+          mode: "insensitive",
+        },
+      });
+    studentName &&
+      search.push({
+        Student: {
+          fullName: {
+            contains: studentName,
+            mode: "insensitive",
+          },
+        },
+      });
+    studentCode &&
+      search.push({
+        Student: {
+          studentCode: {
+            contains: studentCode,
+            mode: "insensitive",
+          },
+        },
+      });
+    email &&
+      search.push({
+        Student: {
+          email: {
+            contains: email,
+            mode: "insensitive",
+          },
+        },
+      });
     const count = await db.violate.count({
       orderBy: [
         {
@@ -86,18 +166,7 @@ export const getCountViolate = async (query: string) => {
         },
       ],
       where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-            },
-          },
-          {
-            description: {
-              contains: query,
-            },
-          },
-        ],
+        AND: search as Array<any>,
       },
     });
     return count;

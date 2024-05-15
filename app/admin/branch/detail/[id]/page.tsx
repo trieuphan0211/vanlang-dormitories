@@ -20,7 +20,7 @@ export default async function DetailPage({
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
-            Branch: {branch?.name}
+            Chi nhánh: {branch?.name}
           </h3>
         </div>
         <div className="p-7">
