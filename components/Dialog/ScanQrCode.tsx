@@ -65,7 +65,7 @@ export const ScanQrCode = ({
                     // delayBetweenScanAttempts: 100,
                     // delayBetweenScanSuccess: 100,
                     constraints: {
-                      facingMode: "user",
+                      facingMode: "environment",
                     },
                   }}
                   onError={(error) => console.log(error?.message)}
