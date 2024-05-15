@@ -4,6 +4,7 @@ import "@/css/style.css";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default async function RootLayout({
             className={`${inter.className} h-screen w-screen overflow-x-hidden`}
           >
             {children}
+            <SpeedInsights />
           </body>
         </html>
       </StoreProvider>
