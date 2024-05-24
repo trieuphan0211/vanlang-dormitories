@@ -4,12 +4,20 @@ import {
   changeStatusInvoice,
   createInvoices,
   deleteInvoice,
+  getAllInvoiceForDashboard,
 } from "@/data/invoice";
 import { getRoomById } from "@/data/room";
 import { sendInvoiceEmail } from "@/lib/mail";
 import { InvoceSchema } from "@/schema";
-import { ROOM } from "@/types";
+import { BRANCH, ROOM } from "@/types";
 import * as z from "zod";
+
+interface Invoice {
+  invoiceMonth: string;
+  invoiceYear: string;
+  total: number;
+  status: number;
+}
 
 export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
   try {
@@ -59,7 +67,8 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
             // Create object invoice
             const dataInvoice = {
               roomId: room.roomId,
-              invoiceDate: invoiceMonth + "/" + invoiceYear,
+              invoiceMonth: invoiceMonth,
+              invoiceYear: invoiceYear,
               total: service.reduce(
                 (total: number, item: any) => total + item.cost,
                 0,
@@ -87,76 +96,6 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
       console.error("Error sending emails1: ", error);
       return { error: "An error occurred!" };
     }
-    // const responses = await room.map(async (room) => {
-    //   let mailBody: {
-    //     name: string;
-    //     detail: Array<{
-    //       serviceName: string;
-    //       serviceId?: string;
-    //       cost: number;
-    //     }>;
-    //   } = {
-    //     name: "",
-    //     detail: [],
-    //   };
-    //   const roomDetail = await getRoomById(room.roomId);
-    //   mailBody.name = roomDetail?.code + "-" + roomDetail?.roomType.name;
-    //   mailBody.detail.push({
-    //     serviceName: "Tiền Phòng",
-    //     cost: roomDetail?.roomType.cost as number,
-    //   });
-    //   room.detail.map((detail: any, index: number) => {
-    //     const service = roomDetail?.Services.filter(
-    //       (e) => e.serviceId === detail.serviceId,
-    //     );
-    //     service?.map((service) => {
-    //       mailBody.detail.push({
-    //         serviceName: service.service.name as string,
-    //         serviceId: service.service.id,
-    //         cost: service.service.cost * Number(detail.cost),
-    //       });
-    //     });
-    //     const serviceStatis = roomDetail?.Services.filter(
-    //       (e) => !e.service.allow,
-    //     );
-    //     serviceStatis?.map((service) => {
-    //       mailBody.detail.push({
-    //         serviceName: service.service.name as string,
-    //         serviceId: service.service.id,
-    //         cost: service.service.cost,
-    //       });
-    //     });
-    //   });
-
-    //   const res = roomDetail?.Student.map(async (student) => {
-    //     return await sendInvoiceEmail(
-    //       student.email,
-    //       student.fullName,
-    //       mailBody,
-    //     );
-    //   });
-    //   if (res) {
-    //     const dataInvoice = {
-    //       roomId: room.roomId,
-    //       invoiceDate:
-    //         data?.invoiceDate + "/" + new Date().getFullYear().toString(),
-    //       total: mailBody?.detail?.reduce(
-    //         (total: number, item: any) => total + item.cost,
-    //         0,
-    //       ),
-    //       detail: JSON.stringify(mailBody),
-    //       status: 0,
-    //     };
-    //     const addInvoices = await createInvoices(dataInvoice);
-    //     if (addInvoices) {
-    //       return addInvoices;
-    //     }
-    //   }
-    // });
-    // if (response) {
-    //   return { success: "success" };
-    // }
-    // return { error: "error" };
   } catch (e) {
     console.error(e);
   }
@@ -184,4 +123,28 @@ export const changeStatusInvoiceById = async (id: string) => {
     console.error(error);
     return { error: "An error occurred!" };
   }
+};
+
+export const getInvoiceForDashboard = async (
+  branchId?: string,
+  invoiceYear?: string,
+) => {
+  const data = {
+    total: Array.from({ length: 12 }).map(() => 0), // Initialize the array with length 12
+    paid: Array.from({ length: 12 }).map(() => 0),
+  };
+  const invoices = (await getAllInvoiceForDashboard({
+    branchId,
+    invoiceYear,
+  })) as Invoice[];
+  invoices.map((invoice) => {
+    console.log("invoice: ", invoice);
+    data.total[Number(invoice.invoiceMonth) - 1] =
+      (data.total[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
+    if (invoice.status === 1) {
+      data.paid[Number(invoice.invoiceMonth) - 1] =
+        (data.paid[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
+    }
+  });
+  return data;
 };

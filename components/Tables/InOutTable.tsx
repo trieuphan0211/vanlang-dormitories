@@ -1,31 +1,22 @@
 "use client";
+import { DialogButton } from "@/components/Button";
+import { RemoveItemDialog } from "@/components/Dialog/RemoveItem";
+import { AddNewBranch } from "@/components/Form/AddNewBranch";
 import { Pagination } from "@/components/Pagination/Pagination";
-import { SearchTable } from "@/components/Search/SearchTable";
-import { useAppDispatch } from "@/hooks/redux";
-import { qrManagerActions } from "@/lib/features/qr-code/qr-slice";
-import { BRANCH, FACILITIES, FACILITIESTYPE } from "@/types";
-import * as Checkbox from "@radix-ui/react-checkbox";
-import clsx from "clsx";
+import { BRANCH, INOUT } from "@/types";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { FaCheck, FaRegEdit } from "react-icons/fa";
-import { FaQrcode } from "react-icons/fa6";
-import { DialogButton } from "../Button";
-import { AddNewFacilities } from "../Form/AddNewFacilities";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { FaRegEdit } from "react-icons/fa";
 import { MdMoreVert } from "react-icons/md";
-import { RemoveItemDialog } from "../Dialog/RemoveItem";
+import { SearchTable } from "../Search";
 
-export const FacilitiesTable = ({
-  facilities,
+export const InOutTable = ({
+  inOuts,
   count,
-  branchs,
-  facilitiesType,
 }: {
-  facilities: FACILITIES[];
+  inOuts: INOUT[];
   count: number;
-  branchs: BRANCH[];
-  facilitiesType: FACILITIESTYPE[];
 }) => {
   // state for add model
   const [open, setOpen] = useState(false);
@@ -38,167 +29,85 @@ export const FacilitiesTable = ({
   // state open remove dialog
   const [openRemove, setOpenRemove] = useState<Boolean>(false);
   // state to get branchid when showing action menu
-  const [facilitiesId, setFacilitiesId] = useState<string>("");
+  const [inOutId, setInOutId] = useState<string>("");
   //Handle set position action menu
   const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
-    setFacilitiesId(id);
+    setInOutId(id);
     setAnchorEl(event.currentTarget);
   };
   // Handle close action menu
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const dispatch = useAppDispatch();
-  const [code, setCode] = useState<FACILITIES[]>([]);
-  const getQrCode = () => {
-    dispatch(qrManagerActions.setQrCode({ qrList: code }));
-    router.push("facilities/qr-code");
-  };
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3">
-        <SearchTable
-          placeholder="Tìm kiếm tên cơ sở vật chất"
-          type="facilities"
-        />
-
-        <DialogButton
+        <SearchTable placeholder="Tìm tiếm tên chi nhánh ..." type={"inout"} />
+        {/* <DialogButton
           open={open}
           setOpen={setOpen}
           childrens={
-            <AddNewFacilities
+            <AddNewBranch
               isPending={isPending}
               startTransition={startTransition}
               setOpen={setOpen}
-              branchs={branchs}
-              facilitiesType={facilitiesType}
             />
           }
-        />
-      </div>
-      <div className="my-3 border-t-[1px] border-graydark"></div>
-      <div className="mb-5 flex w-full gap-3">
-        <button
-          onClick={getQrCode}
-          disabled={code.length === 0}
-          className="inline-flex items-center justify-center gap-2 text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 disabled:bg-[rgba(0,0,0,0.5)] lg:px-8 xl:px-10"
-        >
-          <FaQrcode />
-          Tạo QR
-        </button>
+        /> */}
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="px-4 py-4 font-medium text-black dark:text-white">
-                {" "}
-                <Checkbox.Root
-                  className=" flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-switcher outline-none "
-                  onCheckedChange={(e) => {
-                    if (e) {
-                      setCode([...facilities]);
-                    } else {
-                      setCode([]);
-                    }
-                  }}
-                >
-                  <Checkbox.Indicator className="">
-                    <FaCheck />
-                  </Checkbox.Indicator>
-                </Checkbox.Root>
-              </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
                 #
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Mã cơ sở vật chất
-              </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Tên cơ sở vật chất
-              </th>
-              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Trạng thái
+                Tên sinh viên
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                Chi nhánh
+                Mã sinh viên
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Loại cơ sở vật chất (Mã - Tên)
+              <th className="min-w-25 px-4 py-4 font-medium text-black dark:text-white">
+                Trạng thái
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-25 px-4 py-4 font-medium text-black dark:text-white">
+                Thời gian
+              </th>
+              <th className="text-nowrap px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
             </tr>
           </thead>
           <tbody>
-            {facilities.map((facility, key) => {
+            {inOuts.map((inOut, key) => {
               return (
                 <tr key={key}>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <Checkbox.Root
-                      className=" flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-switcher outline-none "
-                      onCheckedChange={(e) => {
-                        if (e) {
-                          setCode([...code, facility]);
-                        } else {
-                          setCode(
-                            code.filter((item) => item.code !== facility.code),
-                          );
-                        }
-                      }}
-                      checked={code.some((item) => item.code === facility.code)}
-                    >
-                      <Checkbox.Indicator className="">
-                        <FaCheck />
-                      </Checkbox.Indicator>
-                    </Checkbox.Root>
-                  </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{key + 1}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {facility.code}
+                      {inOut.Student?.fullName}
+                    </p>
+                  </td>
+
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {inOut.Student?.studentCode}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {facility.name}
-                    </p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p
-                      className={clsx(
-                        "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
-                        {
-                          "bg-success text-success":
-                            facility.status === "ACTIVE",
-                          "bg-graydark text-graydark":
-                            facility.status === "INACTIVE",
-                          "bg-warning text-warning":
-                            facility.status === "MAINTENANCE",
-                          "bg-danger text-danger":
-                            facility.status === "LIQUIDATION",
-                        },
-                      )}
-                    >
-                      {facility.status === "ACTIVE" && "Hoạt động"}
-                      {facility.status === "INACTIVE" && "Không hoạt động"}
-                      {facility.status === "MAINTENANCE" && "Bảo trì"}
-                      {facility.status === "LIQUIDATION" && "Thanh lý"}
+                      {inOut.status === "IN" && "Vào"}
+                      {inOut.status === "OUT" && "Ra"}
+                      {inOut.status === "NOTIN" && "Chưa vào"}
+                      {inOut.status === "NOTOUT" && "Chưa ra"}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {facility?.branch?.name || "No Branch"}
-                    </p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">
-                      {facility.facilitiesTypeCode +
-                        " - " +
-                        facility?.facilitiesType?.name || "No Facilities Type"}
+                      {inOut.createDate.toDateString()}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -209,7 +118,7 @@ export const FacilitiesTable = ({
                         // aria-controls={openAction ? "menu-menu" : undefined}
                         // aria-expanded={openAction ? "true" : undefined}
                         // aria-haspopup="true"
-                        onClick={(e) => handleClick(e, facility.id)}
+                        onClick={(e) => handleClick(e, inOut.id)}
                       >
                         <MdMoreVert />
                       </IconButton>
@@ -242,9 +151,7 @@ export const FacilitiesTable = ({
                             className="flex w-full items-center gap-3 rounded-xl text-green-600 focus:outline-none"
                             disabled={isPending}
                             onClick={() => {
-                              router.push(
-                                `/admin/facilities/detail/${facilitiesId}`,
-                              );
+                              router.push(`/admin/out-in/detail/${inOutId}`);
                             }}
                           >
                             <svg
@@ -274,7 +181,7 @@ export const FacilitiesTable = ({
                             className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none"
                             disabled={isPending}
                             onClick={() => {
-                              router.push(`/admin/facilities/${facilitiesId}`);
+                              router.push(`/admin/out-in/${inOutId}`);
                             }}
                           >
                             <FaRegEdit />
@@ -324,14 +231,14 @@ export const FacilitiesTable = ({
           </tbody>
         </table>
       </div>
-      {facilities.length > 0 && <Pagination count={count} />}
+      {inOutId.length > 0 && <Pagination count={count} />}
       {openRemove && (
         <RemoveItemDialog
           isPending={isPending}
           startTransition={startTransition}
-          facilityId={facilitiesId}
+          branchId={inOutId}
           setState={setOpenRemove}
-          title={"Bạn có chắc chắn muốn xóa cơ sở vật chất này không?"}
+          title={"Bạn có chắc chắn muốn xóa hoạt động này không?"}
         />
       )}
     </div>

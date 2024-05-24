@@ -6,8 +6,9 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FormSelect } from "../Input";
+import dayjs from "dayjs";
 
 export const Register = ({
   setOpen,
@@ -34,8 +35,10 @@ export const Register = ({
       branchName: searchParams.get("branchName")?.toString() || "",
       year: searchParams.get("year")?.toString() || "",
       date: searchParams.get("date")?.toString() || "",
+      status: searchParams.get("status")?.toString() || "",
     },
   });
+  console.log(errors);
   const onSubmit = (data: any) => {
     handleSearch({ ...data, term: searchParams.get("query")?.toString() });
     setOpen(false);
@@ -75,7 +78,7 @@ export const Register = ({
             disabled={false}
           />
         </div>
-        <div className="col-span-2">
+        <div className="">
           <label className="mb-2 text-sm" htmlFor="">
             Tên chi nhánh
           </label>
@@ -86,30 +89,60 @@ export const Register = ({
             // type="number"
           />
         </div>
-        {/* <div className="col-span-2">
+        <div className="">
+          <label className="mb-2 text-sm" htmlFor="">
+            Trạng thái
+          </label>
+          <FormSelect
+            name="status"
+            control={control}
+            isPending={false}
+            registerStatus={["0", "1", "2"]}
+            placeholder={"Chọn trạng thái"}
+            size="small"
+          />
+        </div>
+        <div className="col-span-2">
           <label className="mb-2 text-sm" htmlFor="">
             Ngày
           </label>
+
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                sx={{
-                  width: "100%",
-                  "& .MuiInputBase-root": {
-                    height: "40px",
-                    "& input": {
-                      padding: "8.5px 14px",
-                    },
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": { height: "45px" },
-                }}
-                onChange={(date) =>
-                  setValue("date", date?.format("MM/DD/YYYY") || "")
-                }
-              />
+              <Controller
+                name="date"
+                control={control}
+                // rules={{ required: true }}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    sx={{
+                      width: "100%",
+                      "& .MuiInputBase-root": {
+                        height: "40px",
+                        "& input": {
+                          padding: "8.5px 14px",
+                        },
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": { height: "45px" },
+                    }}
+                    format="DD/MM/YYYY"
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) => {
+                      console.log(date);
+                      field.onChange(date);
+                    }}
+                  />
+                )}
+              />{" "}
             </DemoContainer>
           </LocalizationProvider>
-        </div> */}
+          {/* <DatePicker
+                onChange={(date) =>
+                  setValue("date", date?.format("DD/MM/YYYY") || "")
+                }
+              /> */}
+        </div>
       </div>
       <div className="flex justify-end gap-5">
         <input type="submit" className="hidden" ref={submitRef} />
@@ -117,7 +150,7 @@ export const Register = ({
           variant="text"
           onClick={(e) => {
             e.preventDefault();
-            handleReset("roomCode,branchName,year,date");
+            handleReset("roomCode,branchName,year,date,status");
             reset();
             setOpen(false);
           }}

@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
 interface Invoice {
   roomId: string;
-  invoiceDate: string;
+  invoiceMonth: string;
+  invoiceYear: string;
   studentId: string;
   total: number;
   detail: string;
@@ -31,10 +32,55 @@ export const getIvoiceById = async (id: string) => {
 
 export const createInvoices = async (data: Invoice) => {
   try {
-    const branch = await db.invoice.create({ data });
-    return branch;
+    const invoice = await db.invoice.create({ data });
+    return invoice;
   } catch (e) {
     console.error(e);
+  }
+};
+export const getAllInvoiceForDashboard = async ({
+  branchId,
+  invoiceYear,
+}: {
+  branchId?: string;
+  invoiceYear?: string;
+}) => {
+  try {
+    const search = [];
+    branchId &&
+      search.push({
+        room: {
+          branch: {
+            id: branchId,
+          },
+        },
+      });
+    invoiceYear &&
+      search.push({
+        invoiceYear: {
+          contains: invoiceYear,
+        },
+      });
+    const invoices = await db.invoice.findMany({
+      orderBy: [
+        {
+          createDate: "desc",
+        },
+      ],
+      where: {
+        AND: search as Array<any>,
+      },
+      select: {
+        invoiceMonth: true,
+        invoiceYear: true,
+        total: true,
+        status: true,
+      },
+    });
+    return invoices;
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
   }
 };
 export const getFilterInvoices = async (
@@ -44,6 +90,8 @@ export const getFilterInvoices = async (
   status: number,
   currentPage: number,
   entries: number,
+  startDate?: Date,
+  endDate?: Date,
 ) => {
   try {
     const search = [];
@@ -90,6 +138,10 @@ export const getFilterInvoices = async (
       ],
       where: {
         AND: search as Array<any>,
+        createDate: {
+          gte: startDate,
+          lte: endDate,
+        },
       },
       include: {
         room: {
@@ -165,7 +217,6 @@ export const getCountInvoices = async (
     console.error(e);
   }
 };
-
 export const deleteInvoice = async (id: string) => {
   try {
     await db.invoice.delete({

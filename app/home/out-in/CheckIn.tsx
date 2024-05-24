@@ -1,28 +1,36 @@
 "use client";
 
-import { useAppDispatch } from "@/hooks/redux";
+import { addCheckInOut } from "@/actions/inOut";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { alertSeletor } from "@/lib/features/alert/alert-selector";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { checkKeyIn, checkKeyOut } from "@/lib/generateKeyInOut";
+import { STUDENT } from "@/types";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { TfiReload } from "react-icons/tfi";
 
-export const CheckIn = () => {
+export const CheckIn = ({ student }: { student: STUDENT }) => {
   const [qr, setQr] = useState<string>("");
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const { message } = useAppSelector(alertSeletor);
   useEffect(() => {
     if (qr === "") return;
-    startTransition(() => {
+    if (message.type) return;
+    startTransition(async () => {
       try {
         const qrs = JSON.parse(qr);
         console.log(qrs);
         if (qrs.type === "in") {
-          checkKeyIn(qrs.key).then((res) => {
+          checkKeyIn(qrs.key).then(async (res) => {
             if (res?.success) {
+              await addCheckInOut({
+                studentId: student.id,
+                status: "IN",
+              });
               router.refresh();
               dispatch(
                 alertManagerActions.setAlert({
@@ -43,11 +51,19 @@ export const CheckIn = () => {
               );
             }
           });
-          setQr("");
+          await new Promise(() => {
+            setTimeout(() => {
+              setQr("");
+            }, 1000);
+          });
         }
         if (qrs.type === "out") {
-          checkKeyOut(qrs.key).then((res) => {
+          checkKeyOut(qrs.key).then(async (res) => {
             if (res) {
+              await addCheckInOut({
+                studentId: student.id,
+                status: "OUT",
+              });
               router.refresh();
 
               dispatch(
@@ -69,27 +85,26 @@ export const CheckIn = () => {
               );
             }
           });
-          setQr("");
+          await new Promise(() => {
+            setTimeout(() => {
+              setQr("");
+            }, 1000);
+          });
         }
       } catch (error) {
         dispatch(
           alertManagerActions.setAlert({
             message: {
               type: "error",
-              content: "Có lỗi xảy ra! Vui lòng thử lại!",
+              content: "Có lỗi xảy ra! Vui lòng thử lại123!",
             },
           }),
         );
         setQr("");
       }
     });
-  }, [qr]);
-  const handleOpen = () => {
-    setOpen(false);
-    setTimeout(() => {
-      setOpen(true);
-    }, 2000);
-  };
+  }, [qr, isPending, student, router, dispatch, startTransition]);
+
   return (
     <div className="relative">
       <div

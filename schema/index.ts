@@ -273,7 +273,7 @@ export const MaintenanceSchema = z
     description: z.optional(z.string()),
     listFacilities: z.optional(z.array(z.string())), // Fix: Added empty object as argument
 
-    startDate: z.optional(z.date()), // Fix: Added optional
+    startDate: z.date(),
     status: z.enum([
       StatusMaintenance.CREATED,
       StatusMaintenance.FINISHED,

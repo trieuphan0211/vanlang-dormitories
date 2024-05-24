@@ -103,7 +103,7 @@ export const InvoiceTable = ({
                     {invoice.room.branch.name}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.invoiceDate}
+                    {invoice.invoiceMonth + "/" + invoice.invoiceYear}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
                     {invoice.total.toLocaleString("en-US", {

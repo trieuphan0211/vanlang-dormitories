@@ -17,6 +17,7 @@ const RegisterPage = async ({
     branchName?: string;
     year?: string;
     date?: string;
+    status?: string;
   };
 }) => {
   const user = await auth();
@@ -24,6 +25,8 @@ const RegisterPage = async ({
   const roomCode = searchParams?.roomCode?.trim() || "";
   const branchName = searchParams?.branchName?.trim() || "";
   const year = Number(searchParams?.year?.trim()) || 0;
+  const date = searchParams?.date?.trim() || "";
+  const status = Number(searchParams?.status?.trim());
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const registers = (await getFilterRegister(
@@ -31,6 +34,8 @@ const RegisterPage = async ({
     roomCode,
     branchName,
     year,
+    status,
+    date,
     currentPage,
     entries,
     user?.user.email as string,

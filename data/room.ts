@@ -28,28 +28,40 @@ export const getRoomById = async (id: string) => {
   }
 };
 
-export const getRoomsAllHaveStudents = async () => {
+export const getRoomsAllHaveStudents = async (type?: string) => {
   try {
-    const rooms = await db.room.findMany({
-      where: {
-        Student: {
-          some: {},
-        },
-      },
-
-      include: {
-        branch: true,
-        roomType: true,
-        Services: {
-          include: {
-            service: true,
+    if (type === "count") {
+      const count = await db.room.count({
+        where: {
+          Student: {
+            some: {},
           },
         },
-        Student: true,
-      },
-    });
-    console.log("rooms", rooms);
-    return rooms;
+      });
+      console.log("rooms count: ", count);
+      return count;
+    } else {
+      const rooms = await db.room.findMany({
+        where: {
+          Student: {
+            some: {},
+          },
+        },
+
+        include: {
+          branch: true,
+          roomType: true,
+          Services: {
+            include: {
+              service: true,
+            },
+          },
+          Student: true,
+        },
+      });
+      console.log("rooms", rooms);
+      return rooms;
+    }
   } catch (e) {
     console.error(e);
   }

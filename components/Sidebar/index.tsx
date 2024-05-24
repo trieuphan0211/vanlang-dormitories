@@ -60,7 +60,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   }, [sidebarExpanded]);
   // End: Handle UI
   // Begin: Handle Logic
-  const menu = [
+  const adminMenu = [
     {
       icon: "/images/header-icon/dashboard.svg",
       title: "Bảng điều khiển",
@@ -168,7 +168,142 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       href: "/admin/violate",
     },
   ];
-  const menuUser = [
+  const staffMenu = [
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Bảng điều khiển",
+      href: "/admin",
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Quản lý thông tin",
+
+      list: [
+        {
+          icon: "/images/header-icon/room-type.svg",
+          title: "Phòng",
+          href: "/admin/room",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Người dùng",
+      list: [
+        {
+          icon: "/images/header-icon/student.svg",
+          title: "Sinh viên",
+          href: "/admin/student",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Cơ sở vật chất",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Danh sách CSVC",
+          href: "/admin/facilities",
+        },
+
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Bảo trì",
+          href: "/admin/maintenance",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Dịch vụ",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Đăng ký Ký túc xá",
+          href: "/admin/register-dormitory",
+        },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Lập hóa đơn",
+          href: "/admin/invoice",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Ra / vào",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Đăng ký ra vào",
+          href: "/admin/out-in",
+        },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Danh sách ra vào",
+          href: "/admin/out-in/list",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Vi phạm",
+      href: "/admin/violate",
+    },
+  ];
+  const directorMenu = [
+    {
+      icon: "/images/header-icon/dashboard.svg",
+      title: "Bảng điều khiển",
+      href: "/admin",
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Quản lý thông tin",
+
+      list: [
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Chi nhánh",
+          href: "/admin/branch",
+        },
+        {
+          icon: "/images/header-icon/service.svg",
+          title: "Dịch vụ",
+          href: "/admin/service",
+        },
+        {
+          icon: "/images/header-icon/room-type.svg",
+          title: "Loại phòng",
+          href: "/admin/room-type",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Người dùng",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Người dùng",
+          href: "/admin/user",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Cơ sở vật chất",
+      list: [
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Loại cơ sở vật chất",
+          href: "/admin/facilities-type",
+        },
+      ],
+    },
+  ];
+  const userMenu = [
     {
       icon: "/images/header-icon/dashboard.svg",
       title: "Thông tin cá nhân",
@@ -197,6 +332,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       ],
     },
   ];
+  const [menu, setMenu] = useState(adminMenu);
+  useEffect(() => {
+    if (role === "ADMIM") {
+      setMenu(adminMenu);
+    }
+    if (role === "STAFF") {
+      setMenu(staffMenu);
+    }
+    if (role === "DIRECTOR") {
+      setMenu(directorMenu);
+    }
+    if (role === "USER") {
+      setMenu(userMenu);
+    }
+  }, [role]);
   // End: Handle Logic
   return (
     <aside
@@ -247,54 +397,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              {role !== "user" &&
-                menu.map((item, index) => {
-                  if (item.list) {
-                    return (
-                      <div key={index}>
-                        <MenuItemList
-                          icon={item.icon}
-                          title={item.title}
-                          list={item.list}
-                          index={index}
-                        />
-                      </div>
-                    );
-                  }
+              {menu.map((item, index) => {
+                if (item.list) {
                   return (
-                    <li key={index}>
-                      <MenuItem
+                    <div key={index}>
+                      <MenuItemList
                         icon={item.icon}
                         title={item.title}
-                        href={item.href}
+                        list={item.list}
+                        index={index}
                       />
-                    </li>
+                    </div>
                   );
-                })}
-              {role === "user" &&
-                menuUser.map((item, index) => {
-                  if (item.list) {
-                    return (
-                      <div key={index}>
-                        <MenuItemList
-                          icon={item.icon}
-                          title={item.title}
-                          list={item.list}
-                          index={index}
-                        />
-                      </div>
-                    );
-                  }
-                  return (
-                    <li key={index}>
-                      <MenuItem
-                        icon={item.icon}
-                        title={item.title}
-                        href={item.href}
-                      />
-                    </li>
-                  );
-                })}
+                }
+                return (
+                  <li key={index}>
+                    <MenuItem
+                      icon={item.icon}
+                      title={item.title}
+                      href={item.href}
+                    />
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </nav>

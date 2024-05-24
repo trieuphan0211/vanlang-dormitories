@@ -5,7 +5,7 @@ import { equal } from "assert";
 export const getStudentByEmail = async (email: string) => {
   try {
     const student = await db.student.findUnique({
-      where: { email },
+      where: { email, studentVerified: true },
       include: {
         room: {
           include: {
@@ -28,6 +28,9 @@ export const getAllStudents = async () => {
           createDate: "desc",
         },
       ],
+      where: {
+        studentVerified: true,
+      },
     });
     return students;
   } catch (e) {
@@ -36,7 +39,9 @@ export const getAllStudents = async () => {
 };
 export const getStudentById = async (id: string) => {
   try {
-    const student = await db.student.findUnique({ where: { id } });
+    const student = await db.student.findUnique({
+      where: { id, studentVerified: true },
+    });
     return student;
   } catch (e) {
     console.error(e);
@@ -103,6 +108,7 @@ export const getFilterStudents = async (
       ],
       where: {
         AND: search as Array<any>,
+        studentVerified: true,
       },
 
       skip: (currentPage - 1) * entries,
@@ -115,12 +121,12 @@ export const getFilterStudents = async (
 };
 
 export const getCountStudents = async (
-  query: string,
-  studentCode: string,
-  email: string,
-  gender: string,
-  major: string,
-  schoolYear: number,
+  query?: string,
+  studentCode?: string,
+  email?: string,
+  gender?: string,
+  major?: string,
+  schoolYear?: number,
 ) => {
   try {
     const search = [];
@@ -173,6 +179,7 @@ export const getCountStudents = async (
       ],
       where: {
         AND: search as Array<any>,
+        studentVerified: true,
       },
     });
     return count;
@@ -183,7 +190,9 @@ export const getCountStudents = async (
 export const deleteStudent = async (id: string) => {
   try {
     console.log("id: ", id);
-    const student = await db.student.delete({ where: { id } });
+    const student = await db.student.delete({
+      where: { id, studentVerified: true },
+    });
     return student;
   } catch (e) {
     console.error(e);
@@ -222,7 +231,6 @@ export const updateStudent = async (
     schoolYear: number;
     studentCode: string;
     createDate: Date;
-
     permanentResidence: string;
     contactinfo: string;
     familiInfo: string;

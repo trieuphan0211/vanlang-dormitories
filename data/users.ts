@@ -90,7 +90,6 @@ export const getFilterUsers = async (
     console.error(e);
   }
 };
-
 export const getCountUsers = async (
   query: string,
   role: string,
@@ -149,6 +148,42 @@ export const updateUser = async (
   },
 ) => {
   try {
+    const currentUser = await db.user.findUnique({ where: { id } });
+    if (!currentUser) {
+      return "User not found";
+    }
+    const student = await db.student.findUnique({
+      where: { email: currentUser.email as string },
+    });
+    if (!student) {
+      return "Student not found";
+    }
+    if (fields.role) {
+      if (
+        fields.role === "ADMIN" ||
+        fields.role === "DIRECTOR" ||
+        fields.role === "STAFF"
+      ) {
+        await db.student.update({
+          where: {
+            id: student.id,
+          },
+          data: {
+            studentVerified: false,
+          },
+        });
+      }
+      if (fields.role === "USER") {
+        await db.student.update({
+          where: {
+            id: student.id,
+          },
+          data: {
+            studentVerified: true,
+          },
+        });
+      }
+    }
     const user = await db.user.update({
       where: { id },
       data: fields,

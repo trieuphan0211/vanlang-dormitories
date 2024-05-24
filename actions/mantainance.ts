@@ -2,7 +2,7 @@
 import crypto from "crypto";
 import * as z from "zod";
 
-import { updateFacilities } from "@/data/facilities";
+import { getFacilitiesById, updateFacilities } from "@/data/facilities";
 import {
   createMaintenance,
   deleteMaintenance,
@@ -10,7 +10,7 @@ import {
   updateMaintenance,
 } from "@/data/mantainance";
 import { MaintenanceSchema } from "@/schema";
-import { MAINTENNANCES } from "@/types";
+import { FACILITIES, MAINTENNANCES } from "@/types";
 
 export const addManitainance = async (
   value: z.infer<typeof MaintenanceSchema>,
@@ -24,15 +24,6 @@ export const addManitainance = async (
 
   const token = "MT" + crypto.randomInt(100, 1_000).toString();
   try {
-    const updateFacilitiess = async (item: string) => {
-      const response = await updateFacilities(item, {
-        status: "MAINTENANCE",
-        maintenanceId: res?.id,
-      });
-      if (response === null) {
-        return { error: "An error occurred!" };
-      }
-    };
     const res = await createMaintenance({
       code: token,
       mantainanceName,
@@ -40,15 +31,43 @@ export const addManitainance = async (
       startDate: startDate || new Date(),
       status,
     });
-    console.log(res);
     if (res === null) {
       return { error: "An error occurred!" };
     }
     if (listFacilities !== undefined) {
-      listFacilities.map((item: string) => {
-        updateFacilitiess(item);
-      });
+      const checkFacilities = await Promise.all(
+        listFacilities.map(async (item: string) => {
+          const facilities = (await getFacilitiesById(item)) as FACILITIES;
+          if (facilities.maintenanceId) {
+            return facilities.code;
+          }
+        }),
+      );
+      console.log(
+        "checkFacilities: ",
+        checkFacilities.filter((item) => item !== undefined),
+      );
+      if (checkFacilities.filter((item) => item !== undefined).length > 0) {
+        return {
+          error: "Facilities is in maintenance!",
+          data: checkFacilities.filter((item) => item !== undefined),
+        };
+      }
+      const addMaintenances = await Promise.all(
+        listFacilities.map(async (item: string) => {
+          const facilities = (await getFacilitiesById(item)) as FACILITIES;
+          if (facilities.maintenanceId) {
+            return { error: "Facilities is in maintenance!" };
+          } else {
+            return await updateFacilities(item, {
+              status: "MAINTENANCE",
+              maintenanceId: res?.id,
+            });
+          }
+        }),
+      );
     }
+
     return { success: "Maintenance is created!" };
   } catch (error) {
     console.error(error);

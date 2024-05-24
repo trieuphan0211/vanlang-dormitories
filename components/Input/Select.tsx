@@ -26,6 +26,7 @@ export const FormSelect = ({
   facilifiesStatus,
   rooms,
   month,
+  registerStatus,
   years,
   defaultValue,
   students,
@@ -44,6 +45,7 @@ export const FormSelect = ({
   facilifiesStatus?: string[];
   rooms?: ROOM[];
   month?: string[];
+  registerStatus?: string[];
   years?: number[];
   defaultValue?: string;
   students?: STUDENT[];
@@ -82,6 +84,14 @@ export const FormSelect = ({
               roomTypes.map((roomType, key) => (
                 <MenuItem key={key} value={roomType.code}>
                   {roomType.name}
+                </MenuItem>
+              ))}
+            {registerStatus &&
+              registerStatus.map((registerStatus, key) => (
+                <MenuItem key={key} value={registerStatus}>
+                  {registerStatus === "0" && "Đang chờ"}
+                  {registerStatus === "1" && "Đã duyệt"}
+                  {registerStatus === "2" && "Đã hủy"}
                 </MenuItem>
               ))}
             {facilifiesStatus &&

@@ -48,7 +48,6 @@ const VerifiedInfo = () => {
       bankNumber: "",
     },
   });
-  console.log(errors);
   const onSubmit = (value: z.infer<typeof StudentInfoSchema>) => {
     startTransition(() => {
       updateStudentByEmail(session.data?.user.email as string, value).then(

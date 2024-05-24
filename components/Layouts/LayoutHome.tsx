@@ -2,12 +2,14 @@
 import React, { useState, ReactNode } from "react";
 import Sidebar from "@/components/Sidebar";
 import { AdminHeader } from "@/components/Header";
+import { useSession } from "next-auth/react";
 
 export default function LayoutHome({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
@@ -17,7 +19,7 @@ export default function LayoutHome({
         <Sidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
-          role="user"
+          role={user.data?.user.role}
         />
         {/* <!-- ===== Sidebar End ===== --> */}
 

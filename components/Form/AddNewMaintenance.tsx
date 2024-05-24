@@ -16,6 +16,10 @@ import { CancelButton, SaveButton } from "../Button";
 import { ScanQrCode } from "../Dialog/ScanQrCode";
 import DatePickerOne from "../FormElements/DatePicker/DatePickerOne";
 import { Input } from "../Input";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export const AddNewMaintenance = ({
   isPending,
@@ -63,6 +67,7 @@ export const AddNewMaintenance = ({
   });
   const onSubmit = (value: z.infer<typeof MaintenanceSchema>) => {
     const facilitiesId = facilities.map((item) => item.id);
+    console.log(value, facilitiesId);
     startTransition(() => {
       addManitainance({ ...value, listFacilities: facilitiesId }).then(
         (res) => {
@@ -80,14 +85,25 @@ export const AddNewMaintenance = ({
             );
           }
           if (res?.error) {
-            dispatch(
-              alertManagerActions.setAlert({
-                message: {
-                  type: "error",
-                  content: "Đã xảy ra lỗi! Vui lòng thử lại sau!",
-                },
-              }),
-            );
+            if (res?.data) {
+              dispatch(
+                alertManagerActions.setAlert({
+                  message: {
+                    type: "warning",
+                    content: `Cơ sở vật chất ${res?.data.join(", ")} đang trong quá trình bảo trì!`,
+                  },
+                }),
+              );
+            } else {
+              dispatch(
+                alertManagerActions.setAlert({
+                  message: {
+                    type: "error",
+                    content: "Đã xảy ra lỗi! Vui lòng thử lại sau!",
+                  },
+                }),
+              );
+            }
           }
         },
       );
@@ -137,7 +153,18 @@ export const AddNewMaintenance = ({
             >
               Ngày bắt đầu
             </label>
-            <DatePickerOne setValue={setValue} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  sx={{
+                    width: "100%",
+                  }}
+                  onChange={(date) =>
+                    date ? setValue("startDate", date.toDate() as Date) : null
+                  }
+                />
+              </DemoContainer>
+            </LocalizationProvider>
             <p
               className={clsx(
                 `font-smblock mt-1 text-sm text-black dark:text-white`,

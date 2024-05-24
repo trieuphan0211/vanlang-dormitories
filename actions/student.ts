@@ -89,7 +89,7 @@ export const updateStudentByEmail = async (
     studentCode,
     permanentResidence,
   } = validateFields.data;
-
+  console.log("email", validateFields.data);
   const user = await getUserByEmail(email);
   if (!user) return { error: "User is not found!" };
   try {

@@ -83,6 +83,7 @@ model Student {
   permanentResidence String?
   familiInfo         String?
   contactinfo        String?
+  studentVerified    Boolean    @default(true)
   createDate         DateTime   @default(now())
   Register           Register[]
   room               Room?      @relation(fields: [roomId], references: [id])
@@ -103,6 +104,8 @@ model Violate {
 enum StatusInOut {
   IN
   OUT
+  NOTIN
+  NOTOUT
 }
 
 model InOut {
@@ -126,16 +129,18 @@ model Register {
 }
 
 model Invoice {
-  id          String   @id @default(cuid())
-  roomId      String
-  studentId   String
-  invoiceDate String
-  total       Int
-  detail      String
-  status      Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy
-  room        Room     @relation(fields: [roomId], references: [id])
-  Student     Student  @relation(fields: [studentId], references: [id])
-  createDate  DateTime @default(now())
+  id           String   @id @default(cuid())
+  roomId       String
+  studentId    String
+  invoiceMonth String
+  invoiceYear  String
+  total        Int
+  detail       String
+  status       Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy
+  room         Room     @relation(fields: [roomId], references: [id])
+  Student      Student  @relation(fields: [studentId], references: [id])
+  updateDate   DateTime @updatedAt
+  createDate   DateTime @default(now())
 }
 
 // Branch Dormitory

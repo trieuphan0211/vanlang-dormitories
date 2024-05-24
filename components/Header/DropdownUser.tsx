@@ -61,7 +61,10 @@ const DropdownUser = () => {
             {session.data?.user.name || "No Name"}
           </span>
           <span className="block text-xs capitalize">
-            {session.data?.user.role}
+            {session.data?.user.role === "USER" && "Sinh viên"}
+            {session.data?.user.role === "ADMIN" && "Quản trị viên"}
+            {session.data?.user.role === "STAFF" && "Nhân viên"}
+            {session.data?.user.role === "DIRECTOR" && "Giám đốc"}
           </span>
         </span>
 

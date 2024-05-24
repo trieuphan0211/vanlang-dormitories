@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client";
+import { StatusInOut, UserRole } from "@prisma/client";
 import { StatusFacilities } from "@prisma/client";
 import { StatusMaintenance } from "@prisma/client";
 
@@ -19,7 +19,8 @@ export type INVOICE = {
   createDate: Date;
   status: number;
   detail: string;
-  invoiceDate: string;
+  invoiceMonth: string;
+  invoiceYear: string;
   Student?: STUDENT;
 };
 export type SERVICES = {
@@ -119,6 +120,7 @@ export type FACILITIES = {
   description?: string;
   facilitiesTypeCode: string;
   status: StatusFacilities;
+  maintenanceId?: string;
   branchId?: string;
   code: string;
   branch?: BRANCH;
@@ -135,4 +137,11 @@ export type MAINTENNANCES = {
   status: StatusMaintenance;
   createDate: Date;
   facilities?: FACILITIES[];
+};
+export type INOUT = {
+  id: string;
+  studentId: string;
+  status: StatusInOut;
+  createDate: Date;
+  Student?: STUDENT;
 };

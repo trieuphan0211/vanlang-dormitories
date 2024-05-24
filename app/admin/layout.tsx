@@ -28,7 +28,7 @@ export default function AdminLayout({
   if (
     session.data?.user?.role === "ADMIN" ||
     session.data?.user?.role === "STAFF" ||
-    session.data?.user?.role === "DIRECRTOR"
+    session.data?.user?.role === "DIRECTOR"
   ) {
     if (session.data.user.verifiedInfo) {
       return (

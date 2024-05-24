@@ -35,6 +35,8 @@ const InvoicePage = async ({
     status,
     currentPage,
     entries,
+    new Date("2021-01-01"),
+    new Date(),
   )) as INVOICE[];
   const count = await getCountInvoices(query, roomCode, branchName, status);
 

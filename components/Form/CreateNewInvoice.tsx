@@ -28,6 +28,7 @@ export const CreateNewInvoice = ({
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<z.infer<typeof InvoceSchema>>({
     resolver: zodResolver(InvoceSchema),
     defaultValues: {
@@ -40,14 +41,14 @@ export const CreateNewInvoice = ({
   useEffect(() => {
     room.map((room, roomKey) => {
       setValue(`detail.${roomKey}.roomId`, room.id);
-      room?.Services?.map((service, serviceKey) => {
-        service.service.allow
-          ? setValue(
-              `detail.${roomKey}.service.${serviceKey}.serviceId`,
-              service.service.id,
-            )
-          : console.log("service not allow");
-      });
+      room?.Services?.filter((e) => e.service.allow === true).map(
+        (service, serviceKey) => {
+          setValue(
+            `detail.${roomKey}.service.${serviceKey}.serviceId`,
+            service.service.id,
+          );
+        },
+      );
     });
   }, [room, setValue]);
 
@@ -138,39 +139,38 @@ export const CreateNewInvoice = ({
           </h4>
           <div className="grid grid-cols-2 gap-5">
             {room?.Services &&
-              room?.Services.map(
-                (service, serviceKey) =>
-                  service.service.allow && (
-                    <div className="mb-2" key={serviceKey}>
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="branchName"
-                      >
-                        {service.service.name}
-                      </label>
-                      <div className="flex items-center gap-1">
-                        <div className="w-full">
-                          <Input
-                            type="number"
-                            placeholder="Nhập số lượng"
-                            isPending={isPending}
-                            size="small"
-                            register={register(
-                              `detail.${roomKey}.service.${serviceKey}.quantity` as "detail",
-                            )}
-                            errors={
-                              errors?.detail?.[roomKey]?.service?.[serviceKey]
-                                ?.quantity
-                            }
-                            disabled={
-                              type === "detail" ? true : null || isPending
-                            }
-                          />
-                        </div>
-                        {service.service.unit}
+              room?.Services.filter((e) => e.service.allow === true).map(
+                (service, serviceKey) => (
+                  <div className="mb-2" key={serviceKey}>
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="branchName"
+                    >
+                      {service.service.name}
+                    </label>
+                    <div className="flex items-center gap-1">
+                      <div className="w-full">
+                        <Input
+                          type="number"
+                          placeholder="Nhập số lượng"
+                          isPending={isPending}
+                          size="small"
+                          register={register(
+                            `detail.${roomKey}.service.${serviceKey}.quantity` as "detail",
+                          )}
+                          errors={
+                            errors?.detail?.[roomKey]?.service?.[serviceKey]
+                              ?.quantity
+                          }
+                          disabled={
+                            type === "detail" ? true : null || isPending
+                          }
+                        />
                       </div>
+                      {service.service.unit}
                     </div>
-                  ),
+                  </div>
+                ),
               )}
           </div>
         </div>
@@ -192,6 +192,7 @@ export const CreateNewInvoice = ({
             "flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90",
             {
               hidden: type === "detail",
+              "bg-slate-600": isPending,
             },
           )}
           type="submit"

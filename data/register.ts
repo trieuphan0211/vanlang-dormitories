@@ -40,7 +40,8 @@ export const getFilterRegister = async (
   roomCode: string,
   branchName: string,
   year: number,
-  // date: string,
+  status: number,
+  date: string,
   currentPage: number,
   entries: number,
   email?: string,
@@ -84,13 +85,25 @@ export const getFilterRegister = async (
           equals: year,
         },
       });
-    // const dates = new Date(date);
-    // date &&
-    //   search.push({
-    //     createDate: {
-    //       equals: dates,
-    //     },
-    //   });
+    status == 0 &&
+      search.push({
+        status: {
+          equals: status,
+        },
+      });
+
+    status &&
+      search.push({
+        status: {
+          equals: status,
+        },
+      });
+    date &&
+      search.push({
+        createDate: {
+          gte: new Date(date),
+        },
+      });
     email && search.push({ studentEmail: email });
     const register = await db.register.findMany({
       orderBy: [
@@ -99,13 +112,6 @@ export const getFilterRegister = async (
         },
       ],
       where: {
-        // OR: [
-        //   {
-        //     createDate: {
-        //       equals: date,
-        //     },
-        //   },
-        // ],
         AND: search as Array<any>,
       },
       include: {

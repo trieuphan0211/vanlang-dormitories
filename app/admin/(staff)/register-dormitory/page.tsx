@@ -21,13 +21,15 @@ const RegisterDormitoryPage = async ({
     branchName?: string;
     year?: string;
     date?: string;
+    status?: string;
   };
 }) => {
   const query = searchParams?.query?.trim() || "";
   const roomCode = searchParams?.roomCode?.trim() || "";
   const branchName = searchParams?.branchName?.trim() || "";
   const year = Number(searchParams?.year?.trim()) || 0;
-  // const date = searchParams?.date?.trim() || "";
+  const date = searchParams?.date?.trim() || "";
+  const status = Number(searchParams?.status?.trim());
   const currentPage = Number(searchParams?.page) || 1;
   const entries = Number(searchParams?.entries) || 10;
   const registers = (await getFilterRegister(
@@ -35,7 +37,8 @@ const RegisterDormitoryPage = async ({
     roomCode,
     branchName,
     year,
-    // date,
+    status,
+    date,
     currentPage,
     entries,
   )) as REGISTER[];

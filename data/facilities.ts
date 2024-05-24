@@ -142,13 +142,13 @@ export const getFilterFacilities = async (
   }
 };
 export const getCountFacilities = async (
-  query: string,
-  facilitiesCode: string,
-  branchName: string,
-  facilitiesTypeCode: string,
-  facilitiesTypeName: string,
-  status: string,
-  description: string,
+  query?: string,
+  facilitiesCode?: string,
+  branchName?: string,
+  facilitiesTypeCode?: string,
+  facilitiesTypeName?: string,
+  status?: string,
+  description?: string,
 ) => {
   try {
     const search = [];

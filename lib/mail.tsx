@@ -29,8 +29,8 @@ export const sendInvoiceEmail = async (
     host: "smtp.ethereal.email",
     port: 587,
     auth: {
-      user: "arch.toy27@ethereal.email",
-      pass: "M1gu3Vuk6ZaUU6pCBk",
+      user: "elmira74@ethereal.email",
+      pass: "pDbpR9nbAcd2TkNX3a",
     },
   });
 

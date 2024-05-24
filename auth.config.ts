@@ -22,33 +22,33 @@ export default {
         params: { scope: "openid profile email User.Read" },
       },
       issuer: `https://login.microsoftonline.com/common/v2.0`,
-      // profile: async (profile, tokens) => {
-      //   const profilePicture = await fetch(
-      //     `https://graph.microsoft.com/v1.0/me/photos/48x48/$value`,
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${tokens.access_token}`,
-      //       },
-      //     },
-      //   );
+      profile: async (profile, tokens) => {
+        const profilePicture = await fetch(
+          `https://graph.microsoft.com/v1.0/me/photos/48x48/$value`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokens.access_token}`,
+            },
+          },
+        );
 
-      //   if (profilePicture.ok) {
-      //     const pictureBuffer = await profilePicture.arrayBuffer();
-      //     const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
-      //     return {
-      //       id: profile.sub,
-      //       name: profile.name,
-      //       email: profile.preferred_username,
-      //       image: `data:image/jpeg;base64, ${pictureBase64}`,
-      //     };
-      //   } else {
-      //     return {
-      //       id: profile.sub,
-      //       name: profile.name,
-      //       email: profile.preferred_username,
-      //     };
-      //   }
-      // },
+        if (profilePicture.ok) {
+          const pictureBuffer = await profilePicture.arrayBuffer();
+          const pictureBase64 = Buffer.from(pictureBuffer).toString("base64");
+          return {
+            id: profile.sub,
+            name: profile.name,
+            email: profile.preferred_username,
+            image: `data:image/jpeg;base64, ${pictureBase64}`,
+          };
+        } else {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            email: profile.preferred_username,
+          };
+        }
+      },
     }),
   ],
 } satisfies NextAuthConfig;
