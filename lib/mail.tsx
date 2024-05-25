@@ -17,22 +17,22 @@ export const sendInvoiceEmail = async (
 ) => {
   console.log("Send to:", email);
   // config mail server from gmail
-  // const transporter = nodemailer.createTransport({
-  //   service: "gmail",
-  //   auth: {
-  //     user: "trieuphan0211@gmail.com",
-  //     pass: "onxllpvzqjyrgtaj",
-  //   },
-  // });
-  // config mail server from Ethereal email
   const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
+    service: "gmail",
     auth: {
-      user: "elmira74@ethereal.email",
-      pass: "pDbpR9nbAcd2TkNX3a",
+      user: "trieuphan0211@gmail.com",
+      pass: "onxllpvzqjyrgtaj",
     },
   });
+  // config mail server from Ethereal email
+  // const transporter = nodemailer.createTransport({
+  //   host: "smtp.ethereal.email",
+  //   port: 587,
+  //   auth: {
+  //     user: "elmira74@ethereal.email",
+  //     pass: "pDbpR9nbAcd2TkNX3a",
+  //   },
+  // });
 
   const emailHtml = render(
     <YelpRecentLoginEmail fullname={fullname} mailBody={mailBody} />,
