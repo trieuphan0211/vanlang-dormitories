@@ -108,8 +108,8 @@ export const InvoiceTable = ({
                   <td className="px-4 py-4 text-black dark:text-white">
                     {invoice.total.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
-                    })}{" "}
-                    đ
+                    })}
+                    VND
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
                     {invoice.status === 1 ? "Đã thanh toán" : "Chưa thanh toán"}

@@ -203,7 +203,7 @@ export const RegistersTable = ({
                             }}
                           >
                             <FaRegEdit />
-                            <span className="text-black">Chỉnh sửa</span>
+                            <span className="text-black">Xét duyệt</span>
                           </button>
                         </MenuItem>
                       )}

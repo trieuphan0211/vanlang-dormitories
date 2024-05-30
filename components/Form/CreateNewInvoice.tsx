@@ -57,6 +57,7 @@ export const CreateNewInvoice = ({
       createInvoice(data).then((res) => {
         if (res?.success) {
           router.push("/admin/invoice");
+          router.refresh();
           dispatch(
             alertManagerActions.setAlert({
               message: {

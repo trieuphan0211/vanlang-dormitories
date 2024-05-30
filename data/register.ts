@@ -173,6 +173,7 @@ export const getCountRegister = async (
           equals: year,
         },
       });
+    email && search.push({ studentEmail: email });
     const register = await db.register.count({
       orderBy: [
         {

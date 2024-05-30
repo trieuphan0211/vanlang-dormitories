@@ -107,7 +107,15 @@ export const InOutTable = ({
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {inOut.createDate.toDateString()}
+                      {inOut.createDate.getDate() +
+                        "/" +
+                        (inOut.createDate.getMonth() + 1) +
+                        "/" +
+                        inOut.createDate.getFullYear() +
+                        " " +
+                        inOut.createDate.getHours() +
+                        ":" +
+                        inOut.createDate.getMinutes()}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -146,7 +154,7 @@ export const InOutTable = ({
                           },
                         }}
                       >
-                        <MenuItem onClick={handleClose}>
+                        {/* <MenuItem onClick={handleClose}>
                           <button
                             className="flex w-full items-center gap-3 rounded-xl text-green-600 focus:outline-none"
                             disabled={isPending}
@@ -187,7 +195,7 @@ export const InOutTable = ({
                             <FaRegEdit />
                             <span className="text-black">Chỉnh sửa</span>
                           </button>
-                        </MenuItem>{" "}
+                        </MenuItem> */}
                         <MenuItem onClick={handleClose}>
                           <button
                             className="flex w-full items-center justify-start gap-3 rounded-xl text-rose-600 focus:outline-none"

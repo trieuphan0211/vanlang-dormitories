@@ -68,7 +68,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Quản lý thông tin",
+      title: "Danh mục",
 
       list: [
         {
@@ -148,16 +148,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Ra / vào",
+      title: "Vào/ra",
       list: [
         {
           icon: "/images/header-icon/user.svg",
-          title: "Đăng ký ra vào",
+          title: "Đăng ký vào ra",
           href: "/admin/out-in",
         },
         {
           icon: "/images/header-icon/user.svg",
-          title: "Danh sách ra vào",
+          title: "Danh sách vào ra",
           href: "/admin/out-in/list",
         },
       ],
@@ -176,7 +176,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Quản lý thông tin",
+      title: "Danh mục",
 
       list: [
         {
@@ -232,16 +232,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Ra / vào",
+      title: "Vào/ra",
       list: [
         {
           icon: "/images/header-icon/user.svg",
-          title: "Đăng ký ra vào",
+          title: "Đăng ký vào ra",
           href: "/admin/out-in",
         },
         {
           icon: "/images/header-icon/user.svg",
-          title: "Danh sách ra vào",
+          title: "Danh sách vào ra",
           href: "/admin/out-in/list",
         },
       ],
@@ -260,7 +260,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Quản lý thông tin",
+      title: "Danh mục",
 
       list: [
         {
@@ -311,17 +311,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/dashboard.svg",
-      title: "Danh sách vi phạm",
+      title: "Vi phạm",
       href: "/home/violate",
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Đăng ký ký túc xá",
+      title: "Đăng ký",
       href: "/home/register-dormitory",
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Ra / vào",
+      title: "Vào/ra",
       href: "/home/out-in",
     },
   ];
