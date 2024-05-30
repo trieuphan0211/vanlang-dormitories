@@ -42,7 +42,7 @@ export const RoomDetailForm = ({
       branchId: room.branchId || "",
       description: room.description || "",
       roomTypeCode: room.roomTypeCode || "",
-      floor: String(room.floor) || "",
+      floor: room.floor,
       code: room.code || "",
       services: room?.Services?.map((item) => item.serviceId) || [],
     },

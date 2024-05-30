@@ -21,7 +21,7 @@ export default async function InfoLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex min-h-screen flex-col items-center bg-white pt-16">
+    <main className="flex min-h-screen flex-col items-center bg-white pt-20">
       <InfoHeader />
       {children}
       <div className="w-full">

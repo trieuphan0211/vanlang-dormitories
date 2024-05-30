@@ -307,7 +307,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     {
       icon: "/images/header-icon/dashboard.svg",
       title: "Thông tin cá nhân",
-      href: "/home/profile",
+      href: "/home",
     },
     {
       icon: "/images/header-icon/dashboard.svg",
@@ -316,20 +316,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Dịch vụ",
-
-      list: [
-        {
-          icon: "/images/header-icon/branch.svg",
-          title: "Đăng ký ký túc xá",
-          href: "/home/register-dormitory",
-        },
-        {
-          icon: "/images/header-icon/branch.svg",
-          title: "Ra / vào",
-          href: "/home/out-in",
-        },
-      ],
+      title: "Đăng ký ký túc xá",
+      href: "/home/register-dormitory",
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
+      title: "Ra / vào",
+      href: "/home/out-in",
     },
   ];
   const [menu, setMenu] = useState(adminMenu);
@@ -406,6 +399,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
                         title={item.title}
                         list={item.list}
                         index={index}
+                        keys={role === "USER" ? "/home" : "/admin"}
                       />
                     </div>
                   );
@@ -416,6 +410,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
                       icon={item.icon}
                       title={item.title}
                       href={item.href}
+                      keys={role === "USER" ? "/home" : "/admin"}
                     />
                   </li>
                 );

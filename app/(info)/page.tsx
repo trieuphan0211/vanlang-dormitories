@@ -11,15 +11,11 @@ import { Footer } from "@/components/Footer/Footer";
 export default async function Home() {
   return (
     <main className="absolute left-0 right-0 top-0 min-h-screen w-screen overflow-hidden">
-      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpg')] bg-cover bg-fixed ">
-        <h1 className="absolute right-20 top-[140px] text-5xl font-semibold tracking-widest text-white">
-          Ký túc xá Trường Đại học Văn Lang
-        </h1>
-      </div>
+      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpg')] bg-cover bg-fixed "></div>
       <div className="mt-[1000px] flex items-center justify-center gap-20 p-10">
         <iframe
           className="aspect-video h-[450px]  rounded-2xl"
-          src="https://www.youtube.com/embed/8P9dY4euGSI"
+          src="https://www.youtube.com/embed/wgb22CwNDTs"
         ></iframe>
         <div className="relative flex h-[450px]  items-end">
           <div className="absolute -left-50 top-20 inline-block w-[700px] bg-[#2d334d] p-10">

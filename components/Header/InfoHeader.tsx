@@ -1,5 +1,6 @@
 "use client";
 import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -85,20 +86,20 @@ export const InfoHeader = () => {
           },
         )}
       >
-        <div className="container mx-auto p-2">
+        <div className="container mx-auto px-2 py-4">
           <div className="relative flex items-center justify-between">
             <div className="h-12 w-60 max-w-full px-4 xl:mr-12">
               <Link href="/" className={`header-logo block h-full w-full`}>
-                <img
+                <Image
                   src="/images/logo/logo.png"
                   alt="logo"
-                  width={100}
-                  height={100}
+                  width={10000}
+                  height={10000}
                   className="h-full w-auto dark:hidden"
                 />
               </Link>
             </div>
-            <div className="flex w-full items-center justify-between px-4">
+            <div className="flex  items-center justify-between gap-10 px-4">
               <div>
                 <button
                   onClick={navbarToggleHandler}
@@ -137,7 +138,7 @@ export const InfoHeader = () => {
                           <Link
                             href={menuItem.path}
                             className={clsx(
-                              `after: flex py-2 text-lg font-semibold  after:absolute after:bottom-0 after:left-0 after:right-full after:block  after:border-b-4 after:border-[#d72134] after:transition-all group-hover:text-[#d72134] group-hover:after:right-0  lg:mr-0 lg:inline-flex lg:px-0`,
+                              `after: flex py-2  font-bold  uppercase after:absolute after:bottom-0 after:left-0 after:right-full after:block  after:border-b-4 after:border-[#d72134] after:transition-all group-hover:text-[#d72134] group-hover:after:right-0  lg:mr-0 lg:inline-flex lg:px-0`,
                               {
                                 "text-[#d72134] after:right-0":
                                   pathname === menuItem.path,
@@ -189,7 +190,7 @@ export const InfoHeader = () => {
               <div className="flex items-center justify-end pr-16 lg:pr-0">
                 <Link
                   href="/auth/signin"
-                  className="ease-in-up hover:shadow-signUp hidden rounded-2xl bg-[#d72134] px-8 py-3 text-base font-bold text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                  className="ease-in-up hover:shadow-signUp hidden rounded  border-2 border-[#d72134] px-8 py-2 text-base font-bold uppercase text-[#d72134] transition transition-all duration-300 hover:bg-[#d72134] hover:text-white md:block md:px-9 lg:px-6 xl:px-9"
                 >
                   Đăng nhập
                 </Link>

@@ -64,6 +64,7 @@ export type ROOM = {
 
 export type STUDENT = {
   id: string;
+  image?: string;
   cccdCode?: string;
   cccdOfDate?: string;
   cccdPlace?: string;

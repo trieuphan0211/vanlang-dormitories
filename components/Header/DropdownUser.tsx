@@ -4,6 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { getStudentByEmail } from "@/data/student";
+import { STUDENT } from "@/types";
+import { getStudentFromEmail } from "@/actions/student";
 
 const DropdownUser = () => {
   //Begin: Handle dropdown state UI
@@ -41,6 +44,17 @@ const DropdownUser = () => {
 
   //Begin: Handle Data & Function
   const session = useSession();
+  const [student, setStudent] = useState<STUDENT>();
+  const getStudent = async () => {
+    const student = (await getStudentFromEmail(
+      session.data?.user.email || "",
+    )) as STUDENT;
+    console.log(student);
+    setStudent(student);
+  };
+  useEffect(() => {
+    getStudent();
+  }, [session]);
   // Begin: Handle Logout
   const handleLogout = async () => {
     await signOut();
@@ -72,7 +86,7 @@ const DropdownUser = () => {
           <Image
             width={112}
             height={112}
-            src={session.data?.user.image || "/images/user/user-01.png"}
+            src={student?.image || "/images/user/user_01.png"}
             style={{
               width: "auto",
               height: "auto",
@@ -107,7 +121,7 @@ const DropdownUser = () => {
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
+        {/* <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
               href="/profile"
@@ -179,7 +193,7 @@ const DropdownUser = () => {
               Account Settings
             </Link>
           </li>
-        </ul>
+        </ul> */}
         <button
           className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 
         ease-in-out hover:text-primary lg:text-base"

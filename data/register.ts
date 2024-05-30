@@ -50,14 +50,12 @@ export const getFilterRegister = async (
     const search = [];
     query &&
       search.push({
-        student: [
-          {
-            fullName: {
-              contains: query,
-              mode: "insensitive",
-            },
+        student: {
+          fullName: {
+            contains: query,
+            mode: "insensitive",
           },
-        ],
+        },
       });
     roomCode &&
       search.push({
@@ -142,14 +140,12 @@ export const getCountRegister = async (
     const search = [];
     query &&
       search.push({
-        student: [
-          {
-            fullName: {
-              contains: query,
-              mode: "insensitive",
-            },
+        student: {
+          fullName: {
+            contains: query,
+            mode: "insensitive",
           },
-        ],
+        },
       });
     roomCode &&
       search.push({

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { FormSelect, FormSelectMultiple, Input } from "@/components/Input";
+import { useEffect, useState } from "react";
 
 export const AddNewRoom = ({
   branchs,
@@ -29,6 +30,7 @@ export const AddNewRoom = ({
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [branch, setBranch] = useState<BRANCH | null>(null);
 
   const {
     register,
@@ -37,6 +39,7 @@ export const AddNewRoom = ({
     reset,
     setValue,
     control,
+    watch,
   } = useForm<z.infer<typeof RoomSchema>>({
     resolver: zodResolver(RoomSchema),
     defaultValues: {
@@ -79,6 +82,10 @@ export const AddNewRoom = ({
     setOpen(false);
     reset();
   };
+  const { branchId } = watch();
+  useEffect(() => {
+    setBranch(branchs.filter((item) => item.id === branchId)[0]);
+  }, [branchs, branchId]);
   return (
     <div className="fixed left-[50%] top-[50%]  z-50 max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
       <div className="border-b border-stroke dark:border-strokedark">
@@ -144,12 +151,13 @@ export const AddNewRoom = ({
               >
                 Tầng
               </label>
-              <Input
-                type="number"
+              <FormSelect
+                name="floor"
+                control={control}
+                isPending={isPending}
+                number={branch?.floorNumber || 1}
                 placeholder="Nhập số tầng"
                 errors={errors.floor}
-                isPending={isPending}
-                register={register("floor")}
               />
             </div>
 

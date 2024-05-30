@@ -1,3 +1,4 @@
+import { dancingScript } from "@/fonts/fonts";
 import { content } from "html2canvas/dist/types/css/property-descriptors/content";
 import { Metadata } from "next";
 import { title } from "process";
@@ -23,7 +24,7 @@ interface rules {
 
 const rules: rules = {
   header:
-    "quy định /n quản lý sinh viên nội trú tại ký túc xá /n trường đại học văn lang",
+    "quy định quản lý sinh viên nội trú tại ký túc xá /n trường đại học văn lang",
   body: [
     {
       chapter: "CHƯƠNG I /n QUY ĐỊNH CHUNG",
@@ -438,9 +439,11 @@ export const metadata: Metadata = {
 };
 const RoomPage = () => {
   return (
-    <main className="w-full bg-[url(/images/background/ky_tuc_xa.jpg)] p-3 font-mono font-medium text-black">
-      <div className="mx-auto max-w-[1300px] rounded-lg bg-white p-7">
-        <h1 className="mb-8 text-center text-4xl font-extrabold uppercase leading-snug">
+    <main className="w-full bg-[url(/images/background/ky_tuc_xa.jpg)] p-5 text-justify font-medium text-black">
+      <div className="mx-auto max-w-[1230px] rounded-lg bg-white px-20 py-7">
+        <h1
+          className={`${dancingScript.className} mb-8 text-center text-4xl font-extrabold uppercase leading-snug`}
+        >
           {rules.header.split("/n").map((title, index) => (
             <span key={title + index}>
               <span>{title}</span>
@@ -451,7 +454,9 @@ const RoomPage = () => {
 
         {rules.body.map((chapter, index) => (
           <div className="mt-4" key={"h2-" + index}>
-            <h2 className="text-center text-2xl font-bold">
+            <h2
+              className={`${dancingScript.className} text-center text-2xl font-bold text-[#d72134]`}
+            >
               {chapter.chapter.split("/n").map((title) => (
                 <span key={"h3-" + title}>
                   <span>{title}</span>

@@ -62,6 +62,7 @@ model User {
 
 model Student {
   id                 String     @id @default(cuid())
+  image              String?
   cccdCode           String?    @unique
   cccdOfDate         String?
   cccdPlace          String?

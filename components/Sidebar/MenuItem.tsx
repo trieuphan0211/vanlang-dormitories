@@ -11,23 +11,29 @@ interface MenuItemProps {
   icon: string;
   title: string;
   href: string;
+  keys?: string;
 }
 interface MenuItemListProps {
   icon: string;
   title: string;
   list: MenuItemProps[];
   index: number;
+  keys: string;
 }
 
 export const MenuItem = (item: MenuItemProps) => {
   const pathname = usePathname();
+  console.log(item);
   return (
     <Link
       href={item.href}
       className={clsx(
         "group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-semibold uppercase text-white duration-300 ease-in-out hover:bg-meta-1/80 ",
         {
-          "bg-meta-1/35": pathname === item.href,
+          "bg-meta-1/35":
+            pathname === item.keys && item.keys === item.href
+              ? true
+              : pathname.includes(item.href) && item.href !== item.keys,
         },
       )}
       key={item.title}

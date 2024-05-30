@@ -109,7 +109,7 @@ export const RoomSchema = z
     description: z.optional(z.string()),
     code: z.optional(z.string()),
     branchId: z.string().min(1, "Chi nhánh không đc để trống"),
-    floor: z.string(),
+    floor: z.number(),
     count: z.optional(z.string()),
     services: z.optional(z.array(z.string())),
   })

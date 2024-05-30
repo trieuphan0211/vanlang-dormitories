@@ -3,10 +3,8 @@ import { auth } from "@/auth";
 import "@/css/style.css";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { Inter } from "next/font/google";
+import { inter } from "@/fonts/fonts";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {

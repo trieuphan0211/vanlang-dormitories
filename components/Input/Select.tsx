@@ -26,6 +26,7 @@ export const FormSelect = ({
   facilifiesStatus,
   rooms,
   month,
+  number,
   registerStatus,
   years,
   defaultValue,
@@ -47,6 +48,7 @@ export const FormSelect = ({
   month?: string[];
   registerStatus?: string[];
   years?: number[];
+  number?: number;
   defaultValue?: string;
   students?: STUDENT[];
   disabled?: boolean;
@@ -72,6 +74,12 @@ export const FormSelect = ({
               branchs.map((branch, key) => (
                 <MenuItem key={key} value={branch.id}>
                   {branch.name}
+                </MenuItem>
+              ))}
+            {number &&
+              Array.from(Array(number).keys()).map((item, key) => (
+                <MenuItem key={key} value={item + 1}>
+                  {item + 1}
                 </MenuItem>
               ))}
             {students &&

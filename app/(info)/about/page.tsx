@@ -1,3 +1,4 @@
+import { dancingScript } from "@/fonts/fonts";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -8,13 +9,19 @@ export const metadata: Metadata = {
 const RoomPage = () => {
   return (
     <main className="">
-      <div className="relative flex h-150 w-screen items-end bg-[url('/images/about/room-bg.webp')] before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-rose-900 before:to-black before:opacity-50 before:blur-sm">
-        <h1 className="z-1 p-10 text-center text-7xl font-bold italic leading-normal text-white">
-          Ký túc xá Trường Đại học Văn Lang: Không gian sống lý tưởng dành cho
-          tân sinh viên
+      <div className="relative flex h-150 w-screen items-end overflow-hidden bg-[url('/images/about/room-bg.webp')] bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)]  before:blur-sm">
+        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[550px] border-l-6 border-red text-center text-6xl font-bold italic leading-normal text-white ">
+          Ký túc xá Trường Đại học Văn Lang
         </h1>
+        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white ">
+          Ký túc xá Trường Đại học Văn Lang hướng đến phong cách năng động, tự
+          chủ, tôn vinh lối sống độc lập và màu sắc riêng của từng sinh viên
+          trong cộng đồng Văn Lang. Hứa hẹn không chỉ là nơi để ở mà còn là nơi
+          nâng tầm chất lượng cuộc sống của sinh viên trong thời gian học tập
+          tại VLU.
+        </p>
       </div>
-      <div className="p-10 text-lg text-black">
+      <div className="px-[130px] py-10 text-justify text-lg text-black">
         <div className="m-auto max-w-[1300px]">
           <p className="font-semibold">
             Hiện nay, trường Đại học Văn Lang có 2 khu Ký túc xá dành cho sinh
@@ -26,7 +33,9 @@ const RoomPage = () => {
             trình 4 năm đại học.
           </p>
           <div className="py-10">
-            <h2 className="pb-5  text-center text-3xl font-bold">
+            <h2
+              className={`${dancingScript.className} pb-5  text-center text-4xl font-bold text-[#d72134]`}
+            >
               Ký túc xá 61A-B Phan Huy Ích, Phường 14, Q. Gò Vấp, TP. Hồ Chí
               Minh
             </h2>
@@ -42,14 +51,15 @@ const RoomPage = () => {
               bộ khuôn viên lầu 1 làm canteen và khu vực sinh hoạt tập thể thoải
               mái, vui tươi cho người ở.
             </p>
-            <div className="my-3 flex flex-col items-center">
+            <div className="my-10 flex flex-col items-center">
               <Image
                 src="/images/about/phong-phanhuyich.jpg"
                 alt="Phòng ở Phan Huy Ích"
                 width={1000}
                 height={500}
+                className=" shadow-2xl"
               />
-              <p className="text-center italic">
+              <p className="mt-6 text-center italic">
                 Ký túc xá được bố trí giường tầng riêng tư, gọn gàng và tiết
                 kiệm diện tích
               </p>
@@ -62,7 +72,9 @@ const RoomPage = () => {
             </p>
           </div>
           <div className="py-10">
-            <h2 className="pb-5  text-center text-3xl font-bold">
+            <h2
+              className={`${dancingScript.className} pb-5  text-center text-4xl font-bold text-[#d72134]`}
+            >
               Ký túc xá tại Cơ sở chính Trường Đại học Văn Lang - 69/68 Đặng
               Thùy Trâm, Phường 13, Quận Bình Thạnh, TP. Hồ Chí Minh
             </h2>
@@ -82,8 +94,9 @@ const RoomPage = () => {
                 alt="Phòng ở Phan Huy Ích"
                 width={1000}
                 height={500}
+                className=" shadow-2xl"
               />
-              <p className="text-center italic">
+              <p className="mt-6 text-center italic">
                 Với cơ sở hạ tầng hiện đại, kiến trúc tiên tiến, khối ký túc xá
                 mới của Trường Đại học Văn Lang gồm 1.026 chỗ ở dành cho sinh
                 viên.
@@ -102,8 +115,9 @@ const RoomPage = () => {
                 alt="Phòng ở Phan Huy Ích"
                 width={1000}
                 height={500}
+                className=" shadow-2xl"
               />
-              <p className="text-center italic">
+              <p className="mt-6 text-center italic">
                 Không gian học tập cực &ldquo;chill&quot; của sinh viên Văn Lang
                 tại ký túc xá mới
               </p>
@@ -114,8 +128,9 @@ const RoomPage = () => {
                 alt="Phòng ở Phan Huy Ích"
                 width={1000}
                 height={500}
+                className=" shadow-2xl"
               />
-              <p className="text-center italic">
+              <p className="mt-6 text-center italic">
                 Không gian chăm sóc và vệ sinh cá nhân
               </p>
             </div>

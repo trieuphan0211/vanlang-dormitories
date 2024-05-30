@@ -1,14 +1,24 @@
 "use client";
 import clsx from "clsx";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 interface BreadcrumbProps {
   pageName: string;
 }
 const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
   const pathname = usePathname();
-  let link = "";
-
+  const [breadcrumb, setBreadcrumb] = useState<Array<String>>([]);
+  console.log(pathname);
+  useEffect(() => {
+    switch (pathname) {
+      case "/home":
+        setBreadcrumb(["Thông tin cá nhân"]);
+        break;
+      case "/home/violate":
+        setBreadcrumb(["Vi phạm"]);
+    }
+  }, [pathname]);
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <h2 className="text-title-md2 font-semibold text-black dark:text-white">
@@ -17,21 +27,19 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
 
       <nav>
         <ol className="flex items-center gap-2">
-          {pathname.split("/").map((path, index) => {
-            const replacePath = path.replace(/-/g, " ");
-            if (path === "") return null;
-            link += `/${path}`;
+          {breadcrumb.map((path, index) => {
+            const replacePath = pathname.split("/");
             return (
               <li key={index}>
                 <Link
                   className={clsx("font-medium capitalize ", {
                     "font-medium text-primary":
-                      index === pathname.split("/").length - 1,
+                      index === pathname.split("/").length - 2,
                   })}
-                  href={link}
+                  href={""}
                 >
-                  {replacePath}{" "}
-                  {index === pathname.split("/").length - 1 ? "" : "/"}
+                  {path}
+                  {index === pathname.split("/").length - 2 ? "" : "/"}
                 </Link>
               </li>
             );

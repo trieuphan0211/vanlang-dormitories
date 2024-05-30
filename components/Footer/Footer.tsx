@@ -77,14 +77,14 @@ export const Footer = () => {
           height={50}
         />
         <div className="grid h-fit grid-cols-4 gap-4">
-          <h3 className="">Email</h3>
-          <h3 className="">Đào tạo</h3>
-          <h3 className="">Tuyển sinh</h3>
-          <h3 className="">Hỗ trợ sinh viên (Call Center)</h3>
-          <p className="text-white">info@vlu.edu.vn</p>
-          <p className="text-white">028.7109 9221</p>
-          <p className="text-white">028.7105 9999</p>
-          <p className="text-white">028. 7106. 1111</p>
+          <h3 className="text-white">Email</h3>
+          <h3 className="text-white">Đào tạo</h3>
+          <h3 className="text-white">Tuyển sinh</h3>
+          <h3 className="text-white">Hỗ trợ sinh viên (Call Center)</h3>
+          <p className="">info@vlu.edu.vn</p>
+          <p className="">028.7109 9221</p>
+          <p className="">028.7105 9999</p>
+          <p className="">028. 7106. 1111</p>
         </div>
       </div>
       <div className="my-5 w-full border-t-[1px] border-[rgba(255,255,255,0.4)]"></div>

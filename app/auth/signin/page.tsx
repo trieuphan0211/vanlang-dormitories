@@ -19,13 +19,13 @@ const SignInPage = async () => {
     redirect("/home");
   }
   return (
-    <div className="flex h-screen items-center justify-center bg-[url('/images/background/h1.jpg')] bg-cover bg-center">
-      <div className="flex flex-col items-center gap-5">
-        <h1 className=" text-center text-6xl font-bold italic leading-normal text-rose-500">
-          Chào mừng để với ký túc xá đại học Văn Lang
+    <div className="flex h-screen items-center justify-center bg-[url('/images/background/h1.jpg')] bg-cover bg-center before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)]  before:blur-sm">
+      <div className="z-1 flex flex-col items-center gap-5">
+        <h1 className=" max-w-[600px] text-center text-4xl font-bold italic leading-normal text-white">
+          Chào mừng đến với <br /> ký túc xá đại học Văn Lang
         </h1>
         <SigninForm />
-        <p className="text-xl text-white">
+        <p className="text-md text-white">
           © 2024 - Bản Quyền Thuộc Phòng Đào Tạo, Trường Đại Học Văn Lang.
         </p>
       </div>

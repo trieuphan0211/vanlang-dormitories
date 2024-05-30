@@ -4,6 +4,7 @@ import { updateRegister } from "@/data/register";
 import {
   deleteStudent,
   getAllStudents,
+  getStudentByEmail,
   updateStudent,
   updateStudentInRoom,
 } from "@/data/student";
@@ -24,6 +25,13 @@ export const removeStudent = async (id: string) => {
     console.error(error);
     return { error: "An error occurred!" };
   }
+};
+export const getStudentFromEmail = async (email: string) => {
+  const student = await getStudentByEmail(email);
+  if (student) {
+    return student;
+  }
+  return { error: "An error occurred!" };
 };
 export const getStudentsAll = async () => {
   try {
