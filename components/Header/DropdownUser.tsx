@@ -48,7 +48,7 @@ const DropdownUser = () => {
   const getStudent = async () => {
     const student = (await getStudentFromEmail(
       session.data?.user.email || "",
-    )) as STUDENT;
+    )) as unknown as STUDENT;
     console.log(student);
     setStudent(student);
   };

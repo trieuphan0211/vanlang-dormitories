@@ -14,8 +14,8 @@ export const getFacilitiesAll = async () => {
   try {
     const facilities = await db.facilities.findMany({
       include: {
-        branch: true,
-        facilitiesType: true,
+        Branch: true,
+        FacilitiesType: true,
       },
     });
     return facilities;
@@ -31,8 +31,8 @@ export const getFacilitiesByCodes = async (code: string) => {
         code,
       },
       include: {
-        branch: true,
-        facilitiesType: true,
+        Branch: true,
+        FacilitiesType: true,
       },
     });
     return facilities;
@@ -47,8 +47,8 @@ export const getFacilitiesById = async (id: string) => {
         id,
       },
       include: {
-        branch: true,
-        facilitiesType: true,
+        Branch: true,
+        FacilitiesType: true,
       },
     });
     return facilities;
@@ -130,8 +130,8 @@ export const getFilterFacilities = async (
         AND: search as Array<any>,
       },
       include: {
-        branch: true,
-        facilitiesType: true,
+        Branch: true,
+        FacilitiesType: true,
       },
       skip: (currentPage - 1) * entries,
       take: entries,

@@ -3,6 +3,7 @@ import { Dialog, DialogTitle } from "@mui/material";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
+import { BiQrScan } from "react-icons/bi";
 
 export const ScanQrCode = ({
   setQr,
@@ -24,11 +25,20 @@ export const ScanQrCode = ({
           e.preventDefault();
           setOpen(true);
         }}
-        className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+        className="group relative flex h-10 w-44 cursor-pointer items-center rounded-lg border border-primary bg-primary text-white hover:bg-primary active:border-primary active:bg-primary"
       >
+        <span className="text-gray-200 ml-8 transform font-semibold transition-all duration-300 group-hover:translate-x-20">
+          Thêm CSVC
+        </span>
+        <span className="absolute right-0 flex h-full w-10 transform items-center justify-center rounded-lg bg-primary transition-all duration-300 group-hover:w-full group-hover:translate-x-0">
+          <BiQrScan className="text-2xl" />
+        </span>
+      </button>
+
+      {/* <button className="inline-flex items-center justify-center text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
         <IoAdd className="text-2xl" />
         Thêm CSVC
-      </button>
+      </button> */}
 
       {open && (
         <Dialog onClose={handleCloseModal} open={open}>

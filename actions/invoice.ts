@@ -32,16 +32,16 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
       // Get service detail and calculate cost
       const service = roomDetail?.Services?.map((service) => {
         return {
-          serviceId: service.service.id,
-          serviceName: service.service.name,
-          cost: service.service.allow
-            ? service.service.cost *
+          serviceId: service.Service.id,
+          serviceName: service.Service.name,
+          cost: service.Service.allow
+            ? service.Service.cost *
               Number(
                 room.service.find(
-                  (e: any) => e.serviceId === service.service.id,
+                  (e: any) => e.serviceId === service.Service.id,
                 )?.quantity as string,
               )
-            : service.service.cost,
+            : service.Service.cost,
         };
       }) as Array<{
         serviceId: string;
@@ -52,7 +52,7 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
       service.push({
         serviceId: room.roomId,
         serviceName: "Tiền Phòng",
-        cost: roomDetail?.roomType?.cost as number,
+        cost: roomDetail?.RoomType?.cost as number,
       });
       // Send mail to all student
       return await Promise.all(
@@ -60,7 +60,7 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
         roomDetail?.Student?.map(async (student): Promise<any> => {
           // Send mail to student
           const res = await sendInvoiceEmail(student.email, student.fullName, {
-            name: roomDetail?.code + "-" + roomDetail?.roomType?.name,
+            name: roomDetail?.code + "-" + roomDetail?.RoomType?.name,
             detail: service,
           });
           if (res) {
@@ -75,7 +75,7 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
               ),
               studentId: student.id,
               detail: JSON.stringify({
-                name: roomDetail?.code + "-" + roomDetail?.roomType?.name,
+                name: roomDetail?.code + "-" + roomDetail?.RoomType?.name,
                 detail: service,
               }),
               status: 0,

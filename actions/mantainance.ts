@@ -15,15 +15,18 @@ import { FACILITIES, MAINTENNANCES } from "@/types";
 export const addManitainance = async (
   value: z.infer<typeof MaintenanceSchema>,
 ) => {
+  // validate value
   const validateValue = MaintenanceSchema.safeParse(value);
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
+  // get value
   const { listFacilities, mantainanceName, status, description, startDate } =
     validateValue.data;
-
+  // generate token
   const token = "MT" + crypto.randomInt(100, 1_000).toString();
   try {
+    // create maintenance
     const res = await createMaintenance({
       code: token,
       mantainanceName,
@@ -31,10 +34,13 @@ export const addManitainance = async (
       startDate: startDate || new Date(),
       status,
     });
+    // check if maintenance is created
     if (res === null) {
       return { error: "An error occurred!" };
     }
+    // check if facilities is in maintenance
     if (listFacilities !== undefined) {
+      // get facilities and if check maintenceId in facility is exist return code
       const checkFacilities = await Promise.all(
         listFacilities.map(async (item: string) => {
           const facilities = (await getFacilitiesById(item)) as FACILITIES;
@@ -43,29 +49,25 @@ export const addManitainance = async (
           }
         }),
       );
-      console.log(
-        "checkFacilities: ",
-        checkFacilities.filter((item) => item !== undefined),
-      );
+      // check if facilities is in maintenance and return error
       if (checkFacilities.filter((item) => item !== undefined).length > 0) {
         return {
           error: "Facilities is in maintenance!",
           data: checkFacilities.filter((item) => item !== undefined),
         };
       }
-      const addMaintenances = await Promise.all(
+      const updateFacilitiesforMaintainceId = await Promise.all(
         listFacilities.map(async (item: string) => {
-          const facilities = (await getFacilitiesById(item)) as FACILITIES;
-          if (facilities.maintenanceId) {
-            return { error: "Facilities is in maintenance!" };
-          } else {
-            return await updateFacilities(item, {
-              status: "MAINTENANCE",
-              maintenanceId: res?.id,
-            });
-          }
+          return await updateFacilities(item, {
+            status: "MAINTENANCE",
+            maintenanceId: res?.id,
+          });
         }),
       );
+      if (updateFacilitiesforMaintainceId === null) {
+        return { error: "An error occurred!" };
+      }
+      return { success: "Maintenance is created!" };
     }
 
     return { success: "Maintenance is created!" };

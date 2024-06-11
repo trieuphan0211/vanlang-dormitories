@@ -24,7 +24,7 @@ export default async function DetailPage({
   };
 }) {
   const register = (await getRegisterById(params.id)) as REGISTER;
-  const user = (await getUserByEmail(register.student.email)) as USER;
+  const user = (await getUserByEmail(register.Student.email)) as USER;
   const branchs = (await getBranchsAll()) as BRANCH[];
   const roomTypes = (await getRoomTypesAll()) as ROOMTYPE[];
   const rooms = (await getRoomsByFields(
@@ -38,7 +38,7 @@ export default async function DetailPage({
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
-            Sinh viên: {register?.student?.fullName}
+            Sinh viên: {register?.Student?.fullName}
           </h3>
         </div>
         <div className="p-7">
@@ -50,7 +50,7 @@ export default async function DetailPage({
               roomTypes={roomTypes}
               rooms={rooms.filter(
                 (room) =>
-                  room.Student?.length || 0 < (room.roomType?.members ?? 0),
+                  room.Student?.length || 0 < (room.RoomType?.members ?? 0),
               )}
             />
           )}

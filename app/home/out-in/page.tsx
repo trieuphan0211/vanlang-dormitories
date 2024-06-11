@@ -1,15 +1,14 @@
-import React from "react";
-import { CheckIn } from "./CheckIn";
-import { currentUser } from "@/lib/auth";
 import { getStudentByEmail } from "@/data/student";
-import { STUDENT } from "@/types";
+import { currentUser } from "@/lib/auth";
+import { Student } from "@prisma/client";
+import { CheckIn } from "./CheckIn";
 
 const OutInPage = async () => {
   const user = await currentUser();
-  const student = (await getStudentByEmail(user?.email as string)) as STUDENT;
+  const student = await getStudentByEmail(user?.email as string);
   return (
     <div className="flex h-full items-center justify-center">
-      <CheckIn student={student} />
+      <CheckIn student={student as unknown as Student} />
     </div>
   );
 };

@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  vanlang-dormitories:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: vanlang-dormitories
+    ports:
+      - "3000:3000"
+
+      # docker compose -f docker/production/docker-compose.yml build

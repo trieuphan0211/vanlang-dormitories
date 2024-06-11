@@ -15,12 +15,12 @@ export type INVOICE = {
   roomId: string;
   studentId: string;
   total: number;
-  room: ROOM;
   createDate: Date;
   status: number;
   detail: string;
   invoiceMonth: string;
   invoiceYear: string;
+  Room: ROOM;
   Student?: STUDENT;
 };
 export type SERVICES = {
@@ -54,8 +54,8 @@ export type ROOM = {
   floor: number;
   branchId: string;
   roomTypeCode: string;
-  branch: BRANCH;
-  roomType?: ROOMTYPE;
+  Branch: BRANCH;
+  RoomType?: ROOMTYPE;
   Services?: Array<any>;
   Student?: Array<any>;
   Register?: Array<any>;
@@ -85,7 +85,7 @@ export type STUDENT = {
   permanentResidence?: string;
   familiInfo?: string;
   contactinfo?: string;
-  room?: ROOM;
+  Room?: ROOM;
 };
 
 export type REGISTER = {
@@ -95,7 +95,7 @@ export type REGISTER = {
   registerdeadline: number;
   status: number;
   createDate: Date;
-  student: STUDENT;
+  Student: STUDENT;
   room?: ROOM;
 };
 

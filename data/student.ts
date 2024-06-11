@@ -4,12 +4,21 @@ import { equal } from "assert";
 
 export const getStudentByEmail = async (email: string) => {
   try {
-    const student = await db.student.findUnique({
-      where: { email, studentVerified: true },
+    const student = await db.student.findMany({
+      where: {
+        AND: {
+          email: {
+            contains: email,
+            mode: "insensitive",
+          },
+        },
+
+        studentVerified: true,
+      },
       include: {
-        room: {
+        Room: {
           include: {
-            branch: true,
+            Branch: true,
           },
         },
       },

@@ -109,6 +109,9 @@ dependencies:
   next-themes:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.2.0)(react@18.2.0)
+  node-cron:
+    specifier: ^3.0.3
+    version: 3.0.3
   nodemailer:
     specifier: ^6.9.13
     version: 6.9.13
@@ -165,6 +168,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.12.7
     version: 20.12.7
+  '@types/node-cron':
+    specifier: ^3.0.11
+    version: 3.0.11
   '@types/nodemailer':
     specifier: ^6.4.14
     version: 6.4.14
@@ -2478,6 +2484,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/node-cron@3.0.11:
+    resolution: {integrity: sha512-0ikrnug3/IyneSHqCBeslAhlK2aBfYek1fGo4bP4QnZPmiqSGRK+Oy7ZMisLWkesffJvQ1cqAcBnJC+8+nxIAg==}
     dev: true
 
   /@types/node@20.12.7:
@@ -5330,6 +5340,13 @@ packages:
       - babel-plugin-macros
     dev: false
 
+  /node-cron@3.0.3:
+    resolution: {integrity: sha512-dOal67//nohNgYWb+nWmg5dkFdIwDm8EpeGYMekPMrngV3637lqnX0lbUcCtgibHTz6SEz7DAIjKvKDFYCnO1A==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      uuid: 8.3.2
+    dev: false
+
   /node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -7145,6 +7162,11 @@ packages:
     resolution: {integrity: sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==}
     dependencies:
       base64-arraybuffer: 1.0.2
+    dev: false
+
+  /uuid@8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
     dev: false
 
   /uuid@9.0.1:

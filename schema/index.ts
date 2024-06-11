@@ -202,9 +202,29 @@ export const StudentInfoSchema = z.object({
 });
 export const ViolateSchema = z.object({
   violateName: z.string().min(1, "Tên vi phạm không được để trống"),
-  description: z.string().min(1, "Mô tả không được để trống"),
+  violateTypeCode: z.string().min(1, "Loại vi phạm không được để trống"),
   studentId: z.string().min(1, "Mã sinh viên không được để trống"),
+  description: z.optional(z.string()),
 });
+export const ViolateTypeSchema = z
+  .object({
+    violateTypeName: z.string().min(1, "Tên loại vi phạm không được để trống"),
+    point: z.string(),
+    description: z.optional(z.string()),
+    allow: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      if (Number(data.point) < 1) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Điểm vi phạm phải lớn hơn 0",
+      path: ["point"],
+    },
+  );
 export const FacilitiesSchema = z
   .object({
     name: z.string().min(1, "Tên cơ sở vật chất không được để trống"),

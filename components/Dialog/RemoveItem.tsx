@@ -11,11 +11,11 @@ import { removeService } from "@/actions/service";
 import { removeStudent } from "@/actions/student";
 import { removeUser } from "@/actions/user";
 import { deleteViolateById } from "@/actions/violate";
+import { deleteViolateType } from "@/actions/violateType";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { Dialog, DialogTitle } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export const RemoveItemDialog = ({
   isPending,
@@ -33,6 +33,7 @@ export const RemoveItemDialog = ({
   registerId,
   violateId,
   invoiceId,
+  violateTypeId,
   setState,
 }: {
   isPending: boolean;
@@ -50,6 +51,7 @@ export const RemoveItemDialog = ({
   registerId?: string;
   violateId?: string;
   invoiceId?: string;
+  violateTypeId?: string;
   setState: Function;
 }) => {
   const router = useRouter();
@@ -408,6 +410,35 @@ export const RemoveItemDialog = ({
           }
         });
       }
+      if (violateTypeId) {
+        deleteViolateType(violateTypeId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setState(false);
+            // Show alert
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Loại vi phạm đã được xóa thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Xóa loại vi phạm thất bại!",
+                },
+              }),
+            );
+          }
+        });
+      }
     });
   };
   const handleCloseModal = () => {
@@ -453,6 +484,7 @@ export const RemoveItemDialog = ({
               {registerId && "Có, hủy đơn đăng ký"}
               {invoiceId && "Có, xóa hóa đơn"}
               {violateId && "Có, xóa vi phạm"}
+              {violateTypeId && "Có, xóa loại vi phạm"}
             </button>
           </div>
         </div>

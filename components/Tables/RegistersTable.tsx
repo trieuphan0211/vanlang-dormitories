@@ -93,7 +93,7 @@ export const RegistersTable = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {register.student.fullName}
+                    {register.Student.fullName}
                   </p>
                 </td>
 

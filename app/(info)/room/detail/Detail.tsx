@@ -85,7 +85,7 @@ const Detail = ({
           </div>
           <button
             className="w-full  bg-[#f57b20] px-20 py-3 text-2xl font-medium text-white"
-            onClick={() => router.push("/home")}
+            onClick={() => router.push("/auth/signin")}
           >
             Đăng ký phòng
           </button>

@@ -6,7 +6,9 @@ import Image from "next/image";
 
 const ProfilePage = async () => {
   const user = await currentUser();
-  const student = (await getStudentByEmail(user?.email as string)) as STUDENT;
+  const student = (await getStudentByEmail(
+    user?.email as string,
+  )) as unknown as STUDENT;
   return (
     <div className="mx-auto max-w-242.5">
       <Breadcrumb pageName="Thông tin cá nhân" />
@@ -90,7 +92,7 @@ const ProfilePage = async () => {
               Đang ở phòng:{" "}
             </h4>
             <p className="">
-              {student?.room?.code || "Hiện không ở trong ký túc xá"}
+              {student?.Room?.code || "Hiện không ở trong ký túc xá"}
             </p>
           </div>
           <div className="flex gap-5">

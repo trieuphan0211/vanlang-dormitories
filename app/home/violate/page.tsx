@@ -2,14 +2,16 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { getStudentByEmail } from "@/data/student";
 import { getViolateByStudentId } from "@/data/violate";
 import { currentUser } from "@/lib/auth";
-import { VIOLATE } from "@/types";
+import { STUDENT, VIOLATE } from "@/types";
 import Link from "next/link";
 
 const ViolatePage = async () => {
   const user = await currentUser();
-  const student = await getStudentByEmail(user?.email as string);
+  const student = (await getStudentByEmail(
+    user?.email as string,
+  )) as unknown as STUDENT;
   const violates = (await getViolateByStudentId(
-    student?.id as string,
+    student.id as string,
   )) as VIOLATE[];
   console.log("violates", violates);
 

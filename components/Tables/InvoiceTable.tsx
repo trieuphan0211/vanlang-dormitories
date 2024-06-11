@@ -97,10 +97,10 @@ export const InvoiceTable = ({
                     {invoice?.Student?.fullName || "Không có"}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.room.code}
+                    {invoice.Room.code}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.room.branch.name}
+                    {invoice.Room.Branch.name}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
                     {invoice.invoiceMonth + "/" + invoice.invoiceYear}

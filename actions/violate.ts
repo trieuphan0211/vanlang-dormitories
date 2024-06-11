@@ -13,7 +13,7 @@ export const addviolate = async (value: z.infer<typeof ViolateSchema>) => {
   try {
     const res = await createViolate({
       name: violateName,
-      description: description,
+      description: description || "",
       studentId: studentId,
     });
     if (res) {
@@ -38,7 +38,7 @@ export const updateViolateById = async (
   try {
     const res = await updateViolate(id, {
       name: violateName,
-      description: description,
+      description: description || "",
       studentId: studentId,
     });
     if (res) {

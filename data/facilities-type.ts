@@ -10,7 +10,7 @@ export const getAllFacilitiesTypes = async () => {
     const facilitiesTypes = await db.facilitiesType.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
     });
@@ -62,7 +62,7 @@ export const getFilterFacilitiesTypes = async (
     const facilitiesTypes = await db.facilitiesType.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -85,7 +85,7 @@ export const getFacilitiesTypeByFields = async (fields: {
     const facilitiesType = await db.facilitiesType.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: fields,
@@ -126,7 +126,7 @@ export const getCountFacilitiestypes = async (
     const count = await db.facilitiesType.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

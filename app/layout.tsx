@@ -1,10 +1,10 @@
 import { StoreProvider } from "@/app/StoreProvider";
 import { auth } from "@/auth";
 import "@/css/style.css";
-import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import { inter } from "@/fonts/fonts";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +20,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-
   return (
     <SessionProvider session={session}>
       <StoreProvider>

@@ -12,11 +12,11 @@ export const getRoomById = async (id: string) => {
     const room = await db.room.findUnique({
       where: { id },
       include: {
-        branch: true,
-        roomType: true,
+        Branch: true,
+        RoomType: true,
         Services: {
           include: {
-            service: true,
+            Service: true,
           },
         },
         Student: true,
@@ -49,11 +49,11 @@ export const getRoomsAllHaveStudents = async (type?: string) => {
         },
 
         include: {
-          branch: true,
-          roomType: true,
+          Branch: true,
+          RoomType: true,
           Services: {
             include: {
-              service: true,
+              Service: true,
             },
           },
           Student: true,
@@ -140,8 +140,8 @@ export const getFilterRooms = async (
         AND: search as Array<any>,
       },
       include: {
-        branch: true,
-        roomType: true,
+        Branch: true,
+        RoomType: true,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -162,8 +162,8 @@ export const getRoomsByFields = async (
         branchId,
       },
       include: {
-        branch: true,
-        roomType: true,
+        Branch: true,
+        RoomType: true,
         Services: true,
         Student: true,
         Register: true,

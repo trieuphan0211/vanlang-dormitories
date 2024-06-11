@@ -165,7 +165,7 @@ export const AddNewRegister = ({
                     .filter((item) => item.floor === index + 1)
                     .map((item, key) => {
                       const roomCurrent =
-                        (item?.roomType?.members || 0) -
+                        (item?.RoomType?.members || 0) -
                         (item?.Student?.length || 0) -
                         (item?.Register?.filter((e) => e.status === 0).length ||
                           0);

@@ -31,7 +31,7 @@ export const getStudentFromEmail = async (email: string) => {
   if (student) {
     return student;
   }
-  return { error: "An error occurred!" };
+  return [];
 };
 export const getStudentsAll = async () => {
   try {

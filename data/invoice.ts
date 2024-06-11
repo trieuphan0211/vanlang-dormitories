@@ -16,10 +16,10 @@ export const getIvoiceById = async (id: string) => {
         id,
       },
       include: {
-        room: {
+        Room: {
           include: {
-            branch: true,
-            roomType: true,
+            Branch: true,
+            RoomType: true,
           },
         },
       },
@@ -124,6 +124,7 @@ export const getFilterInvoices = async (
           },
         },
       });
+
     status &&
       search.push({
         status: {
@@ -138,15 +139,16 @@ export const getFilterInvoices = async (
       ],
       where: {
         AND: search as Array<any>,
+
         createDate: {
           gte: startDate,
           lte: endDate,
         },
       },
       include: {
-        room: {
+        Room: {
           include: {
-            branch: true,
+            Branch: true,
           },
         },
         Student: true,
@@ -154,6 +156,7 @@ export const getFilterInvoices = async (
       skip: (currentPage - 1) * entries,
       take: entries,
     });
+    console.log(invoices);
     return invoices;
   } catch (e) {
     console.error(e);

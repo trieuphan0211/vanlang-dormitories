@@ -8,10 +8,10 @@ export const getRegisterById = async (id: string) => {
         id,
       },
       include: {
-        student: true,
-        room: {
+        Student: true,
+        Room: {
           include: {
-            branch: true,
+            Branch: true,
           },
         },
       },
@@ -113,10 +113,10 @@ export const getFilterRegister = async (
         AND: search as Array<any>,
       },
       include: {
-        student: true,
-        room: {
+        Student: true,
+        Room: {
           include: {
-            branch: true,
+            Branch: true,
           },
         },
       },

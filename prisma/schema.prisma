@@ -84,22 +84,49 @@ model Student {
   permanentResidence String?
   familiInfo         String?
   contactinfo        String?
+  point              Int?       @default(10)
   studentVerified    Boolean    @default(true)
-  createDate         DateTime   @default(now())
   Register           Register[]
-  room               Room?      @relation(fields: [roomId], references: [id])
+  Room               Room?      @relation(fields: [roomId], references: [id])
   Violate            Violate[]
   InOut              InOut[]
   Invoice            Invoice[]
+  updateDate         DateTime   @updatedAt
+  createDate         DateTime   @default(now())
+}
+
+// Violate Dormitory
+model ViolateType {
+  id          String    @id @default(cuid())
+  name        String
+  code        String    @unique
+  point       Int
+  allow       Boolean   @default(false) // true: cho phép lập hóa đơn, false: không cho phép
+  description String?
+  Violate     Violate[]
+  updateDate  DateTime  @updatedAt
+  createDate  DateTime  @default(now())
+}
+
+enum StatusViolate {
+  CREATED // Mới tạo
+  INPROGRESS // Đang xử lý
+  FINISHED // Đã xử lý
+  CANCEL // Hủy
 }
 
 model Violate {
-  id          String   @id @default(cuid())
-  name        String
-  studentId   String?
-  description String
-  Student     Student? @relation(fields: [studentId], references: [id])
-  createDate  DateTime @default(now())
+  id            String        @id @default(cuid())
+  name          String
+  studentId     String?
+  typeViolateId String?
+  status        StatusViolate @default(CREATED)
+  description   String
+  metaData      String?
+  TypeViolate   ViolateType?  @relation(fields: [typeViolateId], references: [id])
+  Student       Student?      @relation(fields: [studentId], references: [id])
+  updateDate    DateTime      @updatedAt
+  createDate    DateTime      @default(now())
 }
 
 enum StatusInOut {
@@ -114,6 +141,7 @@ model InOut {
   studentId  String
   status     StatusInOut
   Student    Student     @relation(fields: [studentId], references: [id])
+  updateDate DateTime    @updatedAt
   createDate DateTime    @default(now())
 }
 
@@ -124,9 +152,10 @@ model Register {
   roomId           String
   registerdeadline Float
   status           Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy
+  Student          Student  @relation(fields: [studentEmail], references: [email])
+  Room             Room     @relation(fields: [roomId], references: [id])
+  updateDate       DateTime @updatedAt
   createDate       DateTime @default(now())
-  student          Student  @relation(fields: [studentEmail], references: [email])
-  room             Room     @relation(fields: [roomId], references: [id])
 }
 
 model Invoice {
@@ -138,7 +167,7 @@ model Invoice {
   total        Int
   detail       String
   status       Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy
-  room         Room     @relation(fields: [roomId], references: [id])
+  Room         Room     @relation(fields: [roomId], references: [id])
   Student      Student  @relation(fields: [studentId], references: [id])
   updateDate   DateTime @updatedAt
   createDate   DateTime @default(now())
@@ -152,9 +181,10 @@ model Branch {
   address     String
   floorNumber Int
   description String?
-  createDate  DateTime     @default(now())
-  facilities  Facilities[]
+  Facilities  Facilities[]
   Room        Room[]
+  updateDate  DateTime     @updatedAt
+  createDate  DateTime     @default(now())
 }
 
 model Services {
@@ -164,8 +194,9 @@ model Services {
   cost        Int
   allow       Boolean         @default(false) // true: cho phép nhập đơn vị, false: không cho phép
   unit        String
-  createDate  DateTime        @default(now())
   Rooms       ServiceOnRoom[]
+  updateDate  DateTime        @updatedAt
+  createDate  DateTime        @default(now())
 
   @@map("services")
 }
@@ -177,14 +208,15 @@ model Room {
   branchId     String
   roomTypeCode String
   floor        Int
-  createDate   DateTime        @default(now())
-  branch       Branch          @relation(fields: [branchId], references: [id])
-  roomType     RoomType        @relation(fields: [roomTypeCode], references: [code])
+  Branch       Branch          @relation(fields: [branchId], references: [id])
+  RoomType     RoomType        @relation(fields: [roomTypeCode], references: [code])
   Facilities   Facilities[]
   Student      Student[]
   Services     ServiceOnRoom[]
   Invoice      Invoice[]
   Register     Register[]
+  updateDate   DateTime        @updatedAt
+  createDate   DateTime        @default(now())
 
   @@map("room")
 }
@@ -194,19 +226,21 @@ model RoomType {
   name        String
   members     Int
   description String?
-  createDate  DateTime @default(now())
   code        String   @unique
   cost        Int
   Room        Room[]
+  updateDate  DateTime @updatedAt
+  createDate  DateTime @default(now())
 }
 
 model FacilitiesType {
   id          String       @id @default(cuid())
   name        String
   description String?
-  createDate  DateTime     @default(now())
   code        String       @unique
-  facilities  Facilities[]
+  Facilities  Facilities[]
+  updateDate  DateTime     @updatedAt
+  createDate  DateTime     @default(now())
 }
 
 enum StatusFacilities {
@@ -225,12 +259,13 @@ model Facilities {
   branchId           String?
   code               String           @unique
   roomId             String?
-  branch             Branch?          @relation(fields: [branchId], references: [id])
-  facilitiesType     FacilitiesType   @relation(fields: [facilitiesTypeCode], references: [code], onDelete: Cascade)
-  createDate         DateTime         @default(now())
   maintenanceId      String?
-  maintenance        Maintenance?     @relation(fields: [maintenanceId], references: [id])
-  room               Room?            @relation(fields: [roomId], references: [id])
+  Branch             Branch?          @relation(fields: [branchId], references: [id])
+  FacilitiesType     FacilitiesType   @relation(fields: [facilitiesTypeCode], references: [code], onDelete: Cascade)
+  Maintenance        Maintenance?     @relation(fields: [maintenanceId], references: [id])
+  Room               Room?            @relation(fields: [roomId], references: [id])
+  updateDate         DateTime         @updatedAt
+  createDate         DateTime         @default(now())
 }
 
 // Maintenance
@@ -246,8 +281,9 @@ model Maintenance {
   mantainanceName String
   startDate       DateTime
   description     String?
-  facilities      Facilities[]
+  Facilities      Facilities[]
   status          StatusMaintenance @default(INPROGRESS)
+  updateDate      DateTime          @updatedAt
   createDate      DateTime          @default(now())
 }
 
@@ -255,8 +291,9 @@ model Maintenance {
 model ServiceOnRoom {
   serviceId  String // relation scalar field (used in the `@relation` attribute above)
   roomId     String
-  service    Services @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  Service    Services @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  Room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  updateDate DateTime @updatedAt
   createDate DateTime @default(now())
 
   @@id([serviceId, roomId])

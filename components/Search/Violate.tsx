@@ -1,7 +1,7 @@
 "use client";
-import { Button, FormControl, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export const Violate = ({

@@ -57,7 +57,7 @@ export const RegisterDetailForm = ({
     console.log(value);
     startTransition(() => {
       updateStudentInRoomById(
-        registers.student.id,
+        registers.Student.id,
         value.roomId,
         registers.id,
       ).then((res) => {
@@ -110,7 +110,7 @@ export const RegisterDetailForm = ({
       {open && (
         <div className="rounded-xl border border-[rgba(0,0,0,0.3)] p-3">
           <StudentDetailForm
-            student={registers.student}
+            student={registers.Student}
             user={user}
             type="detail"
             removeButton={true}

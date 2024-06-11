@@ -11,7 +11,7 @@ export const getMaintenancesById = async (id: string) => {
   try {
     const maintenances = await db.maintenance.findUnique({
       where: { id: id },
-      include: { facilities: true },
+      include: { Facilities: true },
     });
     return maintenances;
   } catch (e) {

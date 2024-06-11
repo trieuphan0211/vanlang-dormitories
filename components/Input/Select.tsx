@@ -9,6 +9,7 @@ import {
 import { Box, Chip, OutlinedInput } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ViolateType } from "@prisma/client";
 import clsx from "clsx";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
@@ -31,6 +32,7 @@ export const FormSelect = ({
   years,
   defaultValue,
   students,
+  violateType,
   disabled,
   size,
 }: {
@@ -51,6 +53,7 @@ export const FormSelect = ({
   number?: number;
   defaultValue?: string;
   students?: STUDENT[];
+  violateType?: ViolateType[];
   disabled?: boolean;
   size?: "small" | "medium";
 }) => {
@@ -92,6 +95,13 @@ export const FormSelect = ({
               roomTypes.map((roomType, key) => (
                 <MenuItem key={key} value={roomType.code}>
                   {roomType.name}
+                </MenuItem>
+              ))}
+
+            {violateType &&
+              violateType.map((violateType, key) => (
+                <MenuItem key={key} value={violateType.code}>
+                  {violateType.name + " - " + violateType.code}
                 </MenuItem>
               ))}
             {registerStatus &&
@@ -142,7 +152,7 @@ export const FormSelect = ({
             {rooms &&
               rooms.map((room, key) => (
                 <MenuItem key={key} value={room.id}>
-                  {room?.roomType?.name} - {room.code}
+                  {room?.RoomType?.name} - {room.code}
                 </MenuItem>
               ))}
             {years &&

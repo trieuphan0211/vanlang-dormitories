@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { alertSeletor } from "@/lib/features/alert/alert-selector";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { checkKeyIn, checkKeyOut } from "@/lib/generateKeyInOut";
-import { STUDENT } from "@/types";
+import { Student } from "@prisma/client";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
-export const CheckIn = ({ student }: { student: STUDENT }) => {
+export const CheckIn = ({ student }: { student: Student }) => {
   const [qr, setQr] = useState<string>("");
   const router = useRouter();
   const dispatch = useAppDispatch();

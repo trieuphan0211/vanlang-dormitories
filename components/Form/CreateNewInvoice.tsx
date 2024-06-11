@@ -41,11 +41,11 @@ export const CreateNewInvoice = ({
   useEffect(() => {
     room.map((room, roomKey) => {
       setValue(`detail.${roomKey}.roomId`, room.id);
-      room?.Services?.filter((e) => e.service.allow === true).map(
+      room?.Services?.filter((e) => e.Service.allow === true).map(
         (service, serviceKey) => {
           setValue(
             `detail.${roomKey}.service.${serviceKey}.serviceId`,
-            service.service.id,
+            service.Service.id,
           );
         },
       );
@@ -136,18 +136,18 @@ export const CreateNewInvoice = ({
       {room.map((room, roomKey) => (
         <div key={roomKey} className="mb-2 rounded-2xl border p-5">
           <h4 className="mb-5 text-center font-semibold">
-            Phòng: {room.code} - {room?.roomType?.name} - {room.branch.name}
+            Phòng: {room.code} - {room?.RoomType?.name} - {room.Branch.name}
           </h4>
           <div className="grid grid-cols-2 gap-5">
             {room?.Services &&
-              room?.Services.filter((e) => e.service.allow === true).map(
+              room?.Services.filter((e) => e.Service.allow === true).map(
                 (service, serviceKey) => (
                   <div className="mb-2" key={serviceKey}>
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
                       htmlFor="branchName"
                     >
-                      {service.service.name}
+                      {service.Service.name}
                     </label>
                     <div className="flex items-center gap-1">
                       <div className="w-full">
@@ -168,7 +168,7 @@ export const CreateNewInvoice = ({
                           }
                         />
                       </div>
-                      {service.service.unit}
+                      {service.Service.unit}
                     </div>
                   </div>
                 ),

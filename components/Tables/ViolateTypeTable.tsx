@@ -1,32 +1,22 @@
 "use client";
-import { removeRoomType } from "@/actions/roomType";
+import { DialogButton } from "@/components/Button";
+import { RemoveItemDialog } from "@/components/Dialog/RemoveItem";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
-import { ROOMTYPE, SERVICES } from "@/types";
-import { useState, useTransition } from "react";
-import { AddNewRoomType } from "../Form/AddNewRoomType";
-import { useRouter } from "next/navigation";
-import { FaRegEdit } from "react-icons/fa";
-import { ROOM } from "@/types";
-import { AddNewRoom } from "@/components/Form/AddNewRoom";
-import { BRANCH } from "@/types";
-import { DialogButton } from "../Button";
 import { IconButton, Menu, MenuItem } from "@mui/material";
+import { ViolateType } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { FaRegEdit } from "react-icons/fa";
 import { MdMoreVert } from "react-icons/md";
-import { RemoveItemDialog } from "../Dialog/RemoveItem";
+import { AddNewViolateType } from "../Form/AddNewViolateType";
 
-export const RoomTable = ({
-  rooms,
+export const ViolateTypeTable = ({
+  violateTypes,
   count,
-  branchs,
-  roomTypes,
-  services,
 }: {
-  rooms: ROOM[];
+  violateTypes: ViolateType[];
   count: number;
-  branchs: BRANCH[];
-  roomTypes: ROOMTYPE[];
-  services: SERVICES[];
 }) => {
   // state for add model
   const [open, setOpen] = useState(false);
@@ -35,15 +25,14 @@ export const RoomTable = ({
   // hook to handle about route
   const router = useRouter();
   // handle open menu action
-  //
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // state open remove dialog
   const [openRemove, setOpenRemove] = useState<Boolean>(false);
-  // state to get roomId when showing action menu
-  const [roomId, setRoomId] = useState<string>("");
-  //Handle open action menu
+  // state to get branchid when showing action menu
+  const [violateTypeId, setViolateTypeId] = useState<string>("");
+  //Handle set position action menu
   const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
-    setRoomId(id);
+    setViolateTypeId(id);
     setAnchorEl(event.currentTarget);
   };
   // Handle close action menu
@@ -53,15 +42,15 @@ export const RoomTable = ({
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3">
-        <SearchTable placeholder="Tìm kiếm mã phòng ..." type="room" />
+        <SearchTable
+          placeholder="Tìm kiếm tên loại vi phạm ..."
+          type="violate"
+        />
         <DialogButton
           open={open}
           setOpen={setOpen}
           childrens={
-            <AddNewRoom
-              branchs={branchs}
-              roomTypes={roomTypes}
-              services={services}
+            <AddNewViolateType
               isPending={isPending}
               startTransition={startTransition}
               setOpen={setOpen}
@@ -77,16 +66,13 @@ export const RoomTable = ({
                 #
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Mã phòng
+                Tên loại vi phạm
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Loại phòng
+                Mã loại vi phạm
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Chi nhánh
-              </th>
-              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Tầng
+                Điểm vi phạm
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
@@ -94,42 +80,46 @@ export const RoomTable = ({
             </tr>
           </thead>
           <tbody>
-            {rooms.map((room, key) => (
+            {violateTypes.map((violateType, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{key + 1}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{room.code}</p>
+                  <p className="text-black dark:text-white">
+                    {violateType.name}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {violateType.code}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {violateType.point}
+                  </p>
                 </td>
 
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {room?.RoomType?.code + " - " + room?.RoomType?.name}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {room.Branch.name}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{room.floor}</p>
-                </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div>
                     <IconButton
                       aria-label="more"
                       id={`menu-button${key}`}
-                      // aria-controls={openAction ? `long-menu${key}` : undefined}
+                      // aria-controls={openAction ? "menu-menu" : undefined}
                       // aria-expanded={openAction ? "true" : undefined}
                       // aria-haspopup="true"
-                      onClick={(e) => handleClick(e, room.id)}
+                      onClick={(e) => handleClick(e, violateType.id)}
                     >
                       <MdMoreVert />
                     </IconButton>
                     <Menu
-                      id={`long-menu${key}`}
+                      id={`menu-menu${key}`}
+                      MenuListProps={
+                        {
+                          // "aria-labelledby": `menu-button${key}`,
+                        }
+                      }
                       anchorEl={anchorEl}
                       open={anchorEl?.id === `menu-button${key}`}
                       onClose={handleClose}
@@ -152,7 +142,9 @@ export const RoomTable = ({
                           className="flex w-full items-center gap-3 rounded-xl text-green-600 focus:outline-none"
                           disabled={isPending}
                           onClick={() => {
-                            router.push(`/admin/room/detail/${roomId}`);
+                            router.push(
+                              `/admin/violate-type/detail/${violateTypeId}`,
+                            );
                           }}
                         >
                           <svg
@@ -182,7 +174,7 @@ export const RoomTable = ({
                           className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none"
                           disabled={isPending}
                           onClick={() => {
-                            router.push(`/admin/room/${roomId}`);
+                            router.push(`/admin/violate-type/${violateTypeId}`);
                           }}
                         >
                           <FaRegEdit />
@@ -231,14 +223,14 @@ export const RoomTable = ({
           </tbody>
         </table>
       </div>
-      {rooms.length > 0 && <Pagination count={count} />}
+      {violateTypes.length > 0 && <Pagination count={count} />}
       {openRemove && (
         <RemoveItemDialog
           isPending={isPending}
           startTransition={startTransition}
-          roomId={roomId}
+          violateTypeId={violateTypeId}
           setState={setOpenRemove}
-          title={"Bạn có chắc chắn muốn xóa phòng này không?"}
+          title={"Bạn có chắc chắn muốn xóa loại vi phạm này không?"}
         />
       )}
     </div>
