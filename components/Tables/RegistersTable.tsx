@@ -9,6 +9,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 import { MdMoreVert } from "react-icons/md";
 import { RemoveItemDialog } from "../Dialog/RemoveItem";
+import clsx from "clsx";
 
 export const RegistersTable = ({
   registers,
@@ -99,7 +100,7 @@ export const RegistersTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {register.room?.code || "Chưa có phòng"}
+                    {register.Room?.code || "Chưa có phòng"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -113,7 +114,16 @@ export const RegistersTable = ({
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
+                  <p
+                    className={clsx(
+                      "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
+                      {
+                        "bg-success text-success": register.status === 1,
+                        "bg-graydark text-graydark": register.status === 0,
+                        "bg-red text-red": register.status === 2,
+                      },
+                    )}
+                  >
                     {register.status === 0 && "Đang chờ"}
                     {register.status === 1 && "Đã duyệt"}
                     {register.status === 2 && "Đã hủy"}
@@ -239,7 +249,7 @@ export const RegistersTable = ({
                                 fill=""
                               />
                             </svg>
-                            <span className="text-black">Xóa</span>
+                            <span className="text-black">Hủy</span>
                           </button>
                         </MenuItem>
                       )}
@@ -258,7 +268,7 @@ export const RegistersTable = ({
           startTransition={startTransition}
           registerId={registerId}
           setState={setOpenRemove}
-          title={"Bạn có chắc chắn muốn xóa đăng ký này không?"}
+          title={"Bạn có chắc chắn muốn hủy đăng ký này không?"}
         />
       )}
     </div>

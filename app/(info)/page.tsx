@@ -11,7 +11,7 @@ import { Footer } from "@/components/Footer/Footer";
 export default async function Home() {
   return (
     <main className="absolute left-0 right-0 top-0 min-h-screen w-screen overflow-hidden">
-      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpg')] bg-cover bg-fixed "></div>
+      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpeg')] bg-cover bg-fixed "></div>
       <div className="mt-[1000px] flex items-center justify-center gap-20 p-10">
         <iframe
           className="aspect-video h-[450px]  rounded-2xl"

@@ -32,7 +32,7 @@ export const InvoiceDetailForm = ({
           isPending={isPending}
           register={{}}
           disabled={true}
-          value={invoice.Room.code + " - " + invoice.Room?.RoomType?.name}
+          value={invoice?.Room?.code + " - " + invoice.Room?.RoomType?.name}
         />
       </div>
       <div className="mb-5.5">
@@ -48,7 +48,7 @@ export const InvoiceDetailForm = ({
           isPending={isPending}
           register={{}}
           disabled={true}
-          value={invoice.Room.Branch.name}
+          value={invoice?.Room?.Branch?.name}
         />
       </div>
       <div className="mb-5.5">

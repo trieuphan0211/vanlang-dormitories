@@ -1,5 +1,7 @@
 "use client";
 import { changeStatusInvoiceById } from "@/actions/invoice";
+import { removeRoomOfStudent } from "@/actions/student";
+import { changeStatusViolateById } from "@/actions/violate";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { Dialog, DialogTitle } from "@mui/material";
@@ -11,14 +13,20 @@ export const CheckInvoice = ({
   isPending,
   title,
   invoiceId,
+  violateId,
+  studentId,
   startTransition,
   setState,
+  type,
 }: {
   isPending: boolean;
   title: string;
-  invoiceId: string;
+  invoiceId?: string;
+  violateId?: string;
+  studentId?: string;
   startTransition: Function;
   setState: Function;
+  type?: string;
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -27,46 +35,103 @@ export const CheckInvoice = ({
   };
   const handleComfirm = () => {
     startTransition(() => {
-      changeStatusInvoiceById(invoiceId).then((res) => {
-        if (res.success) {
-          // Refesh data
-          router.refresh();
-          setState(false);
-          // Show alert
+      if (invoiceId) {
+        changeStatusInvoiceById(invoiceId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setState(false);
+            // Show alert
 
-          dispatch(
-            alertManagerActions.setAlert({
-              message: {
-                type: "success",
-                content: "Đã xác nhận hóa đơn đã thanh toán!",
-              },
-            }),
-          );
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Đã xác nhận hóa đơn đã thanh toán!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Đã xảy ra lỗi, vui lòng thử lại!",
+                },
+              }),
+            );
+          }
+        });
+      }
+      if (violateId) {
+        changeStatusViolateById(violateId).then((res) => {
+          if (res.success) {
+            // Refesh data
+            router.refresh();
+            setState(false);
+            // Show alert
+
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Đã xác nhận vi phạm hoàn thành!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Đã xảy ra lỗi, vui lòng thử lại!",
+                },
+              }),
+            );
+          }
+        });
+      }
+      if (studentId) {
+        switch (type) {
+          case "removeRoom":
+            removeRoomOfStudent(studentId).then((res) => {
+              if (res.success) {
+                // Refesh data
+                router.refresh();
+                setState(false);
+                // Show alert
+                dispatch(
+                  alertManagerActions.setAlert({
+                    message: {
+                      type: "success",
+                      content: "Đã xác nhận sinh viên rời phòng!",
+                    },
+                  }),
+                );
+              }
+              if (res.error) {
+                router.refresh();
+                dispatch(
+                  alertManagerActions.setAlert({
+                    message: {
+                      type: "error",
+                      content: "Đã xảy ra lỗi, vui lòng thử lại!",
+                    },
+                  }),
+                );
+              }
+            });
+            break;
         }
-        if (res.error) {
-          router.refresh();
-          dispatch(
-            alertManagerActions.setAlert({
-              message: {
-                type: "error",
-                content: "Xóa chi nhánh thất bại!",
-              },
-            }),
-          );
-        }
-      });
+      }
     });
   };
   return (
     <div className="w-full">
-      {/* <button
-        className="rounded-xl p-2 text-blue-600 shadow-14 hover:bg-gray-3 focus:outline-none"
-        onClick={() => setOpen(true)}
-        disabled={isPending}
-      >
-        <FaCheck />
-      </button>
-      {open && ( */}
       <Dialog onClose={handleCloseModal} open={true}>
         <div className="fixed left-[50%] top-[50%]  z-50 max-h-[85vh]  max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
           <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
@@ -89,7 +154,8 @@ export const CheckInvoice = ({
             </button>
             <button
               onClick={handleComfirm}
-              className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-rose-100 px-[15px] font-medium leading-none text-rose-600 outline-none hover:bg-rose-200 focus:shadow-[0_0_0_2px] focus:shadow-rose-200"
+              disabled={isPending}
+              className="disabled:bg-slate- inline-flex h-[35px] items-center justify-center rounded-[4px] bg-rose-100 px-[15px] font-medium leading-none text-rose-600 outline-none hover:bg-rose-200 focus:shadow-[0_0_0_2px] focus:shadow-rose-200"
             >
               Xác nhận
             </button>

@@ -168,9 +168,9 @@ export const FacilityDetailForm = ({
             errors={errors.code}
             isPending={isPending}
             value={
-              facilities.facilitiesType?.code +
+              facilities.FacilitiesType?.code +
               " - " +
-              facilities.facilitiesType?.name
+              facilities.FacilitiesType?.name
             }
             register={register("facilitiesTypeCode")}
             disabled={true}

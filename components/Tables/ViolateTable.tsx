@@ -10,6 +10,9 @@ import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdMoreVert } from "react-icons/md";
 import { AddNewViolate } from "../Form/AddNewViolate";
+import clsx from "clsx";
+import { FaCheck } from "react-icons/fa6";
+import { CheckInvoice } from "../Dialog/CheckInvoice";
 
 export const ViolateTable = ({
   violates,
@@ -28,6 +31,7 @@ export const ViolateTable = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // state open remove dialog
   const [openRemove, setOpenRemove] = useState<Boolean>(false);
+  const [openCheck, setOpenCheck] = useState<Boolean>(false);
   // state to get branchid when showing action menu
   const [violateId, setViolateId] = useState<string>("");
   //Handle set position action menu
@@ -39,6 +43,7 @@ export const ViolateTable = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3">
@@ -70,10 +75,10 @@ export const ViolateTable = ({
                 Họ tên sinh viên vi phạm
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Mã sinh viên
+                Loại vi phạm
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Email
+                Trạng Thái
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
@@ -92,22 +97,33 @@ export const ViolateTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {violate?.Student?.fullName || "Không có thông tin"}
+                    {violate.Student?.fullName || "Không có thông tin"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {" "}
-                    {violate?.Student?.studentCode || "Không có thông tin"}
+                    {violate.TypeViolate?.name || "Không có thông tin"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {" "}
-                    {violate?.Student?.email || "Không có thông tin"}
+                  <p
+                    className={clsx(
+                      "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
+                      {
+                        "bg-success text-success":
+                          violate?.status === "FINISHED",
+                        "bg-warning text-warning":
+                          violate?.status === "INPROGRESS",
+                        "bg-danger text-danger": violate?.status === "CREATED",
+                      },
+                    )}
+                  >
+                    {violate?.status === "CREATED" && "Đang chờ"}
+                    {violate?.status === "INPROGRESS" && "Đang xử lý"}
+                    {violate?.status === "FINISHED" && "Hoàn thành"}
                   </p>
                 </td>
-
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div>
                     <IconButton
@@ -120,6 +136,7 @@ export const ViolateTable = ({
                     >
                       <MdMoreVert />
                     </IconButton>
+
                     <Menu
                       id={`menu-menu${key}`}
                       MenuListProps={
@@ -144,6 +161,20 @@ export const ViolateTable = ({
                         },
                       }}
                     >
+                      {violate.status !== "FINISHED" && (
+                        <MenuItem
+                          disabled={isPending}
+                          onClick={() => {
+                            handleClose();
+                            setOpenCheck(true);
+                          }}
+                        >
+                          <button className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none">
+                            <FaCheck className="text-blue-600" />
+                            <span className="text-black">Xác nhận</span>
+                          </button>
+                        </MenuItem>
+                      )}
                       <MenuItem onClick={handleClose}>
                         <button
                           className="flex w-full items-center gap-3 rounded-xl text-green-600 focus:outline-none"
@@ -174,18 +205,20 @@ export const ViolateTable = ({
                           </span>
                         </button>
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <button
-                          className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none"
-                          disabled={isPending}
-                          onClick={() => {
-                            router.push(`/admin/violate/${violateId}`);
-                          }}
-                        >
-                          <FaRegEdit />
-                          <span className="text-black">Chỉnh sửa</span>
-                        </button>
-                      </MenuItem>{" "}
+                      {violate.status !== "FINISHED" && (
+                        <MenuItem onClick={handleClose}>
+                          <button
+                            className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none"
+                            disabled={isPending}
+                            onClick={() => {
+                              router.push(`/admin/violate/${violateId}`);
+                            }}
+                          >
+                            <FaRegEdit />
+                            <span className="text-black">Chỉnh sửa</span>
+                          </button>
+                        </MenuItem>
+                      )}
                       <MenuItem onClick={handleClose}>
                         <button
                           className="flex w-full items-center justify-start gap-3 rounded-xl text-rose-600 focus:outline-none"
@@ -236,6 +269,17 @@ export const ViolateTable = ({
           violateId={violateId}
           setState={setOpenRemove}
           title={"Bạn có chắc chắn muốn xóa vi phạm này không?"}
+        />
+      )}
+      {openCheck && (
+        <CheckInvoice
+          title={
+            "Bạn có chắc chắn muốn xác nhận hoàn thành vi phạm này không ?"
+          }
+          startTransition={startTransition}
+          isPending={isPending}
+          violateId={violateId}
+          setState={setOpenCheck}
         />
       )}
     </div>

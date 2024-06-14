@@ -94,7 +94,7 @@ export const GenerateQr = () => {
                 <p className="font-semibold text-black">Tên: {item.name}</p>
                 <p className="font-semibold text-black">Mã: {item.code}</p>
                 <p className="font-semibold text-black">
-                  Loại: {item.facilitiesType?.name}
+                  Loại: {item.FacilitiesType?.name}
                 </p>
               </div>
             </div>

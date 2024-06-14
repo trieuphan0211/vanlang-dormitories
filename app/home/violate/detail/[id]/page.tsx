@@ -28,13 +28,7 @@ export default async function DetailPage({
           </h3>
         </div>
         <div className="p-7">
-          {violate && (
-            <ViolateDetailForm
-              violate={violate}
-              students={students}
-              type="detail"
-            />
-          )}
+          {violate && <ViolateDetailForm violate={violate} type="detail" />}
         </div>
       </div>
     </div>

@@ -112,21 +112,22 @@ enum StatusViolate {
   CREATED // Mới tạo
   INPROGRESS // Đang xử lý
   FINISHED // Đã xử lý
-  CANCEL // Hủy
 }
 
 model Violate {
-  id            String        @id @default(cuid())
-  name          String
-  studentId     String?
-  typeViolateId String?
-  status        StatusViolate @default(CREATED)
-  description   String
-  metaData      String?
-  TypeViolate   ViolateType?  @relation(fields: [typeViolateId], references: [id])
-  Student       Student?      @relation(fields: [studentId], references: [id])
-  updateDate    DateTime      @updatedAt
-  createDate    DateTime      @default(now())
+  id              String        @id @default(cuid())
+  name            String
+  studentId       String
+  typeViolateCode String
+  status          StatusViolate @default(CREATED)
+  date            String
+  description     String
+  metaData        String?
+  TypeViolate     ViolateType?  @relation(fields: [typeViolateCode], references: [code])
+  Student         Student?      @relation(fields: [studentId], references: [id])
+  Invoice         Invoice[]
+  updateDate      DateTime      @updatedAt
+  createDate      DateTime      @default(now())
 }
 
 enum StatusInOut {
@@ -160,22 +161,24 @@ model Register {
 
 model Invoice {
   id           String   @id @default(cuid())
-  roomId       String
+  roomId       String?
   studentId    String
+  violateId    String?
   invoiceMonth String
   invoiceYear  String
   total        Int
   detail       String
   status       Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy
-  Room         Room     @relation(fields: [roomId], references: [id])
+  Room         Room?    @relation(fields: [roomId], references: [id])
   Student      Student  @relation(fields: [studentId], references: [id])
+  Violate      Violate? @relation(fields: [violateId], references: [id])
   updateDate   DateTime @updatedAt
   createDate   DateTime @default(now())
 }
 
 // Branch Dormitory
 model Branch {
-  id          String       @id @default(cuid())
+  id          String        @id @default(cuid())
   img         String?
   name        String
   address     String
@@ -183,8 +186,9 @@ model Branch {
   description String?
   Facilities  Facilities[]
   Room        Room[]
-  updateDate  DateTime     @updatedAt
-  createDate  DateTime     @default(now())
+  updateDate  DateTime      @updatedAt
+  createDate  DateTime      @default(now())
+  Maintenance Maintenance[]
 }
 
 model Services {
@@ -215,6 +219,7 @@ model Room {
   Services     ServiceOnRoom[]
   Invoice      Invoice[]
   Register     Register[]
+  Maintenance  Maintenance[]
   updateDate   DateTime        @updatedAt
   createDate   DateTime        @default(now())
 
@@ -279,9 +284,12 @@ model Maintenance {
   id              String            @id @default(cuid())
   code            String            @unique
   mantainanceName String
-  startDate       DateTime
-  description     String?
+  branchId        String
+  reason          String?
+  roomId          String?
   Facilities      Facilities[]
+  Room            Room?             @relation(fields: [roomId], references: [id])
+  Branch          Branch            @relation(fields: [branchId], references: [id])
   status          StatusMaintenance @default(INPROGRESS)
   updateDate      DateTime          @updatedAt
   createDate      DateTime          @default(now())

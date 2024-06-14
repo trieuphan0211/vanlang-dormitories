@@ -123,7 +123,7 @@ export const getFilterFacilities = async (
     const facilities = await db.facilities.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -206,7 +206,7 @@ export const getCountFacilities = async (
     const count = await db.facilities.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -248,7 +248,6 @@ export const updateFacilities = async (
     maintenanceId?: string;
   },
 ) => {
-  console.log("fields: ", fields);
   try {
     const facilities = await db.facilities.update({
       where: { id },

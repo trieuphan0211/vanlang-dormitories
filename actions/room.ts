@@ -109,9 +109,10 @@ export const updateRoomById = async (
   }
 };
 export const getRoomByBranchIdAndRoomTypeCode = async (
-  branchId: string,
-  roomTypeCode: string,
+  branchId?: string,
+  roomTypeCode?: string,
+  floor?: number,
 ) => {
-  const rooms = await getRoomsByFields(roomTypeCode, branchId);
+  const rooms = await getRoomsByFields(roomTypeCode, branchId, floor);
   return rooms;
 };

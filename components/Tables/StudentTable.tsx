@@ -8,6 +8,8 @@ import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdMoreVert } from "react-icons/md";
 import { RemoveItemDialog } from "../Dialog/RemoveItem";
+import { IoLogOutOutline } from "react-icons/io5";
+import { CheckInvoice } from "../Dialog/CheckInvoice";
 
 export const StudentTable = ({
   students,
@@ -27,6 +29,7 @@ export const StudentTable = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // state open remove dialog
   const [openRemove, setOpenRemove] = useState<Boolean>(false);
+  const [openCheck, setOpenCheck] = useState<Boolean>(false);
   // state to get serviceId when showing action menu
   const [studentId, setStudentId] = useState<string>("");
   //Handle open action menu
@@ -38,6 +41,7 @@ export const StudentTable = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  console.log(students);
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full gap-3">
@@ -59,18 +63,14 @@ export const StudentTable = ({
               </th>
 
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                Ngày sinh
-              </th>
-              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Giới tính
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Khoa
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                SV Năm
+                Phòng - Chi nhánh
               </th>
-
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
@@ -94,11 +94,6 @@ export const StudentTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {student.brithday || "Chưa cập nhật"}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
                     {student.gender || "Chưa cập nhật"}
                   </p>
                 </td>
@@ -109,7 +104,9 @@ export const StudentTable = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {student.schoolYear || "Chưa cập nhật"}
+                    {student.Room
+                      ? student.Room?.code + " - " + student?.Room?.Branch?.name
+                      : "Chưa có phòng"}
                   </p>
                 </td>
 
@@ -174,6 +171,20 @@ export const StudentTable = ({
                           </span>
                         </button>
                       </MenuItem>
+                      {student.Room && (
+                        <MenuItem
+                          disabled={isPending}
+                          onClick={() => {
+                            handleClose();
+                            setOpenCheck(true);
+                          }}
+                        >
+                          <button className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none">
+                            <IoLogOutOutline className="text-xl text-blue-600" />
+                            <span className="text-black">Rời phòng</span>
+                          </button>
+                        </MenuItem>
+                      )}
                       {/* <MenuItem onClick={handleClose}>
                         <button
                           className="flex w-full items-center gap-3 rounded-xl text-yellow-600 focus:outline-none"
@@ -236,6 +247,16 @@ export const StudentTable = ({
           studentId={studentId}
           setState={setOpenRemove}
           title={"Bạn có chắc chắn muốn xóa thông tin sinh viên này không?"}
+        />
+      )}
+      {openCheck && (
+        <CheckInvoice
+          title={"Bạn có chắc chắn muốn xóa sinh viên khỏi phòng không ?"}
+          startTransition={startTransition}
+          isPending={isPending}
+          studentId={studentId}
+          type="removeRoom"
+          setState={setOpenCheck}
         />
       )}
     </div>

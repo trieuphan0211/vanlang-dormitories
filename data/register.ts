@@ -26,7 +26,7 @@ export const getAllRegister = async () => {
     const register = await db.register.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
     });
@@ -106,7 +106,7 @@ export const getFilterRegister = async (
     const register = await db.register.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -177,7 +177,7 @@ export const getCountRegister = async (
     const register = await db.register.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

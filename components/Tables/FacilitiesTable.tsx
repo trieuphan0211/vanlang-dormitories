@@ -191,14 +191,14 @@ export const FacilitiesTable = ({
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {facility?.branch?.name || "No Branch"}
+                      {facility?.Branch?.name || "Không"}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
                       {facility.facilitiesTypeCode +
                         " - " +
-                        facility?.facilitiesType?.name || "No Facilities Type"}
+                        facility?.FacilitiesType?.name || "No Facilities Type"}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

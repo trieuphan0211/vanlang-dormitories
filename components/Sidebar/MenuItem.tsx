@@ -23,7 +23,6 @@ interface MenuItemListProps {
 
 export const MenuItem = (item: MenuItemProps) => {
   const pathname = usePathname();
-  console.log(item);
   return (
     <Link
       href={item.href}

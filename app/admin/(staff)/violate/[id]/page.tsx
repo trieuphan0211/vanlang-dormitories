@@ -1,9 +1,9 @@
 import { getStudentsAll } from "@/actions/student";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { RoomTypeDetailForm } from "@/components/Form/RoomTypeDetailForm";
 import { ViolateDetailForm } from "@/components/Form/ViolateDetailForm";
 import { getViolateById } from "@/data/violate";
-import { STUDENT, VIOLATE } from "@/types";
+import { STUDENT } from "@/types";
+import { Violate } from "@prisma/client";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default async function DetailPage({
 }: {
   params: { id: string };
 }) {
-  const violate = (await getViolateById(params.id)) as VIOLATE;
+  const violate = (await getViolateById(params.id)) as Violate;
   const students = (await getStudentsAll()) as STUDENT[];
   return (
     <div>
@@ -28,9 +28,7 @@ export default async function DetailPage({
           </h3>
         </div>
         <div className="p-7">
-          {violate && (
-            <ViolateDetailForm violate={violate} students={students} />
-          )}
+          {violate && <ViolateDetailForm violate={violate} />}
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ export const getServicesAll = async () => {
     const services = await db.services.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
     });
@@ -72,7 +72,7 @@ export const getFilterServices = async (
     const services = await db.services.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -95,7 +95,7 @@ export const getServicesByFields = async (fields: {
     const services = await db.services.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: fields,
@@ -143,7 +143,7 @@ export const getCountServices = async (
     const count = await db.services.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

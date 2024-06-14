@@ -34,7 +34,7 @@ export const getAllStudents = async () => {
     const students = await db.student.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -112,12 +112,19 @@ export const getFilterStudents = async (
     const students = await db.student.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
         AND: search as Array<any>,
         studentVerified: true,
+      },
+      include: {
+        Room: {
+          include: {
+            Branch: true,
+          },
+        },
       },
 
       skip: (currentPage - 1) * entries,
@@ -183,7 +190,7 @@ export const getCountStudents = async (
     const count = await db.student.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -207,12 +214,12 @@ export const deleteStudent = async (id: string) => {
     console.error(e);
   }
 };
-export const updateStudentInRoom = async (id: string, roomId: string) => {
+export const updateStudentInRoom = async (id: string, roomId?: string) => {
   try {
     const student = await db.student.update({
       where: { id },
       data: {
-        roomId,
+        roomId: roomId ? roomId : null,
       },
     });
     return student;

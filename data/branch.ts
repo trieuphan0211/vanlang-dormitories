@@ -17,7 +17,7 @@ export const getAllBranchs = async () => {
     const branchs = await db.branch.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
     });
@@ -65,7 +65,7 @@ export const getFilterBranchs = async (
     const branchs = await db.branch.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -90,7 +90,7 @@ export const getBranchByFields = async (fields: {
     const branch = await db.branch.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: fields,
@@ -137,7 +137,7 @@ export const getCountBranchs = async (
     const count = await db.branch.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

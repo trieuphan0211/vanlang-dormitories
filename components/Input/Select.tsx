@@ -88,7 +88,7 @@ export const FormSelect = ({
             {students &&
               students.map((student, key) => (
                 <MenuItem key={key} value={student.id}>
-                  {student.fullName}
+                  {student.fullName} - {student.studentCode}
                 </MenuItem>
               ))}
             {roomTypes &&

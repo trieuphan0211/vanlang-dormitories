@@ -2,6 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { ViolateTable } from "@/components/Tables/ViolateTable";
 import { getCountViolate, getFilterViolate } from "@/data/violate";
 import { VIOLATE } from "@/types";
+import { Violate } from "@prisma/client";
 import { Metadata } from "next";
 import React from "react";
 
@@ -37,6 +38,7 @@ const ViolatePage = async ({
     entries,
   )) as VIOLATE[];
   const count = await getCountViolate(query, studentName, studentCode, email);
+  console.log("Violate: ", count);
   return (
     <div>
       <Breadcrumb pageName="Quản lý vi phạm" />

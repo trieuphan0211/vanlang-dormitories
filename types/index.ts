@@ -1,4 +1,9 @@
-import { StatusInOut, UserRole } from "@prisma/client";
+import {
+  StatusInOut,
+  StatusViolate,
+  UserRole,
+  ViolateType,
+} from "@prisma/client";
 import { StatusFacilities } from "@prisma/client";
 import { StatusMaintenance } from "@prisma/client";
 
@@ -12,15 +17,15 @@ export type BRANCH = {
 };
 export type INVOICE = {
   id: string;
-  roomId: string;
-  studentId: string;
+  roomId?: string;
+  studentId?: string;
   total: number;
   createDate: Date;
   status: number;
   detail: string;
   invoiceMonth: string;
   invoiceYear: string;
-  Room: ROOM;
+  Room?: ROOM;
   Student?: STUDENT;
 };
 export type SERVICES = {
@@ -43,9 +48,16 @@ export type ROOMTYPE = {
 export type VIOLATE = {
   id: string;
   name: string;
-  studentId?: string;
+  studentId: string;
+  typeViolateCode: string;
+  status: StatusViolate;
+  date: string;
   description: string;
+  metaData: string | null;
+  updateDate: Date;
+  createDate: Date;
   Student?: STUDENT;
+  TypeViolate?: ViolateType;
 };
 
 export type ROOM = {
@@ -54,7 +66,7 @@ export type ROOM = {
   floor: number;
   branchId: string;
   roomTypeCode: string;
-  Branch: BRANCH;
+  Branch?: BRANCH;
   RoomType?: ROOMTYPE;
   Services?: Array<any>;
   Student?: Array<any>;
@@ -96,7 +108,7 @@ export type REGISTER = {
   status: number;
   createDate: Date;
   Student: STUDENT;
-  room?: ROOM;
+  Room?: ROOM;
 };
 
 export type USER = {
@@ -124,20 +136,27 @@ export type FACILITIES = {
   maintenanceId?: string;
   branchId?: string;
   code: string;
-  branch?: BRANCH;
+  Branch?: BRANCH;
+  FacilitiesType?: FACILITIESTYPE;
   roomId?: string;
-  facilitiesType?: FACILITIESTYPE;
+  Room?: ROOM;
+  updateDate: Date;
+  createDate: Date;
 };
 
 export type MAINTENNANCES = {
   id: string;
   code: string;
-  startDate: Date;
   mantainanceName: string;
-  description?: string;
+  branchId: string;
+  reason?: string;
+  roomId?: string;
   status: StatusMaintenance;
   createDate: Date;
-  facilities?: FACILITIES[];
+  Facilities?: FACILITIES[];
+  Branch: BRANCH;
+  Room?: ROOM;
+  updateDate: Date;
 };
 export type INOUT = {
   id: string;

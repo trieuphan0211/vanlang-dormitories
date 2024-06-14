@@ -32,8 +32,10 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG AUTH_SECRET
+ENV AUTH_SECRET $NEXTAUTH_SECRET
 # Copy the .env file
-COPY .env .env
+# COPY .env .env
 # Install pnpm
 # RUN npm install -g pnpm
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
@@ -50,15 +52,15 @@ ENV NODE_ENV=production
 # RUN addgroup -g 1001 -S nodejs
 # RUN adduser -S nextjs -u 1001
 
+COPY --from=builder /app/public ./public
 # Copy necessary files from the builder stage
 COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-USER nextjs
 
 EXPOSE 3000
 
 ENV PORT 3000
 
-CMD HOSTNAME=localhost node server.js
+CMD HOSTNAME="0.0.0.0" node server.js

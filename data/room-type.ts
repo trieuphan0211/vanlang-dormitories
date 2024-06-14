@@ -71,7 +71,7 @@ export const getFilterRoomTypes = async (
     const roomTypes = await db.roomType.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -94,7 +94,7 @@ export const getRoomTypeByFields = async (fields: {
     const roomTypes = await db.roomType.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: fields,
@@ -149,7 +149,7 @@ export const getCountRoomtypes = async (
     const count = await db.roomType.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

@@ -205,6 +205,7 @@ export const ViolateSchema = z.object({
   violateTypeCode: z.string().min(1, "Loại vi phạm không được để trống"),
   studentId: z.string().min(1, "Mã sinh viên không được để trống"),
   description: z.optional(z.string()),
+  date: z.string(),
 });
 export const ViolateTypeSchema = z
   .object({
@@ -286,32 +287,20 @@ export const FacilitiesTypeSchema = z.object({
   code: z.optional(z.string()),
 });
 
-export const MaintenanceSchema = z
-  .object({
-    code: z.optional(z.string().min(1, "Mã bảo trì không được để trống")),
-    mantainanceName: z.string().min(1, "Tên bảo trì không được để trống"),
-    description: z.optional(z.string()),
-    listFacilities: z.optional(z.array(z.string())), // Fix: Added empty object as argument
-
-    startDate: z.date(),
-    status: z.enum([
-      StatusMaintenance.CREATED,
-      StatusMaintenance.FINISHED,
-      StatusMaintenance.INPROGRESS,
-    ]),
-  })
-  .refine(
-    (data) => {
-      if (data.startDate === undefined) {
-        return false;
-      }
-      return true;
-    },
-    {
-      message: "Ngày bắt đầu không được để trống",
-      path: ["startDate"],
-    },
-  );
+export const MaintenanceSchema = z.object({
+  code: z.optional(z.string()),
+  mantainanceName: z.string().min(1, "Tên bảo trì không được để trống"),
+  listFacilities: z.array(z.string()), // Fix: Added empty object as argument
+  status: z.enum([
+    StatusMaintenance.CREATED,
+    StatusMaintenance.FINISHED,
+    StatusMaintenance.INPROGRESS,
+  ]),
+  floor: z.optional(z.number()),
+  branchId: z.string().min(1, "Chi nhánh không được để trống"),
+  roomId: z.optional(z.string()),
+  reason: z.optional(z.string()),
+});
 
 export const ServiceSchema = z
   .object({

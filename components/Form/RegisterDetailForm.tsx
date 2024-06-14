@@ -45,8 +45,8 @@ export const RegisterDetailForm = ({
   } = useForm({
     defaultValues: {
       roomId: registers.roomId || "",
-      branchId: registers.room?.branchId || "",
-      roomTypesCode: registers.room?.roomTypeCode || "",
+      branchId: registers.Room?.branchId || "",
+      roomTypesCode: registers.Room?.roomTypeCode || "",
     },
   });
   const onSubmit = (value: {
@@ -117,68 +117,49 @@ export const RegisterDetailForm = ({
           />
         </div>
       )}{" "}
-      <div className="w-full">
-        {/* <label
-          className={clsx(
-            "mb-3 block text-sm font-medium text-black dark:text-white",
-            {
-              "text-red": errors.branchId,
-            },
-          )}
-        >
-          Thời hạn đăng ký
-        </label> */}
-        {/* <FormSelect
-          register={register("year")}
-          isPending={isPending}
-          years={[0.5, 1, 2, 3]}
-          errors={errors?.year}
-          placeholder={"Chọn năm đăng ký"}
-          //   defaultValue={year}
-          disabled={false}
-        /> */}
-      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="my-5.5">
-          <label
-            className={clsx(
-              `mb-3 block text-sm font-medium text-black dark:text-white`,
-            )}
-            htmlFor="emailAddress"
-          >
-            Chi Nhánh
-          </label>
-          <FormSelect
-            name="branchId"
-            control={control}
-            isPending={isPending}
-            branchs={branchs}
-            errors={errors?.branchId}
-            // defaultValue={registers.room?.branchId || ""}
-            defaultValue={branchId || ""}
-            placeholder={"Chọn chi nhánh"}
-            disabled={type === "detail" ? true : null || isPending}
-          />
-        </div>
-        <div className="my-5.5">
-          <label
-            className={clsx(
-              `mb-3 block text-sm font-medium text-black dark:text-white`,
-            )}
-            htmlFor="emailAddress"
-          >
-            Loại phòng
-          </label>
-          <FormSelect
-            name="roomTypesCode"
-            control={control}
-            isPending={isPending}
-            roomTypes={roomTypes}
-            errors={errors?.roomTypesCode}
-            placeholder={"Chọn loại phòng"}
-            defaultValue={roomTypesCode || ""}
-            disabled={type === "detail" ? true : null || isPending}
-          />
+        <div className="flex gap-5">
+          <div className="w-full">
+            <label
+              className={clsx(
+                `mb-3 block text-sm font-medium text-black dark:text-white`,
+              )}
+              htmlFor="emailAddress"
+            >
+              Chi Nhánh
+            </label>
+            <FormSelect
+              name="branchId"
+              control={control}
+              isPending={isPending}
+              branchs={branchs}
+              errors={errors?.branchId}
+              // defaultValue={registers.room?.branchId || ""}
+              defaultValue={branchId || ""}
+              placeholder={"Chọn chi nhánh"}
+              disabled={type === "detail" ? true : null || isPending}
+            />
+          </div>
+          <div className="w-full">
+            <label
+              className={clsx(
+                `mb-3 block text-sm font-medium text-black dark:text-white`,
+              )}
+              htmlFor="emailAddress"
+            >
+              Loại phòng
+            </label>
+            <FormSelect
+              name="roomTypesCode"
+              control={control}
+              isPending={isPending}
+              roomTypes={roomTypes}
+              errors={errors?.roomTypesCode}
+              placeholder={"Chọn loại phòng"}
+              defaultValue={roomTypesCode || ""}
+              disabled={type === "detail" ? true : null || isPending}
+            />
+          </div>
         </div>
         <div className="my-5.5">
           <label

@@ -49,7 +49,6 @@ const DropdownUser = () => {
     const student = (await getStudentFromEmail(
       session.data?.user.email || "",
     )) as unknown as STUDENT;
-    console.log(student);
     setStudent(student);
   };
   useEffect(() => {

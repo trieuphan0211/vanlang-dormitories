@@ -13,12 +13,19 @@ interface Service {
   name: string;
   cost: number;
   unit: string;
+  allow: boolean;
 }
 
 interface RoomType {
   name: string;
   members: number;
   cost: number;
+}
+interface ViolateType {
+  name: string;
+  description?: string;
+  point: number;
+  allow: boolean;
 }
 
 interface FacilitiesType {
@@ -43,36 +50,43 @@ const services: Service[] = [
     name: "Điện",
     cost: 4000,
     unit: "kWh",
+    allow: true,
   },
   {
     name: "Nước",
     cost: 20000,
     unit: "m3",
+    allow: true,
   },
   {
     name: "Internet",
     cost: 100000,
     unit: "tháng",
+    allow: false,
   },
   {
     name: "Vệ sinh",
     cost: 50000,
     unit: "tháng",
+    allow: false,
   },
   {
     name: "Giữ xe",
     cost: 50000,
     unit: "tháng",
+    allow: false,
   },
   {
     name: "Giặt ủi",
     cost: 100000,
     unit: "tháng",
+    allow: false,
   },
   {
     name: "Đồ ăn",
     cost: 200000,
     unit: "tháng",
+    allow: false,
   },
 ];
 
@@ -129,6 +143,50 @@ const facilitiesTypes: FacilitiesType[] = [
     name: "Máy nước lạnh",
   },
 ];
+const violateTypes: ViolateType[] = [
+  {
+    name: "Quá giờ ra vào",
+    point: 1,
+    allow: false,
+    description: "",
+  },
+  {
+    name: "Hút thuốc lá trong khu vực cấm",
+    point: 2,
+    allow: false,
+    description: "",
+  },
+  {
+    name: "Đánh nhau",
+    point: 3,
+    allow: false,
+    description: "",
+  },
+  {
+    name: "Làm ồn",
+    point: 1,
+    allow: false,
+    description: "",
+  },
+  {
+    name: "Vứt rác không đúng nơi quy định",
+    point: 1,
+    allow: false,
+    description: "",
+  },
+  {
+    name: "Làm hỏng cơ sở vật chất",
+    point: 2,
+    allow: true,
+    description: "",
+  },
+  {
+    name: "Trễ hạn nộp tiền phòng",
+    point: 1,
+    allow: false,
+    description: "",
+  },
+];
 //  handle seeding data
 async function seedBranch() {
   try {
@@ -177,12 +235,26 @@ async function seedFacilitiesType() {
   });
   console.log(`Seeded ${data.length} facilities type`);
 }
-
+async function seedViolateType() {
+  const data = violateTypes.map(async (item) => {
+    try {
+      const token = "VT" + crypto.randomInt(1_000, 10_000).toString();
+      const data = await prisma.violateType.createMany({
+        data: { ...item, code: token },
+      });
+      return data;
+    } catch (error) {
+      console.log("Error seeding violate type", error);
+    }
+  });
+  console.log(`Seeded ${data.length} violate type`);
+}
 async function main() {
   await seedBranch();
   await seedService();
   await seedRoomType();
   await seedFacilitiesType();
+  await seedViolateType();
 }
 main()
   .catch((err) => {

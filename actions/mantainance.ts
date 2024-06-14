@@ -21,8 +21,27 @@ export const addManitainance = async (
     return { error: "Invalid Values!" };
   }
   // get value
-  const { listFacilities, mantainanceName, status, description, startDate } =
+  const { listFacilities, mantainanceName, status, branchId, reason, roomId } =
     validateValue.data;
+  // Check Facilities
+  if (listFacilities !== undefined) {
+    // get facilities and if check maintenceId in facility is exist return code
+    const checkFacilities = await Promise.all(
+      listFacilities.map(async (item: string) => {
+        const facilities = (await getFacilitiesById(item)) as FACILITIES;
+        if (facilities.maintenanceId) {
+          return facilities.code;
+        }
+      }),
+    );
+    // check if facilities is in maintenance and return error
+    if (checkFacilities.filter((item) => item !== undefined).length > 0) {
+      return {
+        error: "Facilities is in maintenance!",
+        data: checkFacilities.filter((item) => item !== undefined),
+      };
+    }
+  }
   // generate token
   const token = "MT" + crypto.randomInt(100, 1_000).toString();
   try {
@@ -30,8 +49,9 @@ export const addManitainance = async (
     const res = await createMaintenance({
       code: token,
       mantainanceName,
-      description: description || "",
-      startDate: startDate || new Date(),
+      branchId,
+      reason,
+      roomId: roomId || undefined,
       status,
     });
     // check if maintenance is created
@@ -39,37 +59,18 @@ export const addManitainance = async (
       return { error: "An error occurred!" };
     }
     // check if facilities is in maintenance
-    if (listFacilities !== undefined) {
-      // get facilities and if check maintenceId in facility is exist return code
-      const checkFacilities = await Promise.all(
-        listFacilities.map(async (item: string) => {
-          const facilities = (await getFacilitiesById(item)) as FACILITIES;
-          if (facilities.maintenanceId) {
-            return facilities.code;
-          }
-        }),
-      );
-      // check if facilities is in maintenance and return error
-      if (checkFacilities.filter((item) => item !== undefined).length > 0) {
-        return {
-          error: "Facilities is in maintenance!",
-          data: checkFacilities.filter((item) => item !== undefined),
-        };
-      }
-      const updateFacilitiesforMaintainceId = await Promise.all(
-        listFacilities.map(async (item: string) => {
-          return await updateFacilities(item, {
-            status: "MAINTENANCE",
-            maintenanceId: res?.id,
-          });
-        }),
-      );
-      if (updateFacilitiesforMaintainceId === null) {
-        return { error: "An error occurred!" };
-      }
-      return { success: "Maintenance is created!" };
-    }
 
+    const updateFacilitiesforMaintainceId = await Promise.all(
+      listFacilities.map(async (item: string) => {
+        return await updateFacilities(item, {
+          status: "MAINTENANCE",
+          maintenanceId: res?.id,
+        });
+      }),
+    );
+    if (updateFacilitiesforMaintainceId === null) {
+      return { error: "An error occurred!" };
+    }
     return { success: "Maintenance is created!" };
   } catch (error) {
     console.error(error);
@@ -82,8 +83,8 @@ export const removeMaintenance = async (id: string) => {
   if (maintenance === null) {
     return { error: "Maintenance not found!" };
   }
-  if (maintenance?.facilities !== undefined) {
-    maintenance.facilities.map(async (item) => {
+  if (maintenance?.Facilities !== undefined) {
+    maintenance.Facilities.map(async (item) => {
       if (item.roomId) {
         const response = await updateFacilities(item.id, {
           status: "ACTIVE",
@@ -123,15 +124,40 @@ export const updateMaintenanceById = async (
   if (!validateValue.success) {
     return { error: "Invalid Values!" };
   }
-  const { mantainanceName, status, description } = validateValue.data;
+  const { mantainanceName, status, reason, branchId, roomId, listFacilities } =
+    validateValue.data;
   try {
     const res = await updateMaintenance(id, {
       mantainanceName,
       status,
-      description,
+      reason,
+      branchId,
+      roomId: roomId || undefined,
     });
-    if (res === null) {
+    if (!res?.id) {
       return { error: "An error occurred!" };
+    }
+    if (res.status == "FINISHED" && res.id) {
+      const maintenance = await getMaintenancesById(res.id);
+      maintenance?.Facilities.map(async (item) => {
+        if (item.roomId) {
+          const response = await updateFacilities(item.id, {
+            status: "ACTIVE",
+            maintenanceId: undefined,
+          });
+          if (response === null) {
+            return { error: "An error occurred!" };
+          }
+        } else {
+          const response = await updateFacilities(item.id, {
+            status: "INACTIVE",
+            maintenanceId: undefined,
+          });
+          if (response === null) {
+            return { error: "An error occurred!" };
+          }
+        }
+      });
     }
     return { success: "Maintenance is updated!" };
   } catch (error) {

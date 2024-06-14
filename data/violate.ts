@@ -1,9 +1,13 @@
 import { db } from "@/lib/db";
+import { StatusViolate } from "@prisma/client";
 
 interface VIOLATE {
   name: string;
   studentId: string;
   description: string;
+  metaData: string;
+  date: string;
+  typeViolateCode: string;
 }
 export const getViolateAll = async () => {
   try {
@@ -82,7 +86,7 @@ export const getFilterViolate = async (
     const violate = await db.violate.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -90,6 +94,7 @@ export const getFilterViolate = async (
       },
       include: {
         Student: true,
+        TypeViolate: true,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -107,7 +112,7 @@ export const getViolateByFields = async (fields: {
     const violate = await db.violate.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: fields,
@@ -162,7 +167,7 @@ export const getCountViolate = async (
     const count = await db.violate.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -194,9 +199,12 @@ export const deleteViolate = async (id: string) => {
 export const updateViolate = async (
   id: string,
   fields: {
-    name: string;
-    studentId: string;
-    description: string;
+    name?: string;
+    studentId?: string;
+    description?: string;
+    metaData?: string;
+    typeViolateCode?: string;
+    status?: StatusViolate;
   },
 ) => {
   try {

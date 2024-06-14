@@ -2,6 +2,7 @@ import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
 import * as React from "react";
 import YelpRecentLoginEmail from "@/emails/YelpRecentLoginEmail";
+import AppleReceiptEmail from "@/emails/MdbTemplateInvoice";
 
 export const sendInvoiceEmail = async (
   email: string,
@@ -35,7 +36,8 @@ export const sendInvoiceEmail = async (
   // });
 
   const emailHtml = render(
-    <YelpRecentLoginEmail fullname={fullname} mailBody={mailBody} />,
+    // <YelpRecentLoginEmail fullname={fullname} mailBody={mailBody} />,
+    <AppleReceiptEmail />,
   );
 
   const options = {

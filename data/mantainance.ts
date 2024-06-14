@@ -11,7 +11,7 @@ export const getMaintenancesById = async (id: string) => {
   try {
     const maintenances = await db.maintenance.findUnique({
       where: { id: id },
-      include: { Facilities: true },
+      include: { Facilities: true, Branch: true, Room: true },
     });
     return maintenances;
   } catch (e) {
@@ -28,7 +28,7 @@ export const getFilterMaintenances = async (
     const maintenances = await db.maintenance.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -39,11 +39,15 @@ export const getFilterMaintenances = async (
             },
           },
           {
-            description: {
+            reason: {
               contains: query,
             },
           },
         ],
+      },
+      include: {
+        Branch: true,
+        Facilities: true,
       },
       skip: (currentPage - 1) * entries,
       take: entries,
@@ -58,7 +62,7 @@ export const getCountMaintenances = async (query: string) => {
     const count = await db.maintenance.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -69,7 +73,7 @@ export const getCountMaintenances = async (query: string) => {
             },
           },
           {
-            description: {
+            reason: {
               contains: query,
             },
           },
@@ -85,8 +89,9 @@ export const getCountMaintenances = async (query: string) => {
 export const createMaintenance = async (fields: {
   code: string;
   mantainanceName: string;
-  description?: string;
-  startDate: Date;
+  branchId: string;
+  reason?: string;
+  roomId?: string;
   status: StatusMaintenance;
 }) => {
   try {
@@ -116,8 +121,10 @@ export const updateMaintenance = async (
   id: string,
   fields: {
     mantainanceName: string;
-    description?: string;
+    reason?: string;
     status: StatusMaintenance;
+    branchId: string;
+    roomId?: string;
   },
 ) => {
   try {

@@ -10,6 +10,7 @@ import { IoAdd } from "react-icons/io5";
 import { MdMoreVert } from "react-icons/md";
 import { RemoveItemDialog } from "../Dialog/RemoveItem";
 import { CheckInvoice } from "../Dialog/CheckInvoice";
+import clsx from "clsx";
 
 export const InvoiceTable = ({
   invoices,
@@ -63,11 +64,7 @@ export const InvoiceTable = ({
                 Tên sinh viên
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Phòng
-              </th>
-
-              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Chi nhánh
+                Loại hóa đơn
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Tháng
@@ -97,22 +94,31 @@ export const InvoiceTable = ({
                     {invoice?.Student?.fullName || "Không có"}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.Room.code}
+                    {invoice?.roomId ? "Hóa đơn phòng" : "Hóa đơn vi phạm"}
                   </td>
-                  <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.Room.Branch.name}
-                  </td>
+
                   <td className="px-4 py-4 text-black dark:text-white">
                     {invoice.invoiceMonth + "/" + invoice.invoiceYear}
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.total.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
+                    {invoice.total.toLocaleString("en-US")}
                     VND
                   </td>
                   <td className="px-4 py-4 text-black dark:text-white">
-                    {invoice.status === 1 ? "Đã thanh toán" : "Chưa thanh toán"}
+                    <p
+                      className={clsx(
+                        "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
+                        {
+                          "bg-success text-success": invoice.status === 1,
+
+                          "bg-danger text-danger": invoice.status === 0,
+                        },
+                      )}
+                    >
+                      {invoice.status === 1
+                        ? "Đã thanh toán"
+                        : "Chưa thanh toán"}
+                    </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <div>

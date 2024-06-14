@@ -1,10 +1,11 @@
 "use client";
+import { getBranchsAll } from "@/actions/branch";
 import { getFacilitiesByCode } from "@/actions/facilities";
 import { addManitainance } from "@/actions/mantainance";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { MaintenanceSchema } from "@/schema";
-import { FACILITIES } from "@/types";
+import { BRANCH, FACILITIES, ROOM } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@mui/material";
 import clsx from "clsx";
@@ -14,12 +15,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
 import { ScanQrCode } from "../Dialog/ScanQrCode";
-import DatePickerOne from "../FormElements/DatePicker/DatePickerOne";
-import { Input } from "../Input";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { FormSelect, Input } from "../Input";
+import { getRoomByBranchIdAndRoomTypeCode } from "@/actions/room";
 
 export const AddNewMaintenance = ({
   isPending,
@@ -32,39 +29,36 @@ export const AddNewMaintenance = ({
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  // variable open modal scan QR
   const [openQr, setOpenQr] = useState(false);
+  // save code QR
   const [qr, setQr] = useState<string>("");
+  // List facilities after scan QR
   const [facilities, setFacilities] = useState<FACILITIES[]>([]);
+  // Branch
+  const [branchs, setBranchs] = useState<BRANCH[]>();
+  // Rooms
+  const [rooms, setRooms] = useState<ROOM[]>();
 
-  useEffect(() => {
-    const getFacility = async (qrCode: string) => {
-      const res = (await getFacilitiesByCode(qrCode)) as FACILITIES;
-      facilities.find((item) => item.code === res.code)
-        ? null
-        : setFacilities([...facilities, res]);
-      setQr("");
-      // setOpenQr(false);
-    };
-    if (qr !== "") {
-      getFacility(qr);
-    }
-  }, [qr, facilities]);
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
+    control,
+    watch,
   } = useForm<z.infer<typeof MaintenanceSchema>>({
     resolver: zodResolver(MaintenanceSchema),
     defaultValues: {
       mantainanceName: "",
       listFacilities: [],
       status: "CREATED",
-      description: "",
+      floor: 1,
+      branchId: branchs ? branchs[0]?.id : "",
+      roomId: rooms ? rooms[0]?.id : "",
     },
   });
+  const { branchId, floor } = watch();
   const onSubmit = (value: z.infer<typeof MaintenanceSchema>) => {
     const facilitiesId = facilities.map((item) => item.id);
     console.log(value, facilitiesId);
@@ -79,7 +73,7 @@ export const AddNewMaintenance = ({
               alertManagerActions.setAlert({
                 message: {
                   type: "success",
-                  content: "Loại cơ sở vật chất đã được thêm thành công!",
+                  content: "Bảo trì đã được thêm thành công!",
                 },
               }),
             );
@@ -90,7 +84,7 @@ export const AddNewMaintenance = ({
                 alertManagerActions.setAlert({
                   message: {
                     type: "warning",
-                    content: `Cơ sở vật chất ${res?.data.join(", ")} đang trong quá trình bảo trì!`,
+                    content: `Cơ sở vật chất mã ${res?.data.join(", ")} đang trong quá trình bảo trì!`,
                   },
                 }),
               );
@@ -113,6 +107,40 @@ export const AddNewMaintenance = ({
     setOpen(false);
     reset();
   };
+  const getCommon = async () => {
+    const branch = (await getBranchsAll()) as BRANCH[];
+    setBranchs(branch);
+  };
+  // get Room
+  const getRooms = async () => {
+    const room = (await getRoomByBranchIdAndRoomTypeCode(
+      branchId,
+      undefined,
+      floor,
+    )) as ROOM[];
+    setRooms(room);
+  };
+  // getFacility when scan QR
+  useEffect(() => {
+    const getFacility = async (qrCode: string) => {
+      const res = (await getFacilitiesByCode(qrCode)) as FACILITIES;
+      facilities.find((item) => item.code === res.code)
+        ? null
+        : setFacilities([...facilities, res]);
+      setQr("");
+      // setOpenQr(false);
+    };
+    if (qr !== "") {
+      getFacility(qr);
+    }
+  }, [qr, facilities]);
+  // get Branch
+  useEffect(() => {
+    getCommon();
+  }, []);
+  useEffect(() => {
+    getRooms();
+  }, [branchId, floor]);
   return (
     <div className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
       <div className="border-b border-stroke dark:border-strokedark">
@@ -147,40 +175,72 @@ export const AddNewMaintenance = ({
               className={clsx(
                 "mb-3 block text-sm font-medium text-black dark:text-white",
                 {
-                  "text-red": errors.startDate,
+                  "text-red": errors.mantainanceName,
                 },
               )}
             >
-              Ngày bắt đầu
+              Chi nhánh
             </label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  sx={{
-                    width: "100%",
-                  }}
-                  onChange={(date) =>
-                    date ? setValue("startDate", date.toDate() as Date) : null
-                  }
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-            <p
+            <FormSelect
+              name="branchId"
+              control={control}
+              isPending={isPending}
+              branchs={branchs}
+              errors={errors?.branchId}
+              placeholder={"Chọn chi nhánh"}
+            />
+          </div>
+          <div>
+            <label
               className={clsx(
-                `font-smblock mt-1 text-sm text-black dark:text-white`,
+                "mb-3 block text-sm font-medium text-black dark:text-white",
                 {
-                  "text-red": errors.startDate,
+                  "text-red": errors.floor,
                 },
               )}
             >
-              {errors.startDate?.message}
-            </p>
+              Tầng
+            </label>
+            <FormSelect
+              name="floor"
+              control={control}
+              isPending={isPending}
+              number={
+                branchs?.filter((item) => item.id === branchId)[0]
+                  ?.floorNumber || 1
+              }
+              errors={errors?.floor}
+              placeholder={"Chọn tầng"}
+            />
+          </div>
+          <div>
+            <label
+              className={clsx(
+                "mb-3 block text-sm font-medium text-black dark:text-white",
+                {
+                  "text-red": errors.roomId,
+                },
+              )}
+            >
+              Phòng
+            </label>
+            <FormSelect
+              name="roomId"
+              control={control}
+              isPending={isPending}
+              rooms={rooms}
+              errors={errors?.roomId}
+              placeholder={"Chọn tầng"}
+            />
           </div>
           <div>
             <div className="flex items-center justify-between py-3">
               <label
                 className={clsx(
                   "mb-3 block text-sm font-medium text-black dark:text-white",
+                  {
+                    "text-red": errors.listFacilities,
+                  },
                 )}
               >
                 Cơ sở vật chất
@@ -227,13 +287,14 @@ export const AddNewMaintenance = ({
                         <button
                           className="rounded-xl p-2 text-rose-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                           disabled={isPending}
-                          onClick={() =>
+                          onClick={(e) => {
+                            e.preventDefault();
                             setFacilities(
                               facilities.filter(
                                 (item) => item.id !== facilitie?.id,
                               ),
-                            )
-                          }
+                            );
+                          }}
                         >
                           <svg
                             className="fill-current"
@@ -272,15 +333,17 @@ export const AddNewMaintenance = ({
           </div>
           <div>
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-              Mô tả
+              Lý do
             </label>
-            <textarea
-              rows={6}
-              placeholder="Nhập mô tả loại cơ sở vật chất ..."
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              {...register("description")}
-              disabled={isPending}
-            ></textarea>
+            <Input
+              type="text"
+              placeholder="Nhập lý do bảo trì ..."
+              errors={errors.reason}
+              isPending={isPending}
+              register={register("reason")}
+              multiline={true}
+              rows={3}
+            />
           </div>
         </div>
         <div className="flex w-full gap-30 border-t border-stroke px-6.5 py-4">

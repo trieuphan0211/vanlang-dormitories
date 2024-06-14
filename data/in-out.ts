@@ -37,7 +37,7 @@ export const getFilterInOut = async (
     const branchs = await db.inOut.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -88,7 +88,7 @@ export const getCountInOut = async (
     const count = await db.inOut.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {

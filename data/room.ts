@@ -130,7 +130,7 @@ export const getFilterRooms = async (
     const rooms = await db.room.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
         {
           code: "desc",
@@ -154,12 +154,14 @@ export const getFilterRooms = async (
 export const getRoomsByFields = async (
   roomTypesCode?: string,
   branchId?: string,
+  floor?: number,
 ) => {
   try {
     const rooms = await db.room.findMany({
       where: {
         roomTypeCode: roomTypesCode,
         branchId,
+        floor,
       },
       include: {
         Branch: true,

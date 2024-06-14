@@ -45,6 +45,21 @@ export const getStudentsAll = async () => {
     return { error: "An error occurred!" };
   }
 };
+export const removeRoomOfStudent = async (id: string) => {
+  try {
+    const student = await updateStudentInRoom(id, undefined);
+    if (student) {
+      console.log(student);
+      console.log("Student is removed from room!");
+      return { success: "Student is removed from room!" };
+    }
+    console.log("Student not found!");
+    return { error: "Student not found!" };
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
+  }
+};
 export const updateStudentInRoomById = async (
   id: string,
   roomId: string,

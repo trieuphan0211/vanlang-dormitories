@@ -9,7 +9,6 @@ interface BreadcrumbProps {
 const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
   const pathname = usePathname();
   const [breadcrumb, setBreadcrumb] = useState<Array<String>>([]);
-  console.log(pathname);
   useEffect(() => {
     switch (pathname) {
       case "/home":

@@ -11,12 +11,17 @@ import { Student, ViolateType } from "@prisma/client";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
 import { FormSelect, Input } from "../Input";
 import { STUDENT } from "@/types";
 import { useDebouncedCallback } from "use-debounce";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 export const AddNewViolate = ({
   isPending,
@@ -61,6 +66,7 @@ export const AddNewViolate = ({
     control,
     formState: { errors },
     watch,
+    setValue,
     reset,
   } = useForm<z.infer<typeof ViolateSchema>>({
     resolver: zodResolver(ViolateSchema),
@@ -69,13 +75,18 @@ export const AddNewViolate = ({
       violateTypeCode: "",
       studentId: "",
       description: "",
+      date: new Date().toISOString(),
     },
   });
   const { violateTypeCode } = watch();
   const onSubmit = (value: z.infer<typeof ViolateSchema>) => {
     startTransition(() => {
-      console.log(value);
-      addviolate(value).then((res) => {
+      addviolate(
+        value,
+        violateType.filter((e) => e.code === violateTypeCode)[0]?.allow
+          ? JSON.stringify(items)
+          : "",
+      ).then((res) => {
         if (res?.success) {
           router.refresh();
           handleCloseModal();
@@ -137,6 +148,50 @@ export const AddNewViolate = ({
           <div>
             <label
               className={clsx(
+                "mb-3 block text-sm font-medium text-black dark:text-white",
+                {
+                  "text-red": errors.violateName,
+                },
+              )}
+            >
+              Ngày vi phạm
+            </label>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <Controller
+                  name="date"
+                  control={control}
+                  // rules={{ required: true }}
+                  render={({ field }) => (
+                    <DatePicker
+                      {...field}
+                      sx={{
+                        width: "100%",
+                        // "& .MuiInputBase-root": {
+                        //   height: "40px",
+                        //   "& input": {
+                        //     padding: "8.5px 14px",
+                        //   },
+                        // },
+                        // "& .MuiOutlinedInput-notchedOutline": {
+                        //   height: "45px",
+                        // },
+                      }}
+                      format="DD/MM/YYYY"
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(date) => {
+                        console.log(date);
+                        field.onChange(date?.toISOString());
+                      }}
+                    />
+                  )}
+                />{" "}
+              </DemoContainer>
+            </LocalizationProvider>
+          </div>
+          <div>
+            <label
+              className={clsx(
                 `mb-3 block text-sm font-medium text-black dark:text-white`,
                 {
                   "text-red": errors.studentId,
@@ -153,6 +208,19 @@ export const AddNewViolate = ({
                 fullWidth
                 onChange={(e) => {
                   searchStudent(e.target.value);
+                }}
+                sx={{
+                  "& .MuiInputBase-root input": {
+                    background: "#f5f7f9",
+                    borderRadius: "5px",
+                    color: "#212529",
+                    "&:focus": {
+                      boxShadow: "0 0 0 .25rem rgba(13,110,253,.25)",
+                    },
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
                 }}
                 disabled={isPending}
               />
@@ -235,6 +303,19 @@ export const AddNewViolate = ({
                               ]);
                             }
                           }}
+                          sx={{
+                            "& .MuiInputBase-root input": {
+                              background: "#f5f7f9",
+                              borderRadius: "5px",
+                              color: "#212529",
+                              "&:focus": {
+                                boxShadow: "0 0 0 .25rem rgba(13,110,253,.25)",
+                              },
+                            },
+                            "& .MuiOutlinedInput-notchedOutline": {
+                              border: "none",
+                            },
+                          }}
                           disabled={isPending}
                         />
                       </td>
@@ -249,6 +330,19 @@ export const AddNewViolate = ({
                             const newValue = [...items];
                             newValue[key].cost = Number(e.target.value);
                             setItems(newValue);
+                          }}
+                          sx={{
+                            "& .MuiInputBase-root input": {
+                              background: "#f5f7f9",
+                              borderRadius: "5px",
+                              color: "#212529",
+                              "&:focus": {
+                                boxShadow: "0 0 0 .25rem rgba(13,110,253,.25)",
+                              },
+                            },
+                            "& .MuiOutlinedInput-notchedOutline": {
+                              border: "none",
+                            },
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
@@ -265,7 +359,14 @@ export const AddNewViolate = ({
                           disabled={isPending}
                         />
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                      <td
+                        className={clsx(
+                          "border-b border-[#eee] px-4 py-5 dark:border-strokedark",
+                          {
+                            hidden: key === 0,
+                          },
+                        )}
+                      >
                         {" "}
                         <button
                           className="rounded-xl p-2 text-rose-600 shadow-14 hover:bg-gray-3 focus:outline-none"

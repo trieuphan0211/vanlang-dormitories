@@ -4,14 +4,17 @@ import { updateMaintenanceById } from "@/actions/mantainance";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { MaintenanceSchema } from "@/schema";
-import { MAINTENNANCES } from "@/types";
+import { BRANCH, MAINTENNANCES, ROOM } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { FormSelect, Input } from "../Input";
+import { Branch } from "../Search";
+import { getRoomByBranchIdAndRoomTypeCode } from "@/actions/room";
+import { getBranchsAll } from "@/actions/branch";
 
 export const MaintenanceDetailForm = ({
   maintenance,
@@ -23,23 +26,30 @@ export const MaintenanceDetailForm = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  // Branch
+  const [branchs, setBranchs] = useState<BRANCH[]>();
+  // Rooms
+  const [rooms, setRooms] = useState<ROOM[]>();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset,
-    setValue,
+    watch,
   } = useForm<z.infer<typeof MaintenanceSchema>>({
     resolver: zodResolver(MaintenanceSchema),
     defaultValues: {
       mantainanceName: maintenance.mantainanceName || "",
       status: maintenance.status || "CREATED",
       code: maintenance.code || "",
-      startDate: maintenance.startDate || new Date(),
-      description: maintenance.description || "",
+      reason: maintenance.reason || "",
+      branchId: maintenance.branchId || "",
+      floor: maintenance.Room?.floor || 1,
+      roomId: maintenance.roomId || "",
+      listFacilities: maintenance?.Facilities?.map((item) => item.id) || [],
     },
   });
+  const { branchId, floor } = watch();
   const onSubmit = (value: z.infer<typeof MaintenanceSchema>) => {
     console.log(value);
 
@@ -71,6 +81,26 @@ export const MaintenanceDetailForm = ({
       });
     });
   };
+  const getCommon = async () => {
+    const branch = (await getBranchsAll()) as BRANCH[];
+    setBranchs(branch);
+  };
+  // get Room
+  const getRooms = async () => {
+    const room = (await getRoomByBranchIdAndRoomTypeCode(
+      branchId,
+      undefined,
+      floor,
+    )) as ROOM[];
+    setRooms(room);
+  };
+  // get Branch
+  useEffect(() => {
+    getCommon();
+  }, []);
+  useEffect(() => {
+    getRooms();
+  }, [branchId, floor]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-5.5 flex gap-4 ">
@@ -95,6 +125,29 @@ export const MaintenanceDetailForm = ({
             className={clsx(
               "mb-3 block text-sm font-medium text-black dark:text-white",
               {
+                "text-red": errors.code,
+              },
+            )}
+          >
+            Mã đơn bảo trì
+          </label>
+          <Input
+            type="text"
+            placeholder="Nhập mã phòng"
+            errors={errors.code}
+            isPending={isPending}
+            register={register("code")}
+            disabled={true}
+          />
+        </div>
+      </div>
+
+      <div className="mb-5.5 flex gap-4">
+        <div className="w-full">
+          <label
+            className={clsx(
+              "mb-3 block text-sm font-medium text-black dark:text-white",
+              {
                 "text-red": errors.status,
               },
             )}
@@ -113,62 +166,80 @@ export const MaintenanceDetailForm = ({
           />
         </div>
       </div>
-
-      <div className="mb-5.5 flex gap-4">
-        <div className="w-full">
-          <label
-            className={clsx(
-              "mb-3 block text-sm font-medium text-black dark:text-white",
-              {
-                "text-red": errors.code,
-              },
-            )}
-          >
-            Mã đơn bảo trì
-          </label>
-          <Input
-            type="text"
-            placeholder="Nhập mã phòng"
-            errors={errors.code}
-            isPending={isPending}
-            register={register("code")}
-            disabled={true}
-          />
-        </div>
-        <div className="w-full">
-          <label
-            className={clsx(
-              "mb-3 block text-sm font-medium text-black dark:text-white",
-              {
-                "text-red": errors.startDate,
-              },
-            )}
-          >
-            Ngày bắt đầu
-          </label>
-          <Input
-            type="text"
-            placeholder="Nhập mã phòng"
-            errors={errors.startDate}
-            isPending={isPending}
-            value={new Date(maintenance.startDate).toLocaleDateString()}
-            register={register("startDate")}
-            disabled={true}
-          />
-        </div>
+      <div>
+        <label
+          className={clsx(
+            "mb-3 block text-sm font-medium text-black dark:text-white",
+            {
+              "text-red": errors.mantainanceName,
+            },
+          )}
+        >
+          Chi nhánh
+        </label>
+        <FormSelect
+          name="branchId"
+          control={control}
+          isPending={isPending}
+          branchs={branchs}
+          errors={errors?.branchId}
+          placeholder={"Chọn chi nhánh"}
+        />
       </div>
       <div>
         <label
           className={clsx(
             "mb-3 block text-sm font-medium text-black dark:text-white",
             {
-              "text-red": errors.startDate,
+              "text-red": errors.floor,
             },
+          )}
+        >
+          Tầng
+        </label>
+        <FormSelect
+          name="floor"
+          control={control}
+          isPending={isPending}
+          number={
+            branchs?.filter((item) => item.id === branchId)[0]?.floorNumber || 1
+          }
+          errors={errors?.floor}
+          placeholder={"Chọn tầng"}
+        />
+      </div>
+      <div>
+        <label
+          className={clsx(
+            "mb-3 block text-sm font-medium text-black dark:text-white",
+            {
+              "text-red": errors.roomId,
+            },
+          )}
+        >
+          Phòng
+        </label>
+        <FormSelect
+          name="roomId"
+          control={control}
+          isPending={isPending}
+          rooms={rooms}
+          errors={errors?.roomId}
+          placeholder={"Chọn tầng"}
+        />
+      </div>
+      <div>
+        <label
+          className={clsx(
+            "mb-3 block text-sm font-medium text-black dark:text-white",
+            // {
+            //   "text-red": errors.startDate,
+            // },
           )}
         >
           Cơ sở vật chất
         </label>
-        {maintenance?.facilities !== undefined && (
+        {maintenance?.Facilities !== undefined && (
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -186,7 +257,7 @@ export const MaintenanceDetailForm = ({
               </tr>
             </thead>
             <tbody>
-              {maintenance.facilities.map((facilitie, key) => (
+              {maintenance.Facilities.map((facilitie, key) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{key + 1}</p>
@@ -203,7 +274,6 @@ export const MaintenanceDetailForm = ({
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    {" "}
                     {/* <button
                       className="rounded-xl p-2 text-rose-600 shadow-14 hover:bg-gray-3 focus:outline-none"
                       disabled={isPending}
@@ -250,12 +320,12 @@ export const MaintenanceDetailForm = ({
         </label>
         <Input
           type="text"
-          placeholder="Nhập mô tả cơ sở vật chất ..."
-          errors={errors.description}
+          placeholder="Nhập lý do bảo trì ..."
+          errors={errors.reason}
           isPending={isPending}
-          register={register("description")}
+          register={register("reason")}
           multiline={true}
-          rows={6}
+          rows={3}
           disabled={type === "detail" ? true : null || isPending}
         />
       </div>

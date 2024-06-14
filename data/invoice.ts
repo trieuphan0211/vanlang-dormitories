@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
 interface Invoice {
-  roomId: string;
+  roomId?: string;
   invoiceMonth: string;
   invoiceYear: string;
   studentId: string;
   total: number;
   detail: string;
+  violateId?: string;
   status: number;
 }
 
@@ -64,7 +65,7 @@ export const getAllInvoiceForDashboard = async ({
     const invoices = await db.invoice.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -134,7 +135,7 @@ export const getFilterInvoices = async (
     const invoices = await db.invoice.findMany({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
@@ -208,7 +209,7 @@ export const getCountInvoices = async (
     const count = await db.invoice.count({
       orderBy: [
         {
-          createDate: "desc",
+          updateDate: "desc",
         },
       ],
       where: {
