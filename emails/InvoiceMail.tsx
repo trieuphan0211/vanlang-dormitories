@@ -88,20 +88,164 @@ const InvoiceMail = () => {
             </Row>
           </Section>
           <Section>
-            <Row>
-              <Column align="left">
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left" style={{ width: "50%" }}>
                 <Text style={{ ...resetText }}>Họ tên: Phan Ngọc Triệu</Text>
               </Column>
               <Column align="left">
                 <Text style={{ ...resetText }}>MSSV: 207TC28659</Text>
               </Column>
             </Row>
-            <Row>
-              <Column align="left">
-                <Text style={{ ...resetText }}>Họ tên: Phan Ngọc Triệu</Text>
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left" style={{ width: "50%" }}>
+                <Text style={{ ...resetText }}>Phòng: P201 - Phòng đôi</Text>
               </Column>
               <Column align="left">
-                <Text style={{ ...resetText }}>MSSV: 207TC28659</Text>
+                <Text style={{ ...resetText }}>
+                  Chi nhánh: Tòa I Trường đại học Văn Lang{" "}
+                </Text>
+              </Column>
+            </Row>
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left" style={{ width: "50%" }}>
+                <Text style={{ ...resetText }}>
+                  Nghành: Công nghệ thông tin
+                </Text>
+              </Column>{" "}
+            </Row>{" "}
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left">
+                <Text style={{ ...resetText }}>
+                  Địa chỉ: 11/25 Tự Lập Phường 4, Quận Tân Bình, Tp. Hồ Chí Minh{" "}
+                </Text>
+              </Column>
+            </Row>
+          </Section>
+          <Section>
+            <Row>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Stt</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Tên hàng hóa, dịch vụ</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Đơn vị tính</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Số lượng</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Đơn giá (VND)</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+                  fontWeight: "600",
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Thành tiền (VND)</Text>
+              </Column>
+            </Row>
+            <Row>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>1</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>Nước</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>
+                  m<em>3</em>
+                </Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>123</Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>4,000 </Text>
+              </Column>
+              <Column
+                align="center"
+                style={{
+                  border: "1px solid #000",
+
+                  width: "calc(100% / 6)",
+                }}
+              >
+                <Text style={{ ...resetText }}>480,000</Text>
               </Column>
             </Row>
           </Section>

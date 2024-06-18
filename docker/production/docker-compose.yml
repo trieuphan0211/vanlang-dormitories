@@ -6,7 +6,8 @@ services:
       context: ../../
       dockerfile: docker/production/Dockerfile
     image: vanlang-dormitories
+    environment:
+      - AUTH_URL=http://localhost:3000/api/auth
     ports:
       - "3000:3000"
-
       # docker compose -f docker/production/docker-compose.yml build

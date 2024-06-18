@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
+import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Entra from "next-auth/providers/microsoft-entra-id";
 
@@ -7,10 +8,12 @@ export default {
     Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
+      // redirectProxyUrl: process.env.AUTH_REDIRECT_PROXY_URL,
     }),
     Entra({
       clientId: process.env.AZURE_AD_CLIENT_ID,
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+      // redirectProxyUrl: process.env.AUTH_REDIRECT_PROXY_URL,
       // tenantId: process.env.AZURE_AD_TENANT_ID,
       tenantId: "common",
       token: {

@@ -45,13 +45,21 @@ export const InvoiceTable = ({
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between  gap-3">
         <SearchTable placeholder="Tìm kiếm tên sinh viên ..." type="invoces" />
-        <button
-          onClick={() => router.push("/admin/invoice/create")}
-          className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-        >
-          <IoAdd className="text-2xl" />
-          Lập hóa đơn
-        </button>
+        <div className="flex gap-2">
+          <button
+            // onClick={() => router.push("/admin/invoice/create")}
+            className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-green-400 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            Gửi lại hóa đơn
+          </button>
+          <button
+            onClick={() => router.push("/admin/invoice/create")}
+            className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            <IoAdd className="text-2xl" />
+            Lập hóa đơn
+          </button>
+        </div>
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">

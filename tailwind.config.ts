@@ -14,6 +14,15 @@ const config: Config = {
       xsm: "425px",
       "3xl": "2000px",
       ...defaultTheme.screens,
+      sm: { max: "426px" },
+      // => @media (max-width: 639px) { ... }
+      md: { max: "768px" },
+      // => @media (max-width: 767px) { ... }
+      lg: { max: "1024px" },
+      // => @media (max-width: 1023px) { ... }
+      xl: { max: "1440" },
+      "2xl": { max: "1535px" },
+      // => @media (max-width: 1535px) { ... }
     },
     extend: {
       fontFamily: {

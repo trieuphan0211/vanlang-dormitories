@@ -1,29 +1,22 @@
-import { InfoHeader } from "@/components/Header";
-import { LiaBedSolid } from "react-icons/lia";
-import { MdOutlineTableRestaurant } from "react-icons/md";
-import { PiToiletBold } from "react-icons/pi";
-import { LuBath } from "react-icons/lu";
-import { MdOutlineBalcony } from "react-icons/md";
-import { BiCabinet } from "react-icons/bi";
-import Image from "next/image";
 import { Footer } from "@/components/Footer/Footer";
+import Image from "next/image";
 
 export default async function Home() {
   return (
     <main className="absolute left-0 right-0 top-0 min-h-screen w-screen overflow-hidden">
-      <div className="absolute left-0 right-0 top-0 h-[1000px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpeg')] bg-cover bg-fixed "></div>
-      <div className="mt-[1000px] flex items-center justify-center gap-20 p-10">
+      <div className="absolute left-0 right-0 top-0 h-[1050px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpeg')] bg-cover bg-fixed "></div>
+      <div className="mt-[1050px] flex items-center justify-center gap-20 p-10 lg:flex-col lg:gap-5">
         <iframe
-          className="aspect-video h-[450px]  rounded-2xl"
+          className="aspect-video h-[450px]  rounded-2xl lg:h-full  lg:w-full"
           src="https://www.youtube.com/embed/wgb22CwNDTs"
         ></iframe>
-        <div className="relative flex h-[450px]  items-end">
-          <div className="absolute -left-50 top-20 inline-block w-[700px] bg-[#2d334d] p-10">
-            <h1 className="text-3xl font-bold text-[#f57b20]">
+        <div className="relative flex h-[450px]  items-end sm:flex-col lg:h-auto">
+          <div className="p absolute -left-50 top-20 inline-block w-[700px] bg-[#2d334d]  p-10 sm:relative sm:!right-auto sm:!top-auto sm:!w-full sm:text-center md:w-4/5 lg:-top-22 lg:left-auto lg:right-0 lg:py-3">
+            <h1 className="text-3xl font-bold text-[#f57b20] md:text-2xl">
               Sống nâng tầm khơi nguồn cảm hứng
             </h1>
           </div>
-          <div className="mb-25 max-w-[500px] text-justify text-lg">
+          <div className="mb-25 max-w-[500px] text-justify text-lg lg:max-w-full">
             <p className="text-black">
               Ký túc xá Trường đại học Văn Lang với sứ mệnh không chỉ đáp ứng
               nơi học tập sinh hoạt phù hợp, mà còn là nơi &ldquo;hội tụ&rdquo;
@@ -36,7 +29,13 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="flex h-[1000px] items-end bg-[url('/images/background/bg_room.png')] bg-cover">
+      <Image
+        src={"/images/background/bg_3.jpg"}
+        width={10000}
+        height={10000}
+        alt="bg_3.jpg"
+      />
+      {/* <div className="flex h-[1000px] items-end bg-[url('/images/background/bg_room.png')] bg-cover">
         <div className="max-w-[450px] space-y-11 p-10 text-white">
           <h1 className="text-center text-5xl font-bold uppercase leading-tight">
             Không gian <br />{" "}
@@ -86,9 +85,9 @@ export default async function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="flex flex-col items-center gap-10 p-10">
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 md:flex-col">
           <Image
             src="/images/bath_room.png"
             alt="Cooking room"
@@ -98,14 +97,14 @@ export default async function Home() {
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
             <h1 className="text-4xl font-bold">Khu vực giặt - sấy hiện đại</h1>
-            <p className="text-xl">
+            <p className="text-justify text-xl">
               Khu vực giặt - sấy hiện đại đem lại co sinh viên sự thuận tiện
               trong nếp sống, bất kể thười tiết nắng mưa vẫn tự tin sạch sẽ,
               thơm mát mỗi ngày.
             </p>
           </div>
         </div>
-        <div className="flex flex-row-reverse items-center gap-5 ">
+        <div className="flex flex-row-reverse items-center gap-5 md:flex-col">
           <Image
             src="/images/cook_room.png"
             alt="Cooking room"
@@ -115,7 +114,7 @@ export default async function Home() {
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
             <h1 className="text-4xl font-bold">Khu bếp chung</h1>
-            <p className="text-xl">
+            <p className="text-justify text-xl">
               Khu bếp chung với lối thiết kế chỉnh chu, gọn gàng, tinh tế, trang
               bị đầy đủ các thiết bị phục vụ cho nhu cầu chuẩn bị bữa ăn ngon.
               Bên cạnh đó, không gian bàn ăn thoải mái tạo điều kiện lý tưởng
@@ -123,7 +122,7 @@ export default async function Home() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-5 ">
+        <div className="flex items-center gap-5 md:flex-col">
           <Image
             src="/images/fitness_room.png"
             alt="Cooking room"
@@ -133,14 +132,20 @@ export default async function Home() {
           />
           <div className="max-w-[600px] space-y-6 text-[#2d334d]">
             <h1 className="text-4xl font-bold">Trải nghiệm vô vàn tiện ích</h1>
-            <p className="text-xl">
+            <p className="text-justify text-xl">
               Trải nghiệm các tiện ích không thể bỏ lỡ được mở ra trong chính
               không gian sống của bạn.
             </p>
           </div>
         </div>
       </div>
-      <div
+      <Image
+        src={"/images/background/bg_4.jpg"}
+        width={10000}
+        height={10000}
+        alt="bg_4.jpg"
+      />
+      {/* <div
         className="relative flex h-[1000px] items-end bg-[url('/images/background/working.png')]
       bg-cover after:absolute after:bottom-0 after:top-0 after:w-11 after:bg-gradient-to-b after:from-[rgb(245,123,32,0.2)] after:to-[rgb(255,255,255,0.2)]"
       >
@@ -217,7 +222,7 @@ export default async function Home() {
             Thời gian ra vào KTX: 05:00 - 23:00
           </div>
         </div>
-      </div>
+      </div> */}
       <Footer />
     </main>
   );

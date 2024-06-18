@@ -14,9 +14,9 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL
-  ? `https://${process.env.NEXT_PUBLIC_APP_URL}`
-  : "https://207ct28659.is-tech.vn";
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "";
 
 export const AppleReceiptEmail = () => (
   <Html>
@@ -29,7 +29,7 @@ export const AppleReceiptEmail = () => (
           <Row>
             <Column>
               <Img
-                src={`https://firebasestorage.googleapis.com/v0/b/vanlang-6f9e0.appspot.com/o/logo.png?alt=media&token=bff9ed2d-69f1-4662-9164-04b4bacaff24`}
+                src={`${baseUrl}/static/apple-logo.png`}
                 width="42"
                 height="42"
                 alt="Apple Logo"
@@ -116,7 +116,7 @@ export const AppleReceiptEmail = () => (
           <Row>
             <Column style={{ width: "64px" }}>
               <Img
-                src={`${baseUrl}/images/logo/logo_short.png`}
+                src={`${baseUrl}/static/apple-hbo-max-icon.jpeg`}
                 width="64"
                 height="64"
                 alt="HBO Max"
