@@ -1,8 +1,34 @@
 import { db } from "@/lib/db";
-import { Student } from "@prisma/client";
-import { equal } from "assert";
 
 export const getStudentByEmail = async (email: string) => {
+  try {
+    const student = await db.student.findFirst({
+      where: {
+        AND: {
+          email: {
+            contains: email,
+            mode: "insensitive",
+          },
+        },
+
+        studentVerified: true,
+      },
+      include: {
+        Room: {
+          include: {
+            Branch: true,
+          },
+        },
+        Violate: true,
+      },
+    });
+
+    return student;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const getStudentsByEmail = async (email: string) => {
   try {
     const student = await db.student.findMany({
       where: {
@@ -48,6 +74,7 @@ export const getAllStudents = async () => {
 };
 export const getStudentById = async (id: string) => {
   try {
+    console.log("id: ", { id, studentVerified: true });
     const student = await db.student.findUnique({
       where: { id, studentVerified: true },
     });
@@ -227,6 +254,19 @@ export const updateStudentInRoom = async (id: string, roomId?: string) => {
     console.error(e);
   }
 };
+export const updateStudentPoint = async (id: string, point: number) => {
+  try {
+    const student = await db.student.update({
+      where: { id },
+      data: {
+        point,
+      },
+    });
+    return student;
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const updateStudent = async (
   email: string,
   fields: {
@@ -260,5 +300,38 @@ export const updateStudent = async (
     return student;
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const resetPointOfStudents = async () => {
+  // const students = await getAllStudents();
+  const res = db.student.updateMany({
+    data: {
+      point: 10,
+    },
+  });
+  return res;
+};
+export const removeRoomOfStudentExpired = async () => {
+  try {
+    const students = await db.student.updateMany({
+      where: {
+        AND: {
+          Room: {
+            allowRegisterDate: {
+              lte: new Date(),
+            },
+          },
+        },
+      },
+      data: {
+        roomId: null,
+      },
+    });
+
+    return students;
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
   }
 };

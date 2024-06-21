@@ -100,6 +100,7 @@ export const MaintenanceDetailForm = ({
   }, []);
   useEffect(() => {
     getRooms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branchId, floor]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

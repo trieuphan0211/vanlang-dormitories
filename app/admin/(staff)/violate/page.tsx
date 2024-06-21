@@ -2,9 +2,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { ViolateTable } from "@/components/Tables/ViolateTable";
 import { getCountViolate, getFilterViolate } from "@/data/violate";
 import { VIOLATE } from "@/types";
-import { Violate } from "@prisma/client";
 import { Metadata } from "next";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "Quản lý vi phạm",

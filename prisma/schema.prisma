@@ -116,11 +116,11 @@ enum StatusViolate {
 
 model Violate {
   id              String        @id @default(cuid())
-  name            String
   studentId       String
   typeViolateCode String
   status          StatusViolate @default(CREATED)
   date            String
+  formProcessing  String
   description     String
   metaData        String?
   TypeViolate     ViolateType?  @relation(fields: [typeViolateCode], references: [code])
@@ -152,7 +152,7 @@ model Register {
   studentEmail     String
   roomId           String
   registerdeadline Float
-  status           Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy
+  status           Int // 0: Chờ xác nhận, 1: Đã xác nhận, 2: Đã hủy, 3: Đã gia hạn
   Student          Student  @relation(fields: [studentEmail], references: [email])
   Room             Room     @relation(fields: [roomId], references: [id])
   updateDate       DateTime @updatedAt
@@ -206,22 +206,23 @@ model Services {
 }
 
 model Room {
-  id           String          @id @default(cuid())
-  code         String
-  description  String?
-  branchId     String
-  roomTypeCode String
-  floor        Int
-  Branch       Branch          @relation(fields: [branchId], references: [id])
-  RoomType     RoomType        @relation(fields: [roomTypeCode], references: [code])
-  Facilities   Facilities[]
-  Student      Student[]
-  Services     ServiceOnRoom[]
-  Invoice      Invoice[]
-  Register     Register[]
-  Maintenance  Maintenance[]
-  updateDate   DateTime        @updatedAt
-  createDate   DateTime        @default(now())
+  id                String          @id @default(cuid())
+  code              String
+  description       String?
+  branchId          String
+  roomTypeCode      String
+  floor             Int
+  allowRegisterDate DateTime        @default("1970-01-01T00:00:00.000Z") // Ngày cho phép đăng ký 
+  Branch            Branch          @relation(fields: [branchId], references: [id])
+  RoomType          RoomType        @relation(fields: [roomTypeCode], references: [code])
+  Facilities        Facilities[]
+  Student           Student[]
+  Services          ServiceOnRoom[]
+  Invoice           Invoice[]
+  Register          Register[]
+  Maintenance       Maintenance[]
+  updateDate        DateTime        @updatedAt
+  createDate        DateTime        @default(now())
 
   @@map("room")
 }

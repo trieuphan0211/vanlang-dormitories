@@ -201,9 +201,9 @@ export const StudentInfoSchema = z.object({
   }),
 });
 export const ViolateSchema = z.object({
-  violateName: z.string().min(1, "Tên vi phạm không được để trống"),
   violateTypeCode: z.string().min(1, "Loại vi phạm không được để trống"),
   studentId: z.string().min(1, "Mã sinh viên không được để trống"),
+  formProcessing: z.string().min(1, "Hình thức xử lý không được để trống"),
   description: z.optional(z.string()),
   date: z.string(),
 });

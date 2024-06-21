@@ -309,3 +309,17 @@ export const updateRoom = async (
     console.error(e);
   }
 };
+
+export const updateRoomDate = async (id: string, date: Date) => {
+  try {
+    const response = await db.room.update({
+      where: { id },
+      data: {
+        allowRegisterDate: date,
+      },
+    });
+    return response;
+  } catch (e) {
+    console.error(e);
+  }
+};

@@ -96,7 +96,7 @@ export const RegisterDetailForm = ({
       params.set("branchId", branchId);
     }
     replace(`${pathname}?${params.toString()}`);
-  }, [roomTypesCode, branchId]);
+  }, [roomTypesCode, branchId, searchParams, replace, pathname]);
   return (
     <div>
       <button

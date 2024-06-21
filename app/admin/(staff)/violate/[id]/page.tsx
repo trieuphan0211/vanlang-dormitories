@@ -2,7 +2,7 @@ import { getStudentsAll } from "@/actions/student";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { ViolateDetailForm } from "@/components/Form/ViolateDetailForm";
 import { getViolateById } from "@/data/violate";
-import { STUDENT } from "@/types";
+import { STUDENT, VIOLATE } from "@/types";
 import { Violate } from "@prisma/client";
 import { Metadata } from "next";
 
@@ -16,7 +16,7 @@ export default async function DetailPage({
 }: {
   params: { id: string };
 }) {
-  const violate = (await getViolateById(params.id)) as Violate;
+  const violate = (await getViolateById(params.id)) as VIOLATE;
   const students = (await getStudentsAll()) as STUDENT[];
   return (
     <div>
@@ -24,7 +24,7 @@ export default async function DetailPage({
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
-            Tên vi phạm: {violate?.name}
+            Tên vi phạm: {violate?.TypeViolate?.name}
           </h3>
         </div>
         <div className="p-7">

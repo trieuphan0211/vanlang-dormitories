@@ -114,7 +114,7 @@ export const InfoHeader = () => {
           )}
         </li>
       )),
-    [pathname, openIndex, handleSubmenu],
+    [pathname, openIndex, size.width, handleSubmenu],
   );
 
   return (

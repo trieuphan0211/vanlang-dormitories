@@ -10,6 +10,15 @@ export const getViolateTypeById = async (id: string) => {
   }
 };
 
+export const getViolateTypeByCode = async (code: string) => {
+  try {
+    const violateType = await db.violateType.findUnique({ where: { code } });
+    return violateType;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const getAllViolateTypes = async () => {
   try {
     const violateType = await db.violateType.findMany();

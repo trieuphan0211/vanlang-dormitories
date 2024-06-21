@@ -6,8 +6,6 @@ import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { Dialog, DialogTitle } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
 
 export const CheckInvoice = ({
   isPending,

@@ -5,23 +5,23 @@ import { getViolareTypesAll } from "@/actions/violateType";
 import { useAppDispatch } from "@/hooks/redux";
 import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 import { ViolateSchema } from "@/schema";
+import { STUDENT } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle, TextField } from "@mui/material";
-import { Student, ViolateType } from "@prisma/client";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { ViolateType } from "@prisma/client";
 import clsx from "clsx";
+import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useDebouncedCallback } from "use-debounce";
 import * as z from "zod";
 import { CancelButton, SaveButton } from "../Button";
 import { FormSelect, Input } from "../Input";
-import { STUDENT } from "@/types";
-import { useDebouncedCallback } from "use-debounce";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
 
 export const AddNewViolate = ({
   isPending,
@@ -52,11 +52,11 @@ export const AddNewViolate = ({
         setViolateType(res as ViolateType[]);
       });
     });
-  }, []);
+  }, [startTransition]);
   useEffect(() => {
     startTransition(() => {
       getStudentFromEmail(email).then((res) => {
-        setStudents(res as STUDENT[]);
+        setStudents(res.filter((e) => e.roomId) as STUDENT[]);
       });
     });
   }, [email, startTransition]);
@@ -66,13 +66,12 @@ export const AddNewViolate = ({
     control,
     formState: { errors },
     watch,
-    setValue,
     reset,
   } = useForm<z.infer<typeof ViolateSchema>>({
     resolver: zodResolver(ViolateSchema),
     defaultValues: {
-      violateName: "",
       violateTypeCode: "",
+      formProcessing: "",
       studentId: "",
       description: "",
       date: new Date().toISOString(),
@@ -117,7 +116,7 @@ export const AddNewViolate = ({
     reset();
   };
   return (
-    <div className="fixed left-[50%] top-[50%]  z-50 max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+    <div className="fixed left-[50%] top-[50%]  z-50 max-h-[85vh]  w-[90vw] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
       <div className="border-b border-stroke dark:border-strokedark">
         <DialogTitle className="!font-bold text-black dark:text-white">
           Thêm vi phạm
@@ -126,116 +125,6 @@ export const AddNewViolate = ({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-5.5 p-6.5">
-          <div>
-            <label
-              className={clsx(
-                "mb-3 block text-sm font-medium text-black dark:text-white",
-                {
-                  "text-red": errors.violateName,
-                },
-              )}
-            >
-              Tên vi phạm
-            </label>
-            <Input
-              type="text"
-              placeholder="Nhập tên vi phạm"
-              errors={errors.violateName}
-              isPending={isPending}
-              register={register("violateName")}
-            />
-          </div>
-          <div>
-            <label
-              className={clsx(
-                "mb-3 block text-sm font-medium text-black dark:text-white",
-                {
-                  "text-red": errors.violateName,
-                },
-              )}
-            >
-              Ngày vi phạm
-            </label>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <Controller
-                  name="date"
-                  control={control}
-                  // rules={{ required: true }}
-                  render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      sx={{
-                        width: "100%",
-                        // "& .MuiInputBase-root": {
-                        //   height: "40px",
-                        //   "& input": {
-                        //     padding: "8.5px 14px",
-                        //   },
-                        // },
-                        // "& .MuiOutlinedInput-notchedOutline": {
-                        //   height: "45px",
-                        // },
-                      }}
-                      format="DD/MM/YYYY"
-                      value={field.value ? dayjs(field.value) : null}
-                      onChange={(date) => {
-                        console.log(date);
-                        field.onChange(date?.toISOString());
-                      }}
-                    />
-                  )}
-                />{" "}
-              </DemoContainer>
-            </LocalizationProvider>
-          </div>
-          <div>
-            <label
-              className={clsx(
-                `mb-3 block text-sm font-medium text-black dark:text-white`,
-                {
-                  "text-red": errors.studentId,
-                },
-              )}
-            >
-              Thành viên vi phạm
-            </label>
-            <div className="flex gap-3">
-              <TextField
-                type="text"
-                variant="outlined"
-                placeholder={"Nhập  email"}
-                fullWidth
-                onChange={(e) => {
-                  searchStudent(e.target.value);
-                }}
-                sx={{
-                  "& .MuiInputBase-root input": {
-                    background: "#f5f7f9",
-                    borderRadius: "5px",
-                    color: "#212529",
-                    "&:focus": {
-                      boxShadow: "0 0 0 .25rem rgba(13,110,253,.25)",
-                    },
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                }}
-                disabled={isPending}
-              />
-              <div className="w-full">
-                <FormSelect
-                  name="studentId"
-                  control={control}
-                  isPending={isPending}
-                  students={students}
-                  errors={errors?.studentId}
-                  placeholder={"Chọn sinh viên vi phạm"}
-                />
-              </div>
-            </div>
-          </div>
           <div>
             <label
               className={clsx(
@@ -412,7 +301,124 @@ export const AddNewViolate = ({
               </table>
             )}
           </div>
+          <div>
+            <label
+              className={clsx(
+                "mb-3 block text-sm font-medium text-black dark:text-white",
+                {
+                  "text-red": errors.date,
+                },
+              )}
+            >
+              Ngày vi phạm
+            </label>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <Controller
+                  name="date"
+                  control={control}
+                  // rules={{ required: true }}
+                  render={({ field }) => (
+                    <DatePicker
+                      {...field}
+                      sx={{
+                        width: "100%",
+                        // "& .MuiInputBase-root": {
+                        //   height: "40px",
+                        //   "& input": {
+                        //     padding: "8.5px 14px",
+                        //   },
+                        // },
+                        // "& .MuiOutlinedInput-notchedOutline": {
+                        //   height: "45px",
+                        // },
+                      }}
+                      format="DD/MM/YYYY"
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(date) => {
+                        console.log(date);
+                        field.onChange(date?.toISOString());
+                      }}
+                    />
+                  )}
+                />{" "}
+              </DemoContainer>
+            </LocalizationProvider>
+          </div>
+          <div>
+            <label
+              className={clsx(
+                `mb-3 block text-sm font-medium text-black dark:text-white`,
+                {
+                  "text-red": errors.studentId,
+                },
+              )}
+            >
+              Thành viên vi phạm
+            </label>
+            <div className="flex gap-3">
+              <TextField
+                type="text"
+                variant="outlined"
+                placeholder={"Nhập  email"}
+                fullWidth
+                onChange={(e) => {
+                  searchStudent(e.target.value);
+                }}
+                sx={{
+                  "& .MuiInputBase-root input": {
+                    background: "#f5f7f9",
+                    borderRadius: "5px",
+                    color: "#212529",
+                    "&:focus": {
+                      boxShadow: "0 0 0 .25rem rgba(13,110,253,.25)",
+                    },
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                }}
+                disabled={isPending}
+              />
+              <div className="w-full">
+                <FormSelect
+                  name="studentId"
+                  control={control}
+                  isPending={isPending}
+                  students={students}
+                  errors={errors?.studentId}
+                  placeholder={"Chọn sinh viên vi phạm"}
+                />
+              </div>
+            </div>
+          </div>
 
+          <div>
+            <label
+              className={clsx(
+                `mb-3 block text-sm font-medium text-black dark:text-white`,
+                {
+                  "text-red": errors.formProcessing,
+                },
+              )}
+            >
+              Hình thức xử lý
+            </label>
+            <FormSelect
+              name="formProcessing"
+              control={control}
+              isPending={isPending}
+              formProcessing={[
+                "REMINDED",
+                "WARNING",
+
+                "LABORPENALTY",
+                "DORMITORYEXPULSION",
+              ]}
+              errors={errors?.formProcessing}
+              placeholder={"Chọn hình thức xử lý"}
+            />
+          </div>
           <div>
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               Mô tả

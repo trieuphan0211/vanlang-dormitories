@@ -34,11 +34,7 @@ export const AddNewBranch = ({
     fileFormat: "",
     value: "",
   });
-  useEffect(() => {
-    setValue("image.name", image.fileName);
-    setValue("image.type", image.fileFormat);
-    setValue("image.value", image.value);
-  }, [image]);
+
   const {
     register,
     handleSubmit,
@@ -59,6 +55,11 @@ export const AddNewBranch = ({
       },
     },
   });
+  useEffect(() => {
+    setValue("image.name", image.fileName);
+    setValue("image.type", image.fileFormat);
+    setValue("image.value", image.value);
+  }, [image, setValue]);
   const onSubmit = (value: z.infer<typeof BranchSchema>) => {
     console.log(value);
     startTransition(() => {

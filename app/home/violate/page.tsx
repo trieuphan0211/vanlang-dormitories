@@ -3,6 +3,7 @@ import { getStudentByEmail } from "@/data/student";
 import { getViolateByStudentId } from "@/data/violate";
 import { currentUser } from "@/lib/auth";
 import { STUDENT, VIOLATE } from "@/types";
+import clsx from "clsx";
 import Link from "next/link";
 
 const ViolatePage = async () => {
@@ -13,7 +14,6 @@ const ViolatePage = async () => {
   const violates = (await getViolateByStudentId(
     student.id as string,
   )) as VIOLATE[];
-  console.log("violates", violates);
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -26,16 +26,18 @@ const ViolatePage = async () => {
                 #
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Tên vi phạm
+                Loại vi phạm
               </th>
 
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Họ tên sinh viên vi phạm
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Mã sinh viên
+                Hình thức xử lý
               </th>
-
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Trạng Thái
+              </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Hành động
               </th>
@@ -48,18 +50,44 @@ const ViolatePage = async () => {
                   <p className="text-black dark:text-white">{key + 1}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{violate.name}</p>
+                  <p className="text-black dark:text-white">
+                    {" "}
+                    {violate.TypeViolate?.name || "Không có thông tin"}
+                  </p>
                 </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {violate?.Student?.fullName || "Không có thông tin"}
+                    {violate.Student?.fullName || "Không có thông tin"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {" "}
-                    {violate?.Student?.studentCode || "Không có thông tin"}
+                    {violate.formProcessing === "REMINDED" && "Nhắc nhở"}
+                    {violate.formProcessing === "WARNING" && "Cảnh báo"}
+                    {violate.formProcessing === "LABORPENALTY" &&
+                      "Xử phạt lao động"}
+                    {violate.formProcessing === "DORMITORYEXPULSION" &&
+                      "Rời ký túc xá"}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p
+                    className={clsx(
+                      "inline-flex rounded-full bg-opacity-10 px-3 py-1 text-center text-sm font-medium",
+                      {
+                        "bg-success text-success":
+                          violate?.status === "FINISHED",
+                        "bg-warning text-warning":
+                          violate?.status === "INPROGRESS",
+                        "bg-danger text-danger": violate?.status === "CREATED",
+                      },
+                    )}
+                  >
+                    {violate?.status === "CREATED" && "Đang chờ"}
+                    {violate?.status === "INPROGRESS" && "Đang xử lý"}
+                    {violate?.status === "FINISHED" && "Hoàn thành"}
                   </p>
                 </td>
 

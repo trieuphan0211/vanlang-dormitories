@@ -2,12 +2,13 @@ import { db } from "@/lib/db";
 import { StatusViolate } from "@prisma/client";
 
 interface VIOLATE {
-  name: string;
   studentId: string;
   description: string;
   metaData: string;
   date: string;
+  status?: StatusViolate;
   typeViolateCode: string;
+  formProcessing: string;
 }
 export const getViolateAll = async () => {
   try {
@@ -20,7 +21,13 @@ export const getViolateAll = async () => {
 
 export const getViolateById = async (id: string) => {
   try {
-    const violate = await db.violate.findUnique({ where: { id } });
+    const violate = await db.violate.findUnique({
+      where: { id },
+      include: {
+        Student: true,
+        TypeViolate: true,
+      },
+    });
     return violate;
   } catch (e) {
     console.error(e);
@@ -29,9 +36,15 @@ export const getViolateById = async (id: string) => {
 export const getViolateByStudentId = async (id: string) => {
   try {
     const violate = await db.violate.findMany({
+      orderBy: [
+        {
+          updateDate: "desc",
+        },
+      ],
       where: { studentId: id },
       include: {
         Student: true,
+        TypeViolate: true,
       },
     });
     return violate;
@@ -49,13 +62,7 @@ export const getFilterViolate = async (
 ) => {
   try {
     const search = [];
-    query &&
-      search.push({
-        name: {
-          contains: query,
-          mode: "insensitive",
-        },
-      });
+
     studentName &&
       search.push({
         Student: {

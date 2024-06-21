@@ -68,14 +68,14 @@ export const ViolateTable = ({
                 #
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Tên vi phạm
+                Loại vi phạm
               </th>
 
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Họ tên sinh viên vi phạm
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Loại vi phạm
+                Hình thức xử lý
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Trạng Thái
@@ -92,7 +92,10 @@ export const ViolateTable = ({
                   <p className="text-black dark:text-white">{key + 1}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{violate.name}</p>
+                  <p className="text-black dark:text-white">
+                    {" "}
+                    {violate.TypeViolate?.name || "Không có thông tin"}
+                  </p>
                 </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -103,7 +106,12 @@ export const ViolateTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {" "}
-                    {violate.TypeViolate?.name || "Không có thông tin"}
+                    {violate.formProcessing === "REMINDED" && "Nhắc nhở"}
+                    {violate.formProcessing === "WARNING" && "Cảnh báo"}
+                    {violate.formProcessing === "LABORPENALTY" &&
+                      "Xử phạt lao động"}
+                    {violate.formProcessing === "DORMITORYEXPULSION" &&
+                      "Rời ký túc xá"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

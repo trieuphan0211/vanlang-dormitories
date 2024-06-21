@@ -230,7 +230,9 @@ export const AddNewRegister = ({
         <CancelButton
           isPending={isPending}
           name="Hủy"
-          onClick={() => router.push("/home/register-dormitory")}
+          onClick={() => {
+            router.push("/home/register-dormitory");
+          }}
         />
         <SaveButton
           isPending={isPending}

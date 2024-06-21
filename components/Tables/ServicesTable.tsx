@@ -89,9 +89,7 @@ export const ServicesTable = ({
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {service.cost.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
+                    {service.cost.toLocaleString("en-US")}
                     {` VND/${service.unit}`}
                   </p>
                 </td>

@@ -43,8 +43,8 @@ const Detail = ({
           </nav>
         </div>
       </div>
-      <div className="m-auto flex max-w-[1300px] gap-10 p-3">
-        <div className="w-1/2">
+      <div className="m-auto flex max-w-[1300px] gap-10 p-3 md:flex-col md:items-center">
+        <div className="w-1/2 md:w-full">
           <Image
             src={currentImage.src}
             width={1000}
@@ -52,7 +52,7 @@ const Detail = ({
             alt={currentImage.alt}
             className="h-[500px] w-full object-cover"
           />
-          <div className="flex justify-center gap-5 px-5 py-2">
+          <div className="flex justify-center gap-5 px-5 py-2 sm:overflow-x-auto">
             {listImages.map((image, index) => (
               <Image
                 key={index}
@@ -66,9 +66,9 @@ const Detail = ({
             ))}
           </div>
         </div>
-        <div className="w-1/2 space-y-5 bg-black/10 p-5 text-black">
+        <div className="w-1/2 space-y-5 bg-black/10 p-5 text-black md:flex md:w-full md:flex-col md:items-center">
           <h1
-            className={`${dancingScript.className} text-7xl font-bold text-[#f57b20] `}
+            className={`${dancingScript.className} text-7xl font-bold text-[#f57b20] md:text-center`}
           >
             {info.name}
           </h1>
@@ -79,12 +79,12 @@ const Detail = ({
             VND
           </p>
           <p className="text-justify font-medium">{info.desc}</p>
-          <div className="text-justify font-medium text-black">
+          <div className="text-justify font-medium text-black md:w-full">
             <h2>Dịch vụ:</h2>
             <div></div>
           </div>
           <button
-            className="w-full  bg-[#f57b20] px-20 py-3 text-2xl font-medium text-white"
+            className="w-full  bg-[#f57b20] px-20 py-3 text-2xl font-medium text-white 2sm:text-xl"
             onClick={() => router.push("/auth/signin")}
           >
             Đăng ký phòng

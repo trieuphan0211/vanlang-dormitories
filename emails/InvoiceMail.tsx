@@ -1,31 +1,46 @@
+import { ROOM, STUDENT } from "@/types";
 import {
   Body,
-  Container,
   Column,
+  Container,
   Head,
   Hr,
   Html,
   Img,
-  Link,
   Preview,
   Row,
   Section,
   Text,
 } from "@react-email/components";
-import React from "react";
 
-const InvoiceMail = () => {
+const InvoiceMail = ({
+  data,
+}: {
+  data: {
+    roomDetail?: ROOM;
+    student: STUDENT;
+    detail: Array<{
+      serviceName: string;
+      quantity: number;
+      unit: string;
+      serviceId?: string;
+      cost: number;
+    }>;
+    month?: string;
+  };
+}) => {
   return (
     <Html>
       <Head />
-      <Preview>Invoice For Vanlang Dormitories</Preview>
+      <Preview>
+        {data?.roomDetail ? "Hóa đơn ký túc xá Văn Lang" : "Hóa đơn vi phạm"}
+      </Preview>
       <Body
         style={{
-          //   fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+          fontFamily: '"Roboto", sans-serif',
           backgroundColor: "#ffffff",
         }}
       >
-        {" "}
         <Container
           style={{
             margin: "0 auto",
@@ -71,7 +86,7 @@ const InvoiceMail = () => {
               </Column>
             </Row>
           </Section>
-          <Hr style={{ margin: "15px 0 0 0", borderColor: "#000" }} />
+          <Hr style={{ margin: "15px 0 0 0", borderColor: "#ccc" }} />
           <Section>
             <Row>
               <Column align="center">
@@ -82,7 +97,9 @@ const InvoiceMail = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  HÓA ĐƠN KÝ TÚC XÁ
+                  {data?.roomDetail
+                    ? `HÓA ĐƠN KÝ TÚC XÁ THÁNG ${data?.month}`
+                    : "HÓA ĐƠN VI PHẠM"}
                 </Text>
               </Column>
             </Row>
@@ -90,37 +107,149 @@ const InvoiceMail = () => {
           <Section>
             <Row style={{ marginBottom: "5px" }}>
               <Column align="left" style={{ width: "50%" }}>
-                <Text style={{ ...resetText }}>Họ tên: Phan Ngọc Triệu</Text>
-              </Column>
-              <Column align="left">
-                <Text style={{ ...resetText }}>MSSV: 207TC28659</Text>
-              </Column>
-            </Row>
-            <Row style={{ marginBottom: "5px" }}>
-              <Column align="left" style={{ width: "50%" }}>
-                <Text style={{ ...resetText }}>Phòng: P201 - Phòng đôi</Text>
+                <Text style={{ ...resetText }}>
+                  Họ tên: {data?.student?.fullName}
+                </Text>
               </Column>
               <Column align="left">
                 <Text style={{ ...resetText }}>
-                  Chi nhánh: Tòa I Trường đại học Văn Lang{" "}
+                  MSSV: {data?.student?.studentCode}
                 </Text>
               </Column>
             </Row>
             <Row style={{ marginBottom: "5px" }}>
               <Column align="left" style={{ width: "50%" }}>
                 <Text style={{ ...resetText }}>
-                  Nghành: Công nghệ thông tin
+                  Phòng: {data?.roomDetail?.code}
+                  {data?.roomDetail?.RoomType?.name && " - "}
+                  {data?.roomDetail?.RoomType?.name}
+                </Text>
+              </Column>
+              <Column align="left">
+                <Text style={{ ...resetText }}>
+                  Chi nhánh: {data?.roomDetail?.Branch?.name}
+                </Text>
+              </Column>
+            </Row>
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left" style={{ width: "50%" }}>
+                <Text style={{ ...resetText }}>
+                  Nghành: {data?.student?.major}
                 </Text>
               </Column>{" "}
             </Row>{" "}
-            <Row style={{ marginBottom: "5px" }}>
-              <Column align="left">
-                <Text style={{ ...resetText }}>
-                  Địa chỉ: 11/25 Tự Lập Phường 4, Quận Tân Bình, Tp. Hồ Chí Minh{" "}
-                </Text>
-              </Column>
-            </Row>
           </Section>
+          {data?.detail
+            ?.filter((e) => e.serviceName === "Tiền Phòng")
+            .map((e, key) => (
+              <Section
+                style={{
+                  margin: " 0 0 20px 0",
+                }}
+                key={key}
+              >
+                <Row>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+                      fontWeight: "600",
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>Phòng</Text>
+                  </Column>
+
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+                      fontWeight: "600",
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>Số lượng</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+                      fontWeight: "600",
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>Đơn giá</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+                      fontWeight: "600",
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>Thành tiền (VND)</Text>
+                  </Column>
+                </Row>
+                <Row>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>
+                      {data?.roomDetail?.code} -{" "}
+                      {data?.roomDetail?.RoomType?.name}
+                    </Text>
+                  </Column>
+
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>{e.quantity}</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>{e.unit}</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>
+                      {e.cost.toLocaleString("en-US")}{" "}
+                    </Text>
+                  </Column>
+                </Row>
+              </Section>
+            ))}
+
           <Section>
             <Row>
               <Column
@@ -128,37 +257,25 @@ const InvoiceMail = () => {
                 style={{
                   border: "1px solid #000",
                   fontWeight: "600",
-                  width: "calc(100% / 6)",
+                  width: "150px",
+                  height: "30px",
                 }}
               >
-                <Text style={{ ...resetText }}>Stt</Text>
+                <Text style={{ ...resetText }}>
+                  {data?.detail?.filter((e) => e.serviceName === "Tiền Phòng")
+                    .length > 0
+                    ? "Tên dịch vụ"
+                    : "Tên hàng hóa"}
+                </Text>
               </Column>
+
               <Column
                 align="center"
                 style={{
                   border: "1px solid #000",
                   fontWeight: "600",
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>Tên hàng hóa, dịch vụ</Text>
-              </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-                  fontWeight: "600",
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>Đơn vị tính</Text>
-              </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-                  fontWeight: "600",
-                  width: "calc(100% / 6)",
+                  width: "150px",
+                  height: "30px",
                 }}
               >
                 <Text style={{ ...resetText }}>Số lượng</Text>
@@ -168,84 +285,117 @@ const InvoiceMail = () => {
                 style={{
                   border: "1px solid #000",
                   fontWeight: "600",
-                  width: "calc(100% / 6)",
+                  width: "150px",
+                  height: "30px",
                 }}
               >
-                <Text style={{ ...resetText }}>Đơn giá (VND)</Text>
+                <Text style={{ ...resetText }}>Đơn giá</Text>
               </Column>
               <Column
                 align="center"
                 style={{
                   border: "1px solid #000",
                   fontWeight: "600",
-                  width: "calc(100% / 6)",
+                  width: "150px",
+                  height: "30px",
                 }}
               >
                 <Text style={{ ...resetText }}>Thành tiền (VND)</Text>
               </Column>
             </Row>
+            {data?.detail
+              ?.filter((e) => e.serviceName !== "Tiền Phòng")
+              .map((e, key) => (
+                <Row key={key}>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>{e.serviceName}</Text>
+                  </Column>
+
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>{e.quantity}</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>{e.unit}</Text>
+                  </Column>
+                  <Column
+                    align="center"
+                    style={{
+                      border: "1px solid #000",
+
+                      width: "150px",
+                      height: "30px",
+                    }}
+                  >
+                    <Text style={{ ...resetText }}>
+                      {e.cost.toLocaleString("en-US")}{" "}
+                    </Text>
+                  </Column>
+                </Row>
+              ))}
+          </Section>
+          <Section>
             <Row>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>1</Text>
-              </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>Nước</Text>
-              </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>
-                  m<em>3</em>
+              <Column align="right">
+                <Text>
+                  Tổng cộng (VND):
+                  <strong style={{ fontWeight: "bold" }}>
+                    {" "}
+                    {data?.detail
+                      ?.reduce(
+                        (total: number, item: any) => total + item.cost,
+                        0,
+                      )
+                      .toLocaleString("en-US")}
+                  </strong>
                 </Text>
               </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>123</Text>
+            </Row>
+          </Section>
+          <Section>
+            <Row>
+              <Column align="center">
+                <Text style={{ margin: 0, color: "red" }}>
+                  Vui lòng thanh toán hóa đơn trong vòng 5 ngày kể từ ngày nhận
+                  email.
+                </Text>
+                <Text style={{ margin: 0, color: "red" }}>Xin cảm ơn!</Text>
               </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>4,000 </Text>
+            </Row>
+          </Section>
+          <Hr style={{ margin: "15px 0", borderColor: "#ccc" }} />
+          <Section>
+            <Row style={{ marginBottom: "5px", color: "rgba(0,0,0,0.7)" }}>
+              <Column align="left" style={{ width: "50%" }}>
+                <Text style={{ ...resetText }}>
+                  Email: ktx.vanlangdormitories@gmail.com
+                </Text>
               </Column>
-              <Column
-                align="center"
-                style={{
-                  border: "1px solid #000",
-
-                  width: "calc(100% / 6)",
-                }}
-              >
-                <Text style={{ ...resetText }}>480,000</Text>
+              <Column align="right">
+                <Text style={{ ...resetText }}>Liên hệ: 0372106260</Text>
               </Column>
             </Row>
           </Section>
@@ -254,6 +404,13 @@ const InvoiceMail = () => {
     </Html>
   );
 };
+// InvoiceMail.PreviewProps = {
+//   userFirstName: "Alan",
+//   loginDate: new Date("September 7, 2022, 10:58 am"),
+//   loginDevice: "Chrome on Mac OS X",
+//   loginLocation: "Upland, California, United States",
+//   loginIp: "47.149.53.167",
+// };
 const resetText = {
   margin: "0",
   padding: "0",

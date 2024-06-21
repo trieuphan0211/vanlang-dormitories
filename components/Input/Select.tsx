@@ -33,6 +33,7 @@ export const FormSelect = ({
   defaultValue,
   students,
   violateType,
+  formProcessing,
   disabled,
   size,
 }: {
@@ -54,6 +55,7 @@ export const FormSelect = ({
   defaultValue?: string;
   students?: STUDENT[];
   violateType?: ViolateType[];
+  formProcessing?: string[];
   disabled?: boolean;
   size?: "small" | "medium";
 }) => {
@@ -158,7 +160,17 @@ export const FormSelect = ({
             {years &&
               years.map((year, key) => (
                 <MenuItem key={key} value={year}>
-                  {year} năm
+                  {year < 1 ? year * 12 + " Tháng" : year + " Năm"}
+                </MenuItem>
+              ))}
+            {formProcessing &&
+              formProcessing.map((formProcessing, key) => (
+                <MenuItem key={key} value={formProcessing}>
+                  {formProcessing === "REMINDED" && "Nhắc nhở"}
+                  {formProcessing === "WARNING" && "Cảnh báo"}
+                  {formProcessing === "RECORD" && "Lập biên bản"}
+                  {formProcessing === "LABORPENALTY" && "Xử phạt lao động"}
+                  {formProcessing === "DORMITORYEXPULSION" && "Rời ký túc xá"}
                 </MenuItem>
               ))}
           </Select>

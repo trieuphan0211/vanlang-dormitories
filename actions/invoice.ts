@@ -38,6 +38,15 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
         return {
           serviceId: service.Service.id,
           serviceName: service.Service.name,
+          quantity:
+            Number(
+              room.service.find((e: any) => e.serviceId === service.Service.id)
+                ?.quantity as string,
+            ) || 1,
+          unit:
+            service.Service.cost.toLocaleString("en-US") +
+            "/" +
+            service.Service.unit,
           cost: service.Service.allow
             ? service.Service.cost *
               Number(
@@ -49,12 +58,16 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
         };
       }) as Array<{
         serviceId: string;
+        quantity: number;
+        unit: string;
         serviceName: string;
         cost: number;
       }>;
       // Add room cost to service
       service.push({
         serviceId: room.roomId,
+        quantity: 1,
+        unit: roomDetail?.RoomType?.cost.toLocaleString("en-US") + "/tháng",
         serviceName: "Tiền Phòng",
         cost: roomDetail?.RoomType?.cost as number,
       });
@@ -63,9 +76,11 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
         // map student in room
         roomDetail?.Student?.map(async (student): Promise<any> => {
           // Send mail to student
-          const res = await sendInvoiceEmail(student.email, student.fullName, {
-            name: roomDetail?.code + "-" + roomDetail?.RoomType?.name,
+          const res = await sendInvoiceEmail({
+            roomDetail,
+            student,
             detail: service,
+            month: invoiceMonth + "/" + invoiceYear,
           });
           if (res) {
             // Create object invoice
@@ -117,11 +132,15 @@ export const createInvoiceForViolate = async ({
   const service = JSON.parse(items).map((item: any) => {
     return {
       serviceId: "",
+      quantity: 1,
+      unit: "",
       serviceName: item.name,
       cost: item.cost,
     };
   }) as Array<{
     serviceId: string;
+    quantity: number;
+    unit: string;
     serviceName: string;
     cost: number;
   }>;
@@ -131,8 +150,8 @@ export const createInvoiceForViolate = async ({
   }
   // Send mail to student
 
-  const sendMail = await sendInvoiceEmail(student.email, student.fullName, {
-    name: "Phạt vi phạm",
+  const sendMail = await sendInvoiceEmail({
+    student,
     detail: service,
   });
   if (sendMail) {

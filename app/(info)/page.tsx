@@ -3,9 +3,9 @@ import Image from "next/image";
 
 export default async function Home() {
   return (
-    <main className="absolute left-0 right-0 top-0 min-h-screen w-screen overflow-hidden">
-      <div className="absolute left-0 right-0 top-0 h-[1050px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpeg')] bg-cover bg-fixed "></div>
-      <div className="mt-[1050px] flex items-center justify-center gap-20 p-10 lg:flex-col lg:gap-5">
+    <main className="">
+      <div className="h-[1050px] w-screen overflow-hidden bg-[url('/images/background/ktx_i.jpeg')] bg-cover bg-fixed "></div>
+      <div className="flex items-center justify-center gap-20 p-10 lg:flex-col lg:gap-5">
         <iframe
           className="aspect-video h-[450px]  rounded-2xl lg:h-full  lg:w-full"
           src="https://www.youtube.com/embed/wgb22CwNDTs"
@@ -223,7 +223,7 @@ export default async function Home() {
           </div>
         </div>
       </div> */}
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }

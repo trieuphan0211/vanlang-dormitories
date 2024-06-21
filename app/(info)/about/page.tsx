@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 const RoomPage = () => {
   return (
     <main className="">
-      <div className="relative flex h-150 w-screen items-end overflow-hidden bg-[url('/images/about/room-bg.webp')] bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)]  before:blur-sm">
-        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[550px] border-l-6 border-red text-center text-6xl font-bold italic leading-normal text-white ">
+      <div className="relative flex h-150 w-screen items-end overflow-hidden bg-[url('/images/about/room-bg.webp')] bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)] before:blur-sm  sm:flex-col sm:px-4">
+        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[550px] border-l-6 border-red text-center text-6xl font-bold italic leading-normal text-white sm:relative sm:left-auto sm:top-auto sm:my-10 sm:text-5xl">
           Ký túc xá Trường Đại học Văn Lang
         </h1>
-        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white ">
+        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white sm:relative sm:bottom-auto sm:right-auto">
           Ký túc xá Trường Đại học Văn Lang hướng đến phong cách năng động, tự
           chủ, tôn vinh lối sống độc lập và màu sắc riêng của từng sinh viên
           trong cộng đồng Văn Lang. Hứa hẹn không chỉ là nơi để ở mà còn là nơi
@@ -21,7 +21,7 @@ const RoomPage = () => {
           tại VLU.
         </p>
       </div>
-      <div className="px-[130px] py-10 text-justify text-lg text-black">
+      <div className="px-[130px] py-10 text-justify text-lg text-black sm:px-4">
         <div className="m-auto max-w-[1300px]">
           <p className="font-semibold">
             Hiện nay, trường Đại học Văn Lang có 2 khu Ký túc xá dành cho sinh

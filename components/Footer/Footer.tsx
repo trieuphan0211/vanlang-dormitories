@@ -76,19 +76,36 @@ export const Footer = () => {
           width={200}
           height={50}
         />
-        <div className="grid h-fit grid-cols-4 gap-4">
-          <h3 className="text-white">Email</h3>
-          <h3 className="text-white">Đào tạo</h3>
-          <h3 className="text-white">Tuyển sinh</h3>
-          <h3 className="text-white">Hỗ trợ sinh viên (Call Center)</h3>
-          <p className="">info@vlu.edu.vn</p>
-          <p className="">028.7109 9221</p>
-          <p className="">028.7105 9999</p>
-          <p className="">028. 7106. 1111</p>
+        <div className="flex flex-wrap gap-22 lg:gap-10">
+          <div>
+            <h3 className="text-white">Email</h3>{" "}
+            <p className="">info@vlu.edu.vn</p>
+          </div>
+          <div>
+            <h3 className="text-white">Đào tạo</h3>
+            <p className="">028.7109 9221</p>
+          </div>
+          <div>
+            <h3 className="text-white">Tuyển sinh</h3>
+            <p className="">028.7105 9999</p>
+          </div>
+          <div>
+            <h3 className="text-white">Hỗ trợ sinh viên (Call Center)</h3>
+
+            <p className="">028. 7106. 1111</p>
+          </div>
+          {/* <div className="grid h-fit flex-1 grid-cols-2 gap-4">
+            <h3 className="text-white">Đào tạo</h3>
+
+            <p className="">028.7109 9221</p>
+          </div>
+          <div className="grid h-fit flex-1 grid-cols-2 gap-4">
+          
+          </div> */}
         </div>
       </div>
       <div className="my-5 w-full border-t-[1px] border-[rgba(255,255,255,0.4)]"></div>
-      <div className="flex gap-10">
+      <div className="flex flex-wrap gap-10">
         <div className="m-auto">
           <Image
             src="/images/logo/vanlanglogo.png"
@@ -116,6 +133,16 @@ export const Footer = () => {
           </div>
         ))}
       </div>
+      <div style={{ width: "100%" }}>
+        <iframe
+          width="300"
+          height="300"
+          src="https://maps.google.com/maps?width=300&amp;height=300&amp;hl=en&amp;q=RMHX+FFC,%20Ph%C6%B0%E1%BB%9Dng%205,%20G%C3%B2%20V%E1%BA%A5p,%20H%E1%BB%93%20Ch%C3%AD%20Minh,%20Vietnam+(My%20Business%20Name)&amp;t=&amp;z=18&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+        >
+          <a href="https://www.gps.ie/">gps vehicle tracker</a>
+        </iframe>
+      </div>
+
       <div className="my-5 w-full border-t-[1px] border-[rgba(255,255,255,0.4)]"></div>
       <div className="flex w-full items-center justify-between ">
         <p>© 2024 Van Lang University. All rights reserved.</p>

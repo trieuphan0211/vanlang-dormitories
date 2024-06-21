@@ -23,10 +23,13 @@ export const CheckIn = ({ student }: { student: Student }) => {
     startTransition(async () => {
       try {
         const qrs = JSON.parse(qr);
-        console.log(qrs);
         if (qrs.type === "in") {
           checkKeyIn(qrs.key).then(async (res) => {
             if (res?.success) {
+              console.log({
+                studentId: student.id,
+                status: "IN",
+              });
               await addCheckInOut({
                 studentId: student.id,
                 status: "IN",
@@ -103,7 +106,7 @@ export const CheckIn = ({ student }: { student: Student }) => {
         setQr("");
       }
     });
-  }, [qr, isPending, student, router, dispatch, startTransition]);
+  }, [qr, isPending, student, router, dispatch, startTransition, message.type]);
 
   return (
     <div className="relative">
@@ -117,7 +120,6 @@ export const CheckIn = ({ student }: { student: Student }) => {
         <Scanner
           onResult={(text, result) => {
             if (!text) return;
-            console.log("text:", text);
             setQr(text);
           }}
           components={{

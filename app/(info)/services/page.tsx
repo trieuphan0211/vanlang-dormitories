@@ -85,11 +85,11 @@ text-[#f57b20]"
 const ServicesPage = () => {
   return (
     <div className=" w-full text-black">
-      <div className="relative flex h-[700px] w-screen items-end overflow-hidden bg-[url('/images/room/general.webp')] bg-center bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)]  ">
-        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[550px] border-l-6 border-red text-left text-6xl font-bold italic leading-normal text-white ">
+      <div className="relative flex h-[700px] w-screen items-end overflow-hidden bg-[url('/images/room/general.webp')] bg-center bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)] sm:flex-col sm:px-4">
+        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[450px] border-l-6 border-red text-left text-6xl font-bold italic leading-normal text-white sm:relative sm:left-auto sm:top-auto sm:my-10 sm:text-5xl">
           Dịch vụ & tiện ích tại Văn Lang
         </h1>
-        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white ">
+        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white sm:relative sm:bottom-auto sm:right-auto">
           Tại ký túc xá của Trường Đại học Văn Lang, chúng tôi cung cấp một loạt
           các dịch vụ và tiện ích nhằm tạo điều kiện sống thoải mái và hỗ trợ
           cho sinh viên. Các dịch vụ bao gồm phòng ở tiện nghi với Wi-Fi miễn
@@ -102,15 +102,15 @@ const ServicesPage = () => {
 
       <div className="flex flex-col items-center bg-[#2d334d] p-4">
         <h1
-          className={`${dancingScript.className} text-7xl leading-normal text-primary`}
+          className={`${dancingScript.className} text-center text-7xl leading-normal text-primary`}
         >
           Dịch vụ & tiện ích
         </h1>
-        <p className="text-lg italic tracking-widest text-white">
+        <p className="text-center text-lg italic tracking-widest text-white">
           Hội tụ ngàn tiện ích “All in one” đẳng cấp
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 py-5">
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <FaWifi className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>
               Wifi & Internet
@@ -119,7 +119,7 @@ const ServicesPage = () => {
               Dịch vụ cung cấp kết nối và internet tốc độ cao
             </p>
           </div>
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <FaLightbulb className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>
               Điện & Nước
@@ -128,28 +128,28 @@ const ServicesPage = () => {
               Cung cấp dịch vụ điện và nước ổn định, an toàn
             </p>
           </div>
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <GiBroom className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>Dọn phòng</h3>
             <p className="text-center text-base italic">
               Đảm bảo vệ sinh, dọn dẹp phòng ở hàng ngày
             </p>
           </div>
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <IoShirt className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>Giặt ủi</h3>
             <p className="text-center text-base italic">
               Dịch vụ giặt ủi nhanh chóng, tiện lợi
             </p>
           </div>
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <RiEBikeFill className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>Giữ xe</h3>
             <p className="text-center text-base italic">
               Dịch vụ giữ xe an toàn, tiện lợi cho sinh viên
             </p>
           </div>
-          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12">
+          <div className="flex w-[400px] flex-col items-center gap-2 bg-[#1c223e] p-5 text-white shadow-12 sm:w-full">
             <GiWeightLiftingUp className="text-8xl text-primary" />
             <h3 className={`${dancingScript.className} text-4xl`}>Phòng Gym</h3>
             <p className="text-center text-base italic">

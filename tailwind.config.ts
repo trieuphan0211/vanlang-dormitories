@@ -14,6 +14,8 @@ const config: Config = {
       xsm: "425px",
       "3xl": "2000px",
       ...defaultTheme.screens,
+      "2sm": { max: "376px" },
+      // => @media (max-width: 639px) { ... }
       sm: { max: "426px" },
       // => @media (max-width: 639px) { ... }
       md: { max: "768px" },

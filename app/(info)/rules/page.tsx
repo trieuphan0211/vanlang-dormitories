@@ -440,9 +440,9 @@ export const metadata: Metadata = {
 const RoomPage = () => {
   return (
     <main className="w-full bg-[url(/images/background/ky_tuc_xa.jpg)] p-5 text-justify font-medium text-black">
-      <div className="mx-auto max-w-[1230px] rounded-lg bg-white px-20 py-7">
+      <div className="mx-auto max-w-[1230px] rounded-lg bg-white px-20 py-7 sm:px-3 ">
         <h1
-          className={`${dancingScript.className} mb-8 text-center text-4xl font-extrabold uppercase leading-snug`}
+          className={`${dancingScript.className} mb-8 text-center text-4xl font-extrabold uppercase leading-snug sm:text-3xl`}
         >
           {rules.header.split("/n").map((title, index) => (
             <span key={title + index}>

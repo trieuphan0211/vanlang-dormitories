@@ -10,6 +10,12 @@ import { IoAdd } from "react-icons/io5";
 import { MdMoreVert } from "react-icons/md";
 import { RemoveItemDialog } from "../Dialog/RemoveItem";
 import clsx from "clsx";
+import { getRegisterByStatus } from "@/actions/register";
+import { useAppDispatch } from "@/hooks/redux";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
+import { RoomExtension } from "../Dialog/RoomExtension";
+import { getStudentFromEmail } from "@/actions/student";
+import { getStudentByEmail } from "@/data/student";
 
 export const RegistersTable = ({
   registers,
@@ -20,6 +26,7 @@ export const RegistersTable = ({
   count: number;
   role?: string;
 }) => {
+  const dispatch = useAppDispatch();
   // state for add model
   const [open, setOpen] = useState(false);
   // hook to handle pedding when calling server
@@ -30,6 +37,8 @@ export const RegistersTable = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   // state open remove dialog
   const [openRemove, setOpenRemove] = useState<Boolean>(false);
+  // state open room extension dialog
+  const [openExtension, setOpenExtension] = useState<Boolean>(false);
   // state to get branchid when showing action menu
   const [registerId, setRegisterId] = useState<string>("");
   //Handle set position action menu
@@ -37,26 +46,70 @@ export const RegistersTable = ({
     setRegisterId(id);
     setAnchorEl(event.currentTarget);
   };
+
   // Handle close action menu
   const handleClose = () => {
     setAnchorEl(null);
   };
   useEffect(() => {
     router.refresh();
-  }, []);
+  }, [router]);
+  const handleRegister = async () => {
+    const register =
+      (await getRegisterByStatus(registers[0]?.Student?.email, 0)) || [];
+    if (register.length > 0) {
+      dispatch(
+        alertManagerActions.setAlert({
+          message: {
+            type: "warning",
+            content: "Bạn đã đăng ký phòng trọ rồi! Không thể đăng ký thêm!",
+          },
+        }),
+      );
+    } else {
+      router.push("/home/register-dormitory/create");
+    }
+  };
+  const handleExtension = async () => {
+    const student = await getStudentFromEmail(registers[0]?.Student?.email);
+    if (student[0]?.roomId) {
+      console.log("student", student);
+      setOpenExtension(true);
+    } else {
+      dispatch(
+        alertManagerActions.setAlert({
+          message: {
+            type: "warning",
+            content: "Bạn chưa có phòng tại ký túc xá!",
+          },
+        }),
+      );
+    }
+  };
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3">
         <SearchTable placeholder="Tìm tiếm tên sinh viên ..." type="register" />
-        {role === "user" && (
-          <button
-            onClick={() => router.push("/home/register-dormitory/create")}
-            className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-          >
-            <IoAdd className="text-2xl" />
-            Đăng ký
-          </button>
-        )}
+        <div className=" flex gap-5">
+          {role === "user" && (
+            <button
+              onClick={handleExtension}
+              className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-green-500 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            >
+              {/* <IoAdd className="text-2xl" /> */}
+              Gia hạn
+            </button>
+          )}
+          {role === "user" && (
+            <button
+              onClick={handleRegister}
+              className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            >
+              <IoAdd className="text-2xl" />
+              Đăng ký
+            </button>
+          )}
+        </div>
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -105,7 +158,9 @@ export const RegistersTable = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {register.registerdeadline} năm
+                    {register.registerdeadline < 1
+                      ? register.registerdeadline * 12 + " tháng"
+                      : register.registerdeadline + " năm"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -121,12 +176,14 @@ export const RegistersTable = ({
                         "bg-success text-success": register.status === 1,
                         "bg-graydark text-graydark": register.status === 0,
                         "bg-red text-red": register.status === 2,
+                        "bg-warning text-warning": register.status === 3,
                       },
                     )}
                   >
                     {register.status === 0 && "Đang chờ"}
                     {register.status === 1 && "Đã duyệt"}
                     {register.status === 2 && "Đã hủy"}
+                    {register.status === 3 && "Đã gia hạn"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -269,6 +326,14 @@ export const RegistersTable = ({
           registerId={registerId}
           setState={setOpenRemove}
           title={"Bạn có chắc chắn muốn hủy đăng ký này không?"}
+        />
+      )}
+      {openExtension && (
+        <RoomExtension
+          isPending={isPending}
+          startTransition={startTransition}
+          // registerId={registerId}
+          setState={setOpenExtension}
         />
       )}
     </div>

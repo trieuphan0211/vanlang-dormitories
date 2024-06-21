@@ -48,7 +48,7 @@ export const AddNewService = ({
     if (!allow) {
       setValue("unit", "tháng");
     }
-  }, [allow]);
+  }, [allow, setValue]);
   const onSubmit = (value: z.infer<typeof ServiceSchema>) => {
     startTransition(() => {
       addService(value).then((res) => {

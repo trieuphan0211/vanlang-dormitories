@@ -47,11 +47,11 @@ const serviceItems: ServiceItem[] = [
 const RoomPage = () => {
   return (
     <div className=" w-full text-black">
-      <div className="relative flex h-[700px] w-screen items-end overflow-hidden bg-[url('/images/room/general.webp')] bg-center bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)]  ">
-        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[450px] border-l-6 border-red text-left text-6xl font-bold italic leading-normal text-white ">
+      <div className="relative flex h-[700px] w-screen items-end overflow-hidden bg-[url('/images/room/general.webp')] bg-center bg-no-repeat before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-[rgba(0,0,0,0.5)] sm:flex-col sm:px-4">
+        <h1 className="absolute left-[130px] top-[20%] z-1 max-w-[450px] border-l-6 border-red text-left text-6xl font-bold italic leading-normal text-white sm:relative sm:left-auto sm:top-auto sm:my-10 sm:text-5xl">
           Các loại phòng tại Văn Lang
         </h1>
-        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white ">
+        <p className="absolute bottom-11 right-[130px] z-1 max-w-125 text-justify text-xl text-white sm:relative sm:bottom-auto sm:right-auto">
           Tại ký túc xá Trường Đại học Văn Lang, chúng tôi cung cấp một loạt các
           loại phòng đa dạng để phục vụ nhu cầu và sở thích của sinh viên.Với sự
           đa dạng trong các loại phòng, sinh viên tại ký túc xá của chúng tôi có
@@ -69,20 +69,20 @@ const RoomPage = () => {
         <p className="text-lg italic tracking-widest text-white">
           Đỉnh Cao Cuộc Sống Sinh Viên
         </p>
-        <div className="mt-10 flex justify-center gap-10">
+        <div className="mt-10 flex justify-center gap-10 md:flex-wrap">
           {serviceItems.map((item, index) => (
             <div
               key={index}
               className=" flex max-w-[300px] flex-col items-start justify-between gap-3 text-justify text-white"
             >
               <div className="group">
-                <div className="flex max-h-[200px] items-center overflow-hidden">
+                <div className="flex max-h-[200px] items-center overflow-hidden lg:h-[200px]">
                   <Image
                     src={item.img}
                     width={1000}
                     height={1000}
                     alt={item.title}
-                    className="transition-all group-hover:scale-110"
+                    className="h-full w-full bg-cover bg-center transition-all group-hover:scale-110"
                   />
                 </div>
 

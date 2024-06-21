@@ -9,7 +9,6 @@ import {
 } from "react-icons/md";
 import { LineChart, PieChart } from "../Charts";
 import { CardData } from "./CardData";
-import ChartTwo from "../Charts/ChartTwo";
 
 const Dashboard = ({
   branchCount,
@@ -36,7 +35,7 @@ const Dashboard = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-4 gap-4 gap-7.5 md:grid-cols-2 md:gap-6 xl:grid-cols-1">
         <CardData
           title="Dịch vụ"
           total={String(servicesCount)}

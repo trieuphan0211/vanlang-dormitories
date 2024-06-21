@@ -383,13 +383,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     if (role === "USER") {
       setMenu(userMenu);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role]);
   // End: Handle Logic
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-40 flex h-screen w-72.5 flex-col overflow-y-hidden  bg-[url('/images/background/h1.jpg')] bg-cover bg-center duration-300 ease-linear before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-black before:opacity-75 before:blur-sm lg:static lg:translate-x-0 ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={`static flex h-screen w-72.5 translate-x-0 flex-col overflow-y-hidden bg-[url('/images/background/h1.jpg')] bg-cover  bg-center duration-300 ease-linear before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:bg-gradient-to-t before:from-[#2d334d] before:to-black before:opacity-75 before:blur-sm lg:absolute lg:left-0 lg:top-0 lg:z-40 ${
+        sidebarOpen ? "!-translate-x-full" : "translate-x-0"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
@@ -408,7 +410,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls="sidebar"
           aria-expanded={sidebarOpen}
-          className="block lg:hidden"
+          className="hidden lg:block"
         >
           <svg
             className="fill-current"

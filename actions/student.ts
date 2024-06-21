@@ -1,14 +1,16 @@
 "use server";
 
 import { updateRegister } from "@/data/register";
+import { updateRoomDate } from "@/data/room";
 import {
   deleteStudent,
   getAllStudents,
-  getStudentByEmail,
+  getStudentsByEmail,
   updateStudent,
   updateStudentInRoom,
 } from "@/data/student";
 import { getUserByEmail, updateUser } from "@/data/users";
+import { sendRegisterConfirmationEmail } from "@/lib/mail";
 import { StudentInfoSchema } from "@/schema";
 import * as z from "zod";
 
@@ -27,7 +29,7 @@ export const removeStudent = async (id: string) => {
   }
 };
 export const getStudentFromEmail = async (email: string) => {
-  const student = await getStudentByEmail(email);
+  const student = await getStudentsByEmail(email);
   if (student) {
     return student;
   }
@@ -60,6 +62,7 @@ export const removeRoomOfStudent = async (id: string) => {
     return { error: "An error occurred!" };
   }
 };
+
 export const updateStudentInRoomById = async (
   id: string,
   roomId: string,
@@ -74,7 +77,23 @@ export const updateStudentInRoomById = async (
         return { error: "An error occurred!" };
       }
       console.log("Register is updated!");
-      return { success: "Student is updated!" };
+      if (res !== undefined) {
+        await updateRoomDate(
+          roomId,
+          new Date(
+            new Date().setMonth(
+              new Date().getMonth() + res.registerdeadline * 12,
+            ),
+          ),
+        );
+      }
+      // send Email
+      const sendMail = await sendRegisterConfirmationEmail(student);
+      if (sendMail) {
+        console.log("Email is sent!");
+        return { success: "Student is updated!" };
+      }
+      return { error: "Email is not sent!" };
     }
     console.log("Student not found!");
     return { error: "Student not found!" };

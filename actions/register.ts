@@ -1,5 +1,12 @@
 "use server";
-import { createRegisterById, updateRegister } from "@/data/register";
+import {
+  createRegisterById,
+  getFilterRegister,
+  updateRegister,
+} from "@/data/register";
+import { updateRoomDate } from "@/data/room";
+import { sendRegisterEmail } from "@/lib/mail";
+import { REGISTER } from "@/types";
 
 export const cancelRegister = async (id: string) => {
   try {
@@ -26,9 +33,53 @@ export const createRegister = async (data: any) => {
     if (res === null) {
       return { error: "An error occurred!" };
     }
+    // send email to student
+    console.log(res);
+    const sendMail = await sendRegisterEmail(res);
+    if (sendMail === null) {
+      return { error: "An error occurred!" };
+    }
     return { success: "Register is created!" };
   } catch (error) {
     console.log(error);
     return { error: "An error occurred!" };
   }
+};
+export const createExtensionRegister = async (data: any) => {
+  try {
+    const res = await createRegisterById({
+      roomId: data.roomId,
+      registerdeadline: data.year,
+      studentEmail: data.email,
+      status: 3,
+    });
+    if (res === null) {
+      return { error: "An error occurred!" };
+    }
+    const updateDateRoom = await updateRoomDate(
+      data.roomId,
+      new Date(data.allowRegister),
+    );
+    if (updateDateRoom === null) {
+      return { error: "An error occurred!" };
+    }
+    return { success: "Register is created!" };
+  } catch (error) {
+    console.log(error);
+    return { error: "An error occurred!" };
+  }
+};
+export const getRegisterByStatus = async (email: string, status: number) => {
+  const student = await getFilterRegister(
+    "",
+    "",
+    "",
+    0,
+    status,
+    "",
+    1,
+    10,
+    email,
+  );
+  return student;
 };

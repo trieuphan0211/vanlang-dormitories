@@ -103,6 +103,7 @@ export const getFilterRegister = async (
         },
       });
     email && search.push({ studentEmail: email });
+    console.log(search);
     const register = await db.register.findMany({
       orderBy: [
         {
@@ -193,12 +194,13 @@ export const createRegisterById = async (data: {
   roomId: string;
   registerdeadline: number;
   studentEmail: string;
+  status?: number;
 }) => {
   try {
     const register = await db.register.create({
       data: {
-        ...data,
         status: 0,
+        ...data,
       },
     });
     console.log(register);

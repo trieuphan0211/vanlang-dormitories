@@ -24,7 +24,7 @@ export default async function DetailPage({
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
-            Tên vi phạm: {violate?.name}
+            Tên vi phạm: {violate?.TypeViolate?.name}
           </h3>
         </div>
         <div className="p-7">

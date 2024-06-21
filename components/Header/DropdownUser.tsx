@@ -1,12 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { getStudentByEmail } from "@/data/student";
-import { STUDENT } from "@/types";
 import { getStudentFromEmail } from "@/actions/student";
+import { STUDENT } from "@/types";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { RiShieldUserLine } from "react-icons/ri";
 
 const DropdownUser = () => {
   //Begin: Handle dropdown state UI
@@ -48,11 +47,12 @@ const DropdownUser = () => {
   const getStudent = async () => {
     const student = (await getStudentFromEmail(
       session.data?.user.email || "",
-    )) as unknown as STUDENT;
-    setStudent(student);
+    )) as unknown as STUDENT[];
+    setStudent(student.length > 0 ? student[0] : ({} as STUDENT));
   };
   useEffect(() => {
     getStudent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
   // Begin: Handle Logout
   const handleLogout = async () => {
@@ -60,7 +60,7 @@ const DropdownUser = () => {
   };
   // End: Handle Logout
   // End: Handle Data & Function
-
+  console.log(student);
   return (
     <div className="relative">
       <Link
@@ -69,7 +69,7 @@ const DropdownUser = () => {
         className="flex items-center gap-4"
         href="#"
       >
-        <span className="hidden text-right lg:block">
+        <span className="block text-right lg:hidden">
           <span className="block text-sm font-medium text-black dark:text-white">
             {session.data?.user.name || "No Name"}
           </span>
@@ -93,9 +93,15 @@ const DropdownUser = () => {
             alt="User"
           />
         </span>
+        {session.data?.user.role === "USER" && (
+          <span className="flex items-center gap-1 border-l-2 border-black/30 pl-2 text-blue-400">
+            <RiShieldUserLine />
+            {student?.point}
+          </span>
+        )}
 
         <svg
-          className="hidden fill-current sm:block"
+          className="block fill-current sm:hidden"
           width="12"
           height="8"
           viewBox="0 0 12 8"

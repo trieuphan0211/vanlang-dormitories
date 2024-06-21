@@ -47,7 +47,7 @@ export const ServiceDetailForm = ({
     if (!allow) {
       setValue("unit", "tháng");
     }
-  }, [allow]);
+  }, [allow, setValue]);
   const onSubmit = (value: z.infer<typeof ServiceSchema>) => {
     console.log(value);
     startTransition(() => {

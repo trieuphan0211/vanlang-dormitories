@@ -47,11 +47,12 @@ export type ROOMTYPE = {
 };
 export type VIOLATE = {
   id: string;
-  name: string;
+
   studentId: string;
   typeViolateCode: string;
   status: StatusViolate;
   date: string;
+  formProcessing: string;
   description: string;
   metaData: string | null;
   updateDate: Date;
@@ -66,6 +67,7 @@ export type ROOM = {
   floor: number;
   branchId: string;
   roomTypeCode: string;
+  allowRegisterDate: Date;
   Branch?: BRANCH;
   RoomType?: ROOMTYPE;
   Services?: Array<any>;
@@ -97,7 +99,10 @@ export type STUDENT = {
   permanentResidence?: string;
   familiInfo?: string;
   contactinfo?: string;
+  point?: number;
   Room?: ROOM;
+  roomId?: string;
+  Violate?: VIOLATE[];
 };
 
 export type REGISTER = {
