@@ -20,7 +20,13 @@ const CreatePage = async () => {
 
   return (
     <div>
-      <Breadcrumb pageName="Tạo đăng ký ký túc xá" />
+      <Breadcrumb
+        pageName="Tạo đăng ký ký túc xá"
+        link={[
+          { name: "Đăng ký", link: "/home/register-dormitory" },
+          { name: "Tạo mới", link: "/home/register-dormitory/create" },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           {student?.Violate?.filter(

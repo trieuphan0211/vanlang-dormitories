@@ -17,7 +17,13 @@ export default async function DetailPage({
   const roomType = (await getRoomTypeById(params.id)) as ROOMTYPE;
   return (
     <div>
-      <Breadcrumb pageName={`Cập nhật loại phòng`} />
+      <Breadcrumb
+        pageName={`Cập nhật loại phòng`}
+        link={[
+          { name: "Loại phòng", link: "/admin/room-type" },
+          { name: "Cập nhật", link: `/admin/room-type/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

@@ -16,7 +16,13 @@ export default async function DetailPage({
   const maintenance = (await getMaintenancesById(params.id)) as MAINTENNANCES;
   return (
     <div>
-      <Breadcrumb pageName={`Chi tiết đơn bảo trì`} />
+      <Breadcrumb
+        pageName={`Chi tiết đơn bảo trì`}
+        link={[
+          { name: "Bảo trì", link: "/admin/maintenance" },
+          { name: "Chi tiết", link: `/admin/maintenance/detail/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

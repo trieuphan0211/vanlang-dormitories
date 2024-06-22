@@ -11,7 +11,10 @@ const ProfilePage = async () => {
   )) as unknown as STUDENT;
   return (
     <div className="mx-auto max-w-242.5">
-      <Breadcrumb pageName="Thông tin cá nhân" />
+      <Breadcrumb
+        pageName="Thông tin cá nhân"
+        link={[{ name: "Thông tin cá nhân", link: "/home" }]}
+      />
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className=" z-20  h-35 w-full  overflow-hidden md:h-65 ">
           <Image
@@ -100,6 +103,15 @@ const ProfilePage = async () => {
               Email:{" "}
             </h4>
             <p className="">{student?.email}</p>
+          </div>
+          <div className="flex gap-5">
+            <h4 className="font-semibold text-black dark:text-white">
+              Thời hạn cư trú đến:{" "}
+            </h4>
+            <p className="">
+              {student.Room?.allowRegisterDate &&
+                new Date(student.Room?.allowRegisterDate).toLocaleDateString()}
+            </p>
           </div>
         </div>
       </div>

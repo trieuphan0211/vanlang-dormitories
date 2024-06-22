@@ -7,6 +7,7 @@ export const getFilterInOut = async (
   studentCode: string,
   currentPage: number,
   entries: number,
+  studentId?: string,
 ) => {
   try {
     const search = [];
@@ -17,6 +18,12 @@ export const getFilterInOut = async (
             contains: query,
             mode: "insensitive",
           },
+        },
+      });
+    studentId &&
+      search.push({
+        studentId: {
+          equals: studentId,
         },
       });
     studentCode &&
@@ -58,6 +65,7 @@ export const getCountInOut = async (
   query: string,
   status: StatusInOut,
   studentCode: string,
+  studentId?: string,
 ) => {
   try {
     const search = [];
@@ -68,6 +76,12 @@ export const getCountInOut = async (
             contains: query,
             mode: "insensitive",
           },
+        },
+      });
+    studentId &&
+      search.push({
+        studentId: {
+          equals: studentId,
         },
       });
     studentCode &&

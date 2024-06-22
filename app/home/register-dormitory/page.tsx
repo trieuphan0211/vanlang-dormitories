@@ -50,7 +50,10 @@ const RegisterPage = async ({
 
   return (
     <div>
-      <Breadcrumb pageName="Đăng ký ký túc xá" />
+      <Breadcrumb
+        pageName="Đăng ký ký túc xá"
+        link={[{ name: "Đăng ký", link: "/home/register-dormitory" }]}
+      />
       <RegistersTable registers={registers} count={Number(count)} role="user" />
     </div>
   );

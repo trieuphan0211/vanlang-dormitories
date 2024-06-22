@@ -42,7 +42,10 @@ const FacilitiesTypePage = async ({
   );
   return (
     <div>
-      <Breadcrumb pageName="Quản lý loại cơ sở vật chất" />
+      <Breadcrumb
+        pageName="Quản lý loại cơ sở vật chất"
+        link={[{ name: "Loại cơ sở vật chất", link: "/admin/facilities-type" }]}
+      />
       <FacilitiesTypeTable
         facilitiesTypes={facilitiesTypes}
         count={Number(count)}

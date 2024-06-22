@@ -1,6 +1,6 @@
 "use server";
 
-import { updateRegister } from "@/data/register";
+import { getRegisterById, updateRegister } from "@/data/register";
 import { updateRoomDate } from "@/data/room";
 import {
   deleteStudent,
@@ -12,6 +12,7 @@ import {
 import { getUserByEmail, updateUser } from "@/data/users";
 import { sendRegisterConfirmationEmail } from "@/lib/mail";
 import { StudentInfoSchema } from "@/schema";
+import { REGISTER } from "@/types";
 import * as z from "zod";
 
 export const removeStudent = async (id: string) => {
@@ -87,8 +88,10 @@ export const updateStudentInRoomById = async (
           ),
         );
       }
+      if (res?.id === undefined) return { error: "An error occurred!" };
+      const register = (await getRegisterById(res.id)) as REGISTER;
       // send Email
-      const sendMail = await sendRegisterConfirmationEmail(student);
+      const sendMail = await sendRegisterConfirmationEmail(register);
       if (sendMail) {
         console.log("Email is sent!");
         return { success: "Student is updated!" };

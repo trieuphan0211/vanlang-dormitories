@@ -36,7 +36,10 @@ const UserPage = async ({
   const session = await auth();
   return (
     <div>
-      <Breadcrumb pageName="Quản lý người dùng" />
+      <Breadcrumb
+        pageName="Quản lý người dùng"
+        link={[{ name: "Người dùng", link: "/admin/user" }]}
+      />
       <UserTable
         users={users}
         count={Number(count)}

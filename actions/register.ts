@@ -2,6 +2,7 @@
 import {
   createRegisterById,
   getFilterRegister,
+  getRegisterById,
   updateRegister,
 } from "@/data/register";
 import { updateRoomDate } from "@/data/room";
@@ -34,8 +35,10 @@ export const createRegister = async (data: any) => {
       return { error: "An error occurred!" };
     }
     // send email to student
-    console.log(res);
-    const sendMail = await sendRegisterEmail(res);
+
+    if (res?.id === undefined) return { error: "An error occurred!" };
+    const register = (await getRegisterById(res.id)) as REGISTER;
+    const sendMail = await sendRegisterEmail(register);
     if (sendMail === null) {
       return { error: "An error occurred!" };
     }

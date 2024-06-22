@@ -1,6 +1,8 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { InvoiceTable } from "@/components/Tables/InvoiceTable";
 import { getCountInvoices, getFilterInvoices } from "@/data/invoice";
+import { getStudentByEmail, getStudentById } from "@/data/student";
+import { currentUser } from "@/lib/auth";
 import { INVOICE } from "@/types";
 import { Metadata } from "next";
 import React from "react";
@@ -22,6 +24,8 @@ const InvoicePage = async ({
     entries?: string;
   };
 }) => {
+  const user = await currentUser();
+  const student = await getStudentByEmail(user?.email as string);
   const query = searchParams?.query?.trim() || "";
   const roomCode = searchParams?.roomCode?.trim() || "";
   const branchName = searchParams?.branchName?.trim() || "";
@@ -37,16 +41,23 @@ const InvoicePage = async ({
     entries,
     new Date("2021-01-01"),
     new Date(),
+    student?.id as string,
   )) as INVOICE[];
-  const count = await getCountInvoices(query, roomCode, branchName, status);
-
+  const count = await getCountInvoices(
+    query,
+    roomCode,
+    branchName,
+    status,
+    student?.id as string,
+  );
+  console.log(count);
   return (
     <div>
       <Breadcrumb
         pageName="Quản lý hóa đơn"
         link={[{ name: "Hóa đơn", link: "/admin/invoice" }]}
       />
-      <InvoiceTable invoices={invoices} count={count} />
+      <InvoiceTable invoices={invoices} count={count} type="user" />
     </div>
   );
 };

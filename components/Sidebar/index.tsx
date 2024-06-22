@@ -364,6 +364,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       href: "/home/out-in",
     },
     {
+      icon: "/images/header-icon/branch.svg",
+      title: "Hóa đơn",
+      href: "/home/invoice",
+    },
+    {
       icon: "/images/header-icon/dashboard.svg",
       title: "Vi phạm",
       href: "/home/violate",

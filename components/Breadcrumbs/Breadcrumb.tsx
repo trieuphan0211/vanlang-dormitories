@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 interface BreadcrumbProps {
   pageName: string;
+  link: Array<{ name: string; link: string }>;
 }
-const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
+const Breadcrumb = ({ pageName, link }: BreadcrumbProps) => {
   const pathname = usePathname();
   const [breadcrumb, setBreadcrumb] = useState<Array<String>>([]);
   useEffect(() => {
@@ -19,26 +20,24 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
     }
   }, [pathname]);
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-6 flex  items-center justify-between gap-3">
       <h2 className="text-title-md2 font-semibold text-black dark:text-white">
         {pageName}
       </h2>
 
       <nav>
         <ol className="flex items-center gap-2">
-          {breadcrumb.map((path, index) => {
-            const replacePath = pathname.split("/");
+          {link.map((path, index) => {
             return (
               <li key={index}>
                 <Link
                   className={clsx("font-medium capitalize ", {
-                    "font-medium text-primary":
-                      index === pathname.split("/").length - 2,
+                    "font-medium text-primary": index === link.length - 1,
                   })}
-                  href={""}
+                  href={path.link}
                 >
-                  {path}
-                  {index === pathname.split("/").length - 2 ? "" : "/"}
+                  {path.name}
+                  {index === link.length - 1 ? "" : "/"}
                 </Link>
               </li>
             );

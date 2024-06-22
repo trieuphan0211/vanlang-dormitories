@@ -21,6 +21,7 @@ export type INVOICE = {
   studentId?: string;
   total: number;
   createDate: Date;
+  violateId?: string;
   status: number;
   detail: string;
   invoiceMonth: string;
@@ -101,6 +102,7 @@ export type STUDENT = {
   contactinfo?: string;
   point?: number;
   Room?: ROOM;
+
   roomId?: string;
   Violate?: VIOLATE[];
 };
@@ -112,6 +114,7 @@ export type REGISTER = {
   registerdeadline: number;
   status: number;
   createDate: Date;
+  updateDate: Date;
   Student: STUDENT;
   Room?: ROOM;
 };

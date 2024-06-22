@@ -21,7 +21,13 @@ export default async function DetailPage({
 
   return (
     <div>
-      <Breadcrumb pageName={`Chi tiết cơ sở vật chất`} />
+      <Breadcrumb
+        pageName={`Chi tiết cơ sở vật chất`}
+        link={[
+          { name: "Cơ sở vật chất", link: "/admin/facilities" },
+          { name: "Chi tiết", link: `/admin/facilities/detail/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

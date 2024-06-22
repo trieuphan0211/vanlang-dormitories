@@ -33,7 +33,10 @@ const MaintenancePage = async ({
   const count = await getCountMaintenances(query);
   return (
     <div>
-      <Breadcrumb pageName="Quản lý bảo trì" />
+      <Breadcrumb
+        pageName="Quản lý bảo trì"
+        link={[{ name: "Bảo trì", link: "/admin/maintenance" }]}
+      />
       <MaintenancesTable maintenances={maintenances} count={Number(count)} />
     </div>
   );

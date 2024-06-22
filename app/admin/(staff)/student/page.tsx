@@ -52,7 +52,10 @@ const StudentPage = async ({
   );
   return (
     <div>
-      <Breadcrumb pageName="Quản lý sinh viên" />
+      <Breadcrumb
+        pageName="Quản lý sinh viên"
+        link={[{ name: "Sinh viên", link: "/admin/student" }]}
+      />
       <StudentTable students={students} count={Number(count)} />
     </div>
   );

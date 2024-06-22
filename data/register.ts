@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { equal } from "assert";
 
 export const getRegisterById = async (id: string) => {
   try {
@@ -12,6 +11,7 @@ export const getRegisterById = async (id: string) => {
         Room: {
           include: {
             Branch: true,
+            RoomType: true,
           },
         },
       },

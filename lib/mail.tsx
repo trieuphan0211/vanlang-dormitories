@@ -72,9 +72,9 @@ export const sendViolateEmail = async (violate: VIOLATE) => {
     throw error;
   }
 };
-export const sendRegisterEmail = async (register: any) => {
+export const sendRegisterEmail = async (register: REGISTER) => {
   console.log("Send mail violate to:", register.studentEmail);
-  const emailHtml = render(<RegisterMail />);
+  const emailHtml = render(<RegisterMail register={register} />);
   const options = {
     from: "trieuphan0211@gmail.com",
     to: register.studentEmail,
@@ -90,12 +90,14 @@ export const sendRegisterEmail = async (register: any) => {
     throw error;
   }
 };
-export const sendRegisterConfirmationEmail = async (student: any) => {
-  console.log("Send mail violate to:", student.email);
-  const emailHtml = render(<RegistrationConfirmationMail />);
+export const sendRegisterConfirmationEmail = async (register: REGISTER) => {
+  console.log("Send mail violate to:", register.studentEmail);
+  const emailHtml = render(
+    <RegistrationConfirmationMail register={register} />,
+  );
   const options = {
     from: "trieuphan0211@gmail.com",
-    to: student.email,
+    to: register.studentEmail,
     subject: "Thông báo đơn đăng ký đã được duyệt",
     html: emailHtml,
   };

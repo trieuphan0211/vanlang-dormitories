@@ -33,7 +33,10 @@ const ViolatePage = async ({
   const count = await getCountViolatetypes(query);
   return (
     <div>
-      <Breadcrumb pageName="Quản lý loại vi phạm" />
+      <Breadcrumb
+        pageName="Quản lý loại vi phạm"
+        link={[{ name: "Loại vi phạm", link: "/admin/violate-type" }]}
+      />
       <ViolateTypeTable violateTypes={violateTypes} count={Number(count)} />
     </div>
   );

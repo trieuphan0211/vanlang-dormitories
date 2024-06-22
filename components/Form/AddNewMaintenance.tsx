@@ -143,7 +143,7 @@ export const AddNewMaintenance = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branchId, floor]);
   return (
-    <div className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+    <div className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  w-[90vw] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
       <div className="border-b border-stroke dark:border-strokedark">
         <DialogTitle className="!font-bold text-black dark:text-white">
           Thêm đơn bảo trì

@@ -22,7 +22,13 @@ export default async function DetailPage({
   const services = (await getServicesAll()) as SERVICES[];
   return (
     <div>
-      <Breadcrumb pageName={`Chi tiết phòng`} />
+      <Breadcrumb
+        pageName={`Chi tiết phòng`}
+        link={[
+          { name: "Phòng", link: "/admin/room" },
+          { name: "Chi tiết", link: `/admin/room/detail/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

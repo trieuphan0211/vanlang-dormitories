@@ -51,7 +51,10 @@ const RegisterDormitoryPage = async ({
   );
   return (
     <div>
-      <Breadcrumb pageName="Quản lý đăng ký ký túc xá" />
+      <Breadcrumb
+        pageName="Quản lý đăng ký ký túc xá"
+        link={[{ name: "Đăng ký", link: "/admin/register-dormitory" }]}
+      />
       <RegistersTable registers={registers} count={Number(count)} />
     </div>
   );

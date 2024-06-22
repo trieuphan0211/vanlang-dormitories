@@ -58,7 +58,13 @@ export const GenerateQr = () => {
   }
   return (
     <>
-      <Breadcrumb pageName="Tạo QR Code" />
+      <Breadcrumb
+        pageName="Tạo QR Code"
+        link={[
+          { name: "Cơ sở vật chất", link: "/admin/facilities" },
+          { name: "QR Code", link: "/admin/facilities/qr-code" },
+        ]}
+      />
       <div className="my-4 flex justify-end">
         <button
           onClick={dowloadFile}
@@ -68,7 +74,7 @@ export const GenerateQr = () => {
           In
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-3 gap-3 ">
         {qrList.map((item, key) => {
           return (
             <div

@@ -1,3 +1,4 @@
+import { REGISTER } from "@/types";
 import {
   Body,
   Button,
@@ -15,7 +16,11 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export const RegistrationConfirmationMail = () => {
+export const RegistrationConfirmationMail = ({
+  register,
+}: {
+  register: REGISTER;
+}) => {
   return (
     <Html>
       <Head />
@@ -65,7 +70,7 @@ export const RegistrationConfirmationMail = () => {
                     textAlign: "center",
                   }}
                 >
-                  Chào Phan Ngọc Triệu,
+                  Chào {register?.Student?.fullName},
                 </Heading>
                 <Heading
                   as="h2"
@@ -81,19 +86,21 @@ export const RegistrationConfirmationMail = () => {
 
                 <Text style={paragraph}>
                   <b>Chi Nhánh: </b>
-                  Tòa I Trường đại học Văn Lang
+                  {register?.Room?.Branch?.name}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Phòng: </b>
-                  201 - Phòng đôi
+                  {register?.Room?.code +
+                    " - " +
+                    register?.Room?.RoomType?.name}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Thời gian đăng ký: </b>
-                  Thứ 2 ngày 2 tháng 10 năm 2023, 10:00 AM
+                  {new Date(register?.createDate)?.toLocaleDateString()}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Thời gian duyệt: </b>
-                  Thứ 2 ngày 2 tháng 10 năm 2023, 10:00 AM
+                  {new Date(register?.updateDate)?.toLocaleDateString()}
                 </Text>
                 <Text
                   style={{

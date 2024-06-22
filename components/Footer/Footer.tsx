@@ -133,7 +133,7 @@ export const Footer = () => {
           </div>
         ))}
       </div>
-      <div style={{ width: "100%" }}>
+      {/* <div style={{ width: "100%" }}>
         <iframe
           width="300"
           height="300"
@@ -141,7 +141,7 @@ export const Footer = () => {
         >
           <a href="https://www.gps.ie/">gps vehicle tracker</a>
         </iframe>
-      </div>
+      </div> */}
 
       <div className="my-5 w-full border-t-[1px] border-[rgba(255,255,255,0.4)]"></div>
       <div className="flex w-full items-center justify-between ">

@@ -93,6 +93,7 @@ export const getFilterInvoices = async (
   entries: number,
   startDate?: Date,
   endDate?: Date,
+  studentId?: string,
 ) => {
   try {
     const search = [];
@@ -103,6 +104,12 @@ export const getFilterInvoices = async (
             contains: query,
             mode: "insensitive",
           },
+        },
+      });
+    studentId &&
+      search.push({
+        studentId: {
+          equals: studentId,
         },
       });
     roomCode &&
@@ -157,7 +164,6 @@ export const getFilterInvoices = async (
       skip: (currentPage - 1) * entries,
       take: entries,
     });
-    console.log(invoices);
     return invoices;
   } catch (e) {
     console.error(e);
@@ -168,6 +174,7 @@ export const getCountInvoices = async (
   roomCode: string,
   branchName: string,
   status: number,
+  studentId?: string,
 ) => {
   try {
     const search = [];
@@ -178,6 +185,12 @@ export const getCountInvoices = async (
             contains: query,
             mode: "insensitive",
           },
+        },
+      });
+    studentId &&
+      search.push({
+        studentId: {
+          equals: studentId,
         },
       });
     roomCode &&
@@ -216,7 +229,32 @@ export const getCountInvoices = async (
         AND: search as Array<any>,
       },
     });
+
     return count;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const getInvoicesExpired = async () => {
+  try {
+    const invoices = await db.invoice.findMany({
+      where: {
+        status: 0,
+        createDate: {
+          lte: new Date(new Date().setDate(new Date().getDate() - 5)),
+        },
+      },
+      include: {
+        Room: {
+          include: {
+            Branch: true,
+            RoomType: true,
+          },
+        },
+        Student: true,
+      },
+    });
+    return invoices;
   } catch (e) {
     console.error(e);
   }

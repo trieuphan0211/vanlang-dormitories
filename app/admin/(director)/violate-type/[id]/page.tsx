@@ -20,7 +20,13 @@ export default async function UpdatePage({
   const violateType = (await getViolateTypeById(params.id)) as ViolateType;
   return (
     <div>
-      <Breadcrumb pageName={`Cập nhật Loại vi phạm`} />
+      <Breadcrumb
+        pageName={`Cập nhật Loại vi phạm`}
+        link={[
+          { name: "Loại vi phạm", link: "/admin/violate-type" },
+          { name: "Cập nhật", link: `/admin/violate-type/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

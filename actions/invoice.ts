@@ -5,13 +5,14 @@ import {
   createInvoices,
   deleteInvoice,
   getAllInvoiceForDashboard,
+  getInvoicesExpired,
   getIvoiceById,
 } from "@/data/invoice";
 import { getRoomById } from "@/data/room";
 import { getStudentById } from "@/data/student";
 import { sendInvoiceEmail } from "@/lib/mail";
 import { InvoceSchema } from "@/schema";
-import { BRANCH, ROOM, STUDENT } from "@/types";
+import { BRANCH, INVOICE, ROOM, STUDENT } from "@/types";
 import { Invoice } from "@prisma/client";
 import * as z from "zod";
 import { changeStatusViolateById } from "./violate";
@@ -22,6 +23,32 @@ interface Invoices {
   total: number;
   status: number;
 }
+export const resendMail = async () => {
+  try {
+    const invoices = (await getInvoicesExpired()) as INVOICE[];
+    await Promise.all(
+      invoices.map(async (invoice) => {
+        invoice?.violateId
+          ? sendInvoiceEmail({
+              student: invoice.Student as STUDENT,
+              detail: JSON.parse(invoice.detail).detail,
+            })
+          : sendInvoiceEmail({
+              roomDetail: invoice.Room,
+              student: invoice.Student as STUDENT,
+              detail: JSON.parse(invoice.detail).detail,
+              month:
+                invoice.invoiceMonth + invoice.invoiceMonth &&
+                "/" + invoice.invoiceYear + " lần 2",
+            });
+      }),
+    );
+    return { success: "success" };
+  } catch (error) {
+    console.error(error);
+    return { error: "An error occurred!" };
+  }
+};
 
 export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
   try {

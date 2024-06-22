@@ -3,20 +3,27 @@ import { DialogButton } from "@/components/Button";
 import { RemoveItemDialog } from "@/components/Dialog/RemoveItem";
 import { AddNewBranch } from "@/components/Form/AddNewBranch";
 import { Pagination } from "@/components/Pagination/Pagination";
-import { BRANCH, INOUT } from "@/types";
+import { BRANCH, INOUT, STUDENT } from "@/types";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdMoreVert } from "react-icons/md";
 import { SearchTable } from "../Search";
+import { IoAdd } from "react-icons/io5";
+import { CheckIn } from "@/app/home/out-in/CheckIn";
+import { Student } from "@prisma/client";
 
 export const InOutTable = ({
   inOuts,
   count,
+  role,
+  student,
 }: {
   inOuts: INOUT[];
   count: number;
+  role?: string;
+  student: Student;
 }) => {
   // state for add model
   const [open, setOpen] = useState(false);
@@ -43,17 +50,17 @@ export const InOutTable = ({
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3">
         <SearchTable placeholder="Tìm tiếm tên chi nhánh ..." type={"inout"} />
-        {/* <DialogButton
-          open={open}
-          setOpen={setOpen}
-          childrens={
-            <AddNewBranch
-              isPending={isPending}
-              startTransition={startTransition}
-              setOpen={setOpen}
-            />
-          }
-        /> */}
+        <div className=" flex gap-5">
+          {role === "user" && (
+            <button
+              onClick={() => setOpen(true)}
+              className="inline-flex h-[45px] items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            >
+              <IoAdd className="text-2xl" />
+              Quét QR
+            </button>
+          )}
+        </div>
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -249,6 +256,11 @@ export const InOutTable = ({
           title={"Bạn có chắc chắn muốn xóa hoạt động này không?"}
         />
       )}
+      <CheckIn
+        student={student as unknown as Student}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   );
 };

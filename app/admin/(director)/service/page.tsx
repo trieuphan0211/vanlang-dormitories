@@ -38,7 +38,10 @@ const ServicePage = async ({
   console.log("services count: ", count);
   return (
     <div>
-      <Breadcrumb pageName="Quản lý dịch vụ" />
+      <Breadcrumb
+        pageName="Quản lý dịch vụ"
+        link={[{ name: "Dịch vụ", link: "/admin/service" }]}
+      />
       <ServicesTable services={services} count={Number(count)} />
     </div>
   );

@@ -18,11 +18,13 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       <Breadcrumb
         pageName={`Chi tiết hóa đơn`}
         link={[
-          { name: "Hóa đơn", link: "/admin/invoice" },
-          { name: "Chi tiết", link: `/admin/invoice/detail/${params.id}` },
+          { name: "Hóa đơn", link: "/home/invoice" },
+          { name: "Chi tiết", link: `/home/invoice/detail/${params.id}` },
         ]}
       />
-      {invoice && <InvoiceDetailForm invoice={invoice} type={"detail"} />}
+      {invoice && (
+        <InvoiceDetailForm invoice={invoice} type={"detail"} user="user" />
+      )}
     </div>
   );
 };

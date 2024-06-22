@@ -20,7 +20,13 @@ export default async function DetailPage({
   const students = (await getStudentsAll()) as STUDENT[];
   return (
     <div>
-      <Breadcrumb pageName={`Cập nhật vi phạm`} />
+      <Breadcrumb
+        pageName={`Cập nhật vi phạm`}
+        link={[
+          { name: "Vi phạm", link: "/admin/violate" },
+          { name: "Cập nhật", link: `/admin/violate/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

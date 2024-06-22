@@ -17,7 +17,13 @@ export default async function DetailPage({
   const branch = (await getBranchById(params.id)) as BRANCH;
   return (
     <div>
-      <Breadcrumb pageName={`Cập nhật chi nhánh`} />
+      <Breadcrumb
+        pageName={`Cập nhật chi nhánh`}
+        link={[
+          { name: "Chi Nhánh", link: "/admin/branch" },
+          { name: "Cập nhật", link: `/admin/branch/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

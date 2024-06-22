@@ -39,7 +39,10 @@ const ViolatePage = async ({
   console.log("Violate: ", count);
   return (
     <div>
-      <Breadcrumb pageName="Quản lý vi phạm" />
+      <Breadcrumb
+        pageName="Quản lý vi phạm"
+        link={[{ name: "Vi phạm", link: "/admin/violate" }]}
+      />
       <ViolateTable violates={violates} count={Number(count)} />
     </div>
   );

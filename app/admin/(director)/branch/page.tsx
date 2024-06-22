@@ -44,7 +44,10 @@ const BranchPage = async ({
 
   return (
     <div>
-      <Breadcrumb pageName="Quản lý chi nhánh" />
+      <Breadcrumb
+        pageName="Quản lý chi nhánh"
+        link={[{ name: "Chi Nhánh", link: "/admin/branch" }]}
+      />
       <BranchTable branchs={branchs} count={Number(count)} />
     </div>
   );

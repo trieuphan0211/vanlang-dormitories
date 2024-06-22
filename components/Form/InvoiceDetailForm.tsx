@@ -9,9 +9,11 @@ import { Input } from "../Input";
 export const InvoiceDetailForm = ({
   invoice,
   type,
+  user,
 }: {
   invoice: INVOICE;
   type?: string;
+  user?: string;
 }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -137,7 +139,9 @@ export const InvoiceDetailForm = ({
         <button
           onClick={(e) => {
             e.preventDefault();
-            router.push("/admin/invoice");
+            user === "user"
+              ? router.push("/home/invoice")
+              : router.push("/admin/invoice");
           }}
           className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
           type="submit"

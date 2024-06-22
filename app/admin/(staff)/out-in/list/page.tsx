@@ -37,7 +37,10 @@ const ListInOutPage = async ({
   const count = await getCountInOut(query, status, studentCode);
   return (
     <div>
-      <Breadcrumb pageName="Danh sách ra/vào" />
+      <Breadcrumb
+        pageName="Danh sách ra/vào"
+        link={[{ name: "Ra vào", link: "/admin/out-in/list" }]}
+      />
       <InOutTable inOuts={inOuts} count={Number(count)} />
     </div>
   );

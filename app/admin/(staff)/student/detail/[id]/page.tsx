@@ -19,7 +19,13 @@ export default async function DetailPage({
   const user = (await getUserByEmail(student.email)) as USER;
   return (
     <div>
-      <Breadcrumb pageName={`Chi tiết sinh viên`} />
+      <Breadcrumb
+        pageName={`Chi tiết sinh viên`}
+        link={[
+          { name: "Sinh viên", link: "/admin/student" },
+          { name: "Chi tiết", link: `/admin/student/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">

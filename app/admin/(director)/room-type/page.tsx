@@ -47,7 +47,10 @@ const RoomTypePage = async ({
   );
   return (
     <div>
-      <Breadcrumb pageName="Quản lý loại phòng" />
+      <Breadcrumb
+        pageName="Quản lý loại phòng"
+        link={[{ name: "Loại phòng", link: "/admin/room-type" }]}
+      />
       <RoomTypeTable roomTypes={roomTypes} count={Number(count)} />
     </div>
   );

@@ -34,7 +34,13 @@ export default async function DetailPage({
   console.log("rooms", rooms);
   return (
     <div>
-      <Breadcrumb pageName={`Xét duyệt đơn đăng ký`} />
+      <Breadcrumb
+        pageName={`Xét duyệt đơn đăng ký`}
+        link={[
+          { name: "Đăng ký", link: "/admin/register-dormitory" },
+          { name: "Xét duyệt", link: `/admin/register-dormitory/${params.id}` },
+        ]}
+      />
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
           <h3 className="font-medium text-black dark:text-white">
