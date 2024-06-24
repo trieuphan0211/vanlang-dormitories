@@ -68,6 +68,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
     },
     {
       icon: "/images/header-icon/branch.svg",
+      title: "Thống kê",
+      list: [
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Doanh thu",
+          href: "/admin/statistics/revenue",
+        },
+        {
+          icon: "/images/header-icon/service.svg",
+          title: "Dịch vụ",
+          href: "/admin/service",
+        },
+        {
+          icon: "/images/header-icon/room-type.svg",
+          title: "Phòng",
+          href: "/admin/room",
+        },
+        {
+          icon: "/images/header-icon/room-type.svg",
+          title: "Loại phòng",
+          href: "/admin/room-type",
+        },
+      ],
+    },
+    {
+      icon: "/images/header-icon/branch.svg",
       title: "Danh mục",
 
       list: [

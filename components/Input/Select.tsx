@@ -30,6 +30,7 @@ export const FormSelect = ({
   number,
   registerStatus,
   years,
+  yearsArr,
   defaultValue,
   students,
   violateType,
@@ -51,6 +52,7 @@ export const FormSelect = ({
   month?: string[];
   registerStatus?: string[];
   years?: number[];
+  yearsArr?: number[];
   number?: number;
   defaultValue?: string;
   students?: STUDENT[];
@@ -161,6 +163,12 @@ export const FormSelect = ({
               years.map((year, key) => (
                 <MenuItem key={key} value={year}>
                   {year < 1 ? year * 12 + " Tháng" : year + " Năm"}
+                </MenuItem>
+              ))}
+            {yearsArr &&
+              yearsArr.map((year, key) => (
+                <MenuItem key={key} value={year}>
+                  {year}
                 </MenuItem>
               ))}
             {formProcessing &&

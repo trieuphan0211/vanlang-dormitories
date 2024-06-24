@@ -110,7 +110,7 @@ const ProfilePage = async () => {
             </h4>
             <p className="">
               {student.Room?.allowRegisterDate &&
-                new Date(student.Room?.allowRegisterDate).toLocaleDateString()}
+                new Date(student?.Room?.allowRegisterDate).toLocaleDateString()}
             </p>
           </div>
         </div>
