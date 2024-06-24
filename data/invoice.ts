@@ -50,8 +50,8 @@ export const getAllInvoiceForDashboard = async ({
     const search = [];
     branchId &&
       search.push({
-        room: {
-          branch: {
+        Room: {
+          Branch: {
             id: branchId,
           },
         },
@@ -77,6 +77,13 @@ export const getAllInvoiceForDashboard = async ({
         total: true,
         status: true,
       },
+      // include: {
+      //   Room: {
+      //     include: {
+      //       Branch: true,
+      //     },
+      //   },
+      // },
     });
     return invoices;
   } catch (error) {

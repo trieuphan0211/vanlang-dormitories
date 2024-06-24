@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { IoIosPrint } from "react-icons/io";
 import { SampleData } from "@/prisma/testdata/MOCK_DATA";
+import { ExportToExcel } from "@/app/admin/(director)/statistics/revenue/ExportToExcel";
 
 const options: ApexOptions = {
   colors: ["#3C50E0", "#80CAEE"],
@@ -72,16 +73,29 @@ interface ChartTwoState {
   }[];
 }
 
-const BarChart: React.FC = () => {
+interface Invoices {
+  invoiceMonth: string;
+  invoiceYear: string;
+  total: number;
+  status: number;
+}
+
+interface BarChartProps {
+  paid: number[];
+  notpaid: number[];
+  invoicesArr: Invoices[];
+}
+
+const BarChart: React.FC<BarChartProps> = ({ paid, notpaid, invoicesArr }) => {
   const [state, setState] = useState<ChartTwoState>({
     series: [
       {
         name: "Không thanh toán",
-        data: [44, 55, 41, 67, 22, 43, 65],
+        data: notpaid,
       },
       {
         name: "Có thanh toán",
-        data: [13, 23, 20, 8, 13, 27, 15],
+        data: paid,
       },
     ],
   });
@@ -100,10 +114,11 @@ const BarChart: React.FC = () => {
           <h4 className="text-xl font-semibold text-black dark:text-white">
             Profit this week
           </h4>
-          <button className="flex flex-row gap-2 rounded-md bg-orange-500 p-2 text-white shadow-4">
+          {/* <button className="flex flex-row gap-2 rounded-md bg-orange-500 p-2 text-white shadow-4">
             <IoIosPrint className="size-6" />
             Print to Excel
-          </button>
+          </button> */}
+          <ExportToExcel apiData={invoicesArr} fileName="DoanhThuKTX" />
         </div>
         {/* <div>
           <div className="relative z-20 inline-block">

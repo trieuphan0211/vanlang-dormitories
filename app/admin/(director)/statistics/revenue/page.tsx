@@ -22,11 +22,12 @@ const Page = async ({
 }) => {
   const branchs = (await getBranchsAll()) as BRANCH[];
   const years = yearsArr as number[];
-  const resultArr = await getInvoiceForDashboard(
+  const invoice = await getInvoiceForDashboard(
     searchParams?.branchName,
     searchParams?.year,
   );
-  console.log(resultArr);
+
+  console.log(invoice);
   return (
     <div className="flex flex-col gap-3">
       <div>
@@ -36,7 +37,7 @@ const Page = async ({
         <div className="flex-1">
           <CardData
             title="Chưa thanh toán"
-            total={String(10)}
+            total={String(invoice.all_quantity - invoice.paid_quantity)}
             // rate="0.43%"
             // levelUp
           >
@@ -46,7 +47,7 @@ const Page = async ({
         <div className="flex-1">
           <CardData
             title="Đã thanh toán"
-            total={String(10)}
+            total={String(invoice.paid_quantity)}
             // rate="0.43%"
             // levelUp
           >
@@ -56,7 +57,11 @@ const Page = async ({
         <div className="flex-1">
           <CardData
             title="Tổng doanh thu"
-            total={String(10)}
+            total={
+              invoice.total
+                .reduce((prev, curr) => prev + curr)
+                .toLocaleString("de-DE") + " vnd"
+            }
             // rate="0.43%"
             // levelUp
           >
@@ -64,7 +69,11 @@ const Page = async ({
           </CardData>
         </div>
       </div>
-      <BarChart />
+      <BarChart
+        paid={invoice.paid}
+        notpaid={invoice.notpaid}
+        invoicesArr={invoice.invoicesArr}
+      />
     </div>
   );
 };
