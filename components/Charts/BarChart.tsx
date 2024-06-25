@@ -81,12 +81,19 @@ interface Invoices {
 }
 
 interface BarChartProps {
+  total: number[];
   paid: number[];
   notpaid: number[];
   invoicesArr: Invoices[];
 }
 
-const BarChart: React.FC<BarChartProps> = ({ paid, notpaid, invoicesArr }) => {
+const BarChart: React.FC<BarChartProps> = ({
+  total,
+  paid,
+  notpaid,
+  invoicesArr,
+}) => {
+  console.log(total);
   const [state, setState] = useState<ChartTwoState>({
     series: [
       {
@@ -118,7 +125,11 @@ const BarChart: React.FC<BarChartProps> = ({ paid, notpaid, invoicesArr }) => {
             <IoIosPrint className="size-6" />
             Print to Excel
           </button> */}
-          <ExportToExcel apiData={invoicesArr} fileName="DoanhThuKTX" />
+          <ExportToExcel
+            totalArr={total}
+            apiData={invoicesArr}
+            fileName="DoanhThuKTX"
+          />
         </div>
         {/* <div>
           <div className="relative z-20 inline-block">

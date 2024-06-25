@@ -70,6 +70,7 @@ const Page = async ({
         </div>
       </div>
       <BarChart
+        total={invoice.total}
         paid={invoice.paid}
         notpaid={invoice.notpaid}
         invoicesArr={invoice.invoicesArr}
