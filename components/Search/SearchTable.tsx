@@ -138,7 +138,7 @@ export const SearchTable = ({
     replace(`${pathname}?${params.toString()}`);
   };
   return (
-    <div className="relative flex w-1/2 rounded-full border border-stroke bg-transparent px-5 py-2.5">
+    <div className="relative flex w-1/2 rounded-full border border-stroke bg-transparent px-5 py-2.5 sm:w-full">
       <input
         className="w-full outline-none focus:border-primary"
         type="text"

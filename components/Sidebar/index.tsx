@@ -27,11 +27,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
-      if (!sidebar.current || !trigger.current) return;
+      if (!sidebar.current || trigger.current) return;
       if (
         sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
+        (sidebar.current.contains(target) && trigger.current.contains(target))
       )
         return;
       setSidebarOpen(true);

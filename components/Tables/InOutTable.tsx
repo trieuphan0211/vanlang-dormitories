@@ -48,7 +48,7 @@ export const InOutTable = ({
   };
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <div className="mb-5 flex w-full justify-between gap-3">
+      <div className="mb-5 flex w-full justify-between gap-3 sm:flex-col">
         <SearchTable placeholder="Tìm tiếm tên chi nhánh ..." type={"inout"} />
         <div className=" flex gap-5">
           {role === "user" && (

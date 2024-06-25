@@ -19,7 +19,7 @@ export const DialogButton = ({
     <div className="">
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex h-full items-center justify-center text-nowrap rounded-md bg-primary px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+        className="inline-flex h-full items-center justify-center text-nowrap rounded-md bg-primary px-5 py-2 text-center font-medium text-white hover:bg-opacity-90 sm:w-full"
       >
         <IoAdd className="text-2xl" />
         Thêm

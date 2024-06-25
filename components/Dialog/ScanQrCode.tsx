@@ -42,7 +42,7 @@ export const ScanQrCode = ({
 
       {open && (
         <Dialog onClose={handleCloseModal} open={open}>
-          <div className="fixed left-[50%]  top-[50%] z-[2] max-h-[85vh]  max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow md:max-w-[80vw]">
+          <div className="fixed left-[50%] top-[50%] z-[2]   max-h-[85vh] max-w-[450px] translate-x-[-50%]  translate-y-[-50%] overflow-auto rounded-[6px] bg-white p-3 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow sm:w-[95vw] sm:max-w-[95vw] md:max-w-[80vw]">
             <div className="border-b border-stroke dark:border-strokedark">
               <DialogTitle className="font-medium text-black dark:text-white">
                 Quét mã QR
@@ -50,13 +50,7 @@ export const ScanQrCode = ({
             </div>
 
             <form>
-              <div
-                style={{
-                  width: 400,
-                  height: 400,
-                  margin: "auto",
-                }}
-              >
+              <div className="m-auto h-[400px] w-[400px] sm:w-full">
                 <Scanner
                   onResult={(text, result) => {
                     if (!text) return;
