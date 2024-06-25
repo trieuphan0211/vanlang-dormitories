@@ -28,7 +28,7 @@ export const ExportToExcel = ({
       onClick={(e) => exportToCSV(apiData, fileName)}
     >
       <IoIosPrint className="size-6" />
-      Print to Excel
+      Xuất ra Excel
     </button>
   );
 };

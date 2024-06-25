@@ -112,7 +112,7 @@ const BarChart: React.FC<BarChartProps> = ({ paid, notpaid, invoicesArr }) => {
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div className="flex flex-row justify-between">
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Profit this week
+            Doanh thu
           </h4>
           {/* <button className="flex flex-row gap-2 rounded-md bg-orange-500 p-2 text-white shadow-4">
             <IoIosPrint className="size-6" />

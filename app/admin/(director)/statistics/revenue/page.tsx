@@ -33,7 +33,7 @@ const Page = async ({
       <div>
         <Search branchs={branchs} years={years} />
       </div>
-      <div className="flex flex-row justify-between gap-3">
+      <div className="flex flex-row justify-between gap-3 ">
         <div className="flex-1">
           <CardData
             title="Chưa thanh toán"
@@ -57,10 +57,11 @@ const Page = async ({
         <div className="flex-1">
           <CardData
             title="Tổng doanh thu"
+            clasName="text-3xl"
             total={
               invoice.total
                 .reduce((prev, curr) => prev + curr)
-                .toLocaleString("de-DE") + " vnd"
+                .toLocaleString("en") + " VND"
             }
             // rate="0.43%"
             // levelUp

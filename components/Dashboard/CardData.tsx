@@ -8,6 +8,7 @@ interface CardDataStatsProps {
   levelUp?: boolean;
   levelDown?: boolean;
   children: ReactNode;
+  clasName?: string;
 }
 
 export const CardData = ({
@@ -16,6 +17,7 @@ export const CardData = ({
   title,
   total,
   levelDown,
+  clasName,
   levelUp,
 }: CardDataStatsProps) => {
   return (
@@ -28,7 +30,9 @@ export const CardData = ({
       </div>
       <div className="mt-4 flex items-end justify-between">
         <div>
-          <h4 className="text-7xl font-medium  text-black  dark:text-white">
+          <h4
+            className={`${clasName ? clasName : "text-7xl"}  font-medium  text-black  dark:text-white `}
+          >
             {total}
           </h4>
         </div>

@@ -23,7 +23,7 @@ export const InOutTable = ({
   inOuts: INOUT[];
   count: number;
   role?: string;
-  student: Student;
+  student?: Student;
 }) => {
   // state for add model
   const [open, setOpen] = useState(false);
