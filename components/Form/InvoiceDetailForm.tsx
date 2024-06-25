@@ -20,13 +20,14 @@ export const InvoiceDetailForm = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const hostname = process.env.NEXT_PUBLIC_APP_URL;
   const onSubmit = async (value?: any) => {
     const body = {
       partnerCode: "MOMO",
       requestId: "VLU" + new Date().getTime(),
       orderInfo: invoice.roomId ? "HOA DON TIEN PHONG" : "HOA DON VI PHAM",
-      redirectUrl: `http://localhost:3000/home/payment/${invoice.id}`,
-      ipnUrl: `http://localhost:3000/home/payment/${invoice.id}`,
+      redirectUrl: `${hostname}/home/payment/${invoice.id}`,
+      ipnUrl: `${hostname}/home/payment/${invoice.id}`,
       amount: invoice.total,
     };
     const result = await axios({
