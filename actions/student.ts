@@ -1,7 +1,6 @@
 "use server";
 
 import { getRegisterById, updateRegister } from "@/data/register";
-import { updateRoomDate } from "@/data/room";
 import {
   deleteStudent,
   getAllStudents,
@@ -70,25 +69,25 @@ export const updateStudentInRoomById = async (
   registerId: string,
 ) => {
   try {
-    const student = await updateStudentInRoom(id, roomId);
-    if (student) {
-      console.log("Student is updated!");
-      const res = await updateRegister(registerId, { status: 1 });
-      if (res === null) {
+    // transfer status to 1
+    const res = await updateRegister(registerId, { status: 1 });
+
+    if (res) {
+      console.log("Register is updated!");
+      const student = await updateStudentInRoom(
+        id,
+        roomId,
+        new Date(
+          new Date().setMonth(
+            new Date().getMonth() + res.registerdeadline * 12,
+          ),
+        ),
+      );
+      if (student === null) {
         return { error: "An error occurred!" };
       }
-      console.log("Register is updated!");
-      if (res !== undefined) {
-        await updateRoomDate(
-          roomId,
-          new Date(
-            new Date().setMonth(
-              new Date().getMonth() + res.registerdeadline * 12,
-            ),
-          ),
-        );
-      }
-      if (res?.id === undefined) return { error: "An error occurred!" };
+      console.log("Student is updated!");
+
       const register = (await getRegisterById(res.id)) as REGISTER;
       // send Email
       const sendMail = await sendRegisterConfirmationEmail(register);

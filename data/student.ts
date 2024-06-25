@@ -241,15 +241,33 @@ export const deleteStudent = async (id: string) => {
     console.error(e);
   }
 };
-export const updateStudentInRoom = async (id: string, roomId?: string) => {
+export const updateStudentInRoom = async (
+  id: string,
+  roomId?: string,
+  expiredRoom?: Date,
+) => {
   try {
     const student = await db.student.update({
       where: { id },
       data: {
         roomId: roomId ? roomId : null,
+        expiredRoom: expiredRoom ? expiredRoom : null,
       },
     });
     return student;
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const updateRoomDate = async (id: string, date: Date) => {
+  try {
+    const response = await db.student.update({
+      where: { id },
+      data: {
+        expiredRoom: date,
+      },
+    });
+    return response;
   } catch (e) {
     console.error(e);
   }
@@ -312,20 +330,27 @@ export const resetPointOfStudents = async () => {
   });
   return res;
 };
-export const removeRoomOfStudentExpired = async () => {
+export const getStudentExpired = async () => {
   try {
-    const students = await db.student.updateMany({
+    const students = await db.student.findMany({
+      orderBy: [
+        {
+          expiredRoom: "asc",
+        },
+      ],
       where: {
         AND: {
-          Room: {
-            allowRegisterDate: {
-              lte: new Date(),
-            },
+          expiredRoom: {
+            lte: new Date(),
           },
         },
       },
-      data: {
-        roomId: null,
+      include: {
+        Room: {
+          include: {
+            Branch: true,
+          },
+        },
       },
     });
 

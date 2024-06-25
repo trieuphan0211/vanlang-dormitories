@@ -126,6 +126,7 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
               }),
               status: 0,
             };
+            console.log("dataInvoice: ", dataInvoice);
             // Add invoice to database
             return await createInvoices(dataInvoice);
           }
@@ -237,8 +238,8 @@ export const getInvoiceForDashboard = async (
     branchId,
     invoiceYear,
   })) as Invoices[];
+  console.log("invoices: ", invoices);
   invoices.map((invoice) => {
-    console.log("invoice: ", invoice);
     data.total[Number(invoice.invoiceMonth) - 1] =
       (data.total[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
     if (invoice.status === 1) {

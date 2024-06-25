@@ -1,16 +1,15 @@
 "use client";
+import { createExtensionRegister } from "@/actions/register";
+import { getStudentFromEmail } from "@/actions/student";
 import { useAppDispatch } from "@/hooks/redux";
 import { Dialog, DialogTitle } from "@mui/material";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from "../Button";
 import { FormSelect } from "../Input";
-import { currentUser } from "@/lib/auth";
-import { getStudentFromEmail } from "@/actions/student";
-import { STUDENT } from "@/types";
-import { useSession } from "next-auth/react";
-import { createExtensionRegister } from "@/actions/register";
+import { alertManagerActions } from "@/lib/features/alert/alert-slice";
 
 export const RoomExtension = ({
   isPending,
@@ -41,17 +40,47 @@ export const RoomExtension = ({
   const onSubmit = async (value: any) => {
     startTransition(() => {
       getStudentFromEmail(user.data?.user.email as string).then((student) => {
-        const date = new Date(
-          student[0]?.Room?.allowRegisterDate ?? 0,
-        ).setMonth(
-          new Date(student[0]?.Room?.allowRegisterDate ?? 0).getMonth() +
-            value.year * 12,
+        if (!student[0]?.expiredRoom) {
+          dispatch(
+            alertManagerActions.setAlert({
+              message: {
+                type: "warning",
+                content: "Có lỗi xảy ra, hãy tải lại trang!",
+              },
+            }),
+          );
+          return;
+        }
+        const date = new Date(student[0]?.expiredRoom).setMonth(
+          new Date(student[0]?.expiredRoom).getMonth() + value.year * 12,
         );
         createExtensionRegister({
           roomId: student[0]?.Room?.id,
           year: value.year,
           allowRegister: new Date(date).toISOString(),
           email: user.data?.user.email,
+        }).then((res) => {
+          if (res.success) {
+            router.refresh();
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "success",
+                  content: "Đăng ký phòng thành công!",
+                },
+              }),
+            );
+          }
+          if (res.error) {
+            dispatch(
+              alertManagerActions.setAlert({
+                message: {
+                  type: "error",
+                  content: "Đăng ký gia hạn phòng thất bại!",
+                },
+              }),
+            );
+          }
         });
         return new Date(date).toISOString();
       });

@@ -13,9 +13,12 @@ import { StatusViolate, ViolateType } from "@prisma/client";
 import { getViolateTypeByCode } from "@/data/violate-type";
 import { sendViolateEmail } from "@/lib/mail";
 import { STUDENT, VIOLATE } from "@/types";
-import { getStudentById, updateStudentPoint } from "@/data/student";
+import {
+  getStudentById,
+  updateRoomDate,
+  updateStudentPoint,
+} from "@/data/student";
 import { removeRoomOfStudent } from "./student";
-import { updateRoomDate } from "@/data/room";
 
 export const addviolate = async (
   value: z.infer<typeof ViolateSchema>,
@@ -85,7 +88,7 @@ export const addviolate = async (
         // update room date
         if (student?.roomId) {
           await updateRoomDate(
-            student?.roomId,
+            student?.id,
             new Date(new Date().setDate(new Date().getDate() + 5)),
           );
         }

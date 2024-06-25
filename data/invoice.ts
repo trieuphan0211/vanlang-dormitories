@@ -23,6 +23,11 @@ export const getIvoiceById = async (id: string) => {
             RoomType: true,
           },
         },
+        Violate: {
+          include: {
+            TypeViolate: true,
+          },
+        },
       },
     });
     return invoice;

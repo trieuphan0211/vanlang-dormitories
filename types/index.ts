@@ -27,6 +27,7 @@ export type INVOICE = {
   invoiceMonth: string;
   invoiceYear: string;
   Room?: ROOM;
+  Violate?: VIOLATE;
   Student?: STUDENT;
 };
 export type SERVICES = {
@@ -68,7 +69,7 @@ export type ROOM = {
   floor: number;
   branchId: string;
   roomTypeCode: string;
-  allowRegisterDate: Date;
+
   Branch?: BRANCH;
   RoomType?: ROOMTYPE;
   Services?: Array<any>;
@@ -101,8 +102,8 @@ export type STUDENT = {
   familiInfo?: string;
   contactinfo?: string;
   point?: number;
+  expiredRoom?: Date;
   Room?: ROOM;
-
   roomId?: string;
   Violate?: VIOLATE[];
 };

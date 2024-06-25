@@ -144,6 +144,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           title: "Lập hóa đơn",
           href: "/admin/invoice",
         },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Danh sách hết hạn",
+          href: "/admin/expired",
+        },
       ],
     },
     {
@@ -256,6 +261,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           icon: "/images/header-icon/user.svg",
           title: "Danh sách vào ra",
           href: "/admin/out-in/list",
+        },
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Danh sách hết hạn",
+          href: "/admin/expired",
         },
       ],
     },

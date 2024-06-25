@@ -73,7 +73,6 @@ export const RegistersTable = ({
   const handleExtension = async () => {
     const student = await getStudentFromEmail(registers[0]?.Student?.email);
     if (student[0]?.roomId) {
-      console.log("student", student);
       setOpenExtension(true);
     } else {
       dispatch(

@@ -86,6 +86,7 @@ model Student {
   contactinfo        String?
   point              Int?       @default(10)
   studentVerified    Boolean    @default(true)
+  expiredRoom        DateTime?
   Register           Register[]
   Room               Room?      @relation(fields: [roomId], references: [id])
   Violate            Violate[]
@@ -206,23 +207,22 @@ model Services {
 }
 
 model Room {
-  id                String          @id @default(cuid())
-  code              String
-  description       String?
-  branchId          String
-  roomTypeCode      String
-  floor             Int
-  allowRegisterDate DateTime        @default("1970-01-01T00:00:00.000Z") // Ngày cho phép đăng ký 
-  Branch            Branch          @relation(fields: [branchId], references: [id])
-  RoomType          RoomType        @relation(fields: [roomTypeCode], references: [code])
-  Facilities        Facilities[]
-  Student           Student[]
-  Services          ServiceOnRoom[]
-  Invoice           Invoice[]
-  Register          Register[]
-  Maintenance       Maintenance[]
-  updateDate        DateTime        @updatedAt
-  createDate        DateTime        @default(now())
+  id           String          @id @default(cuid())
+  code         String
+  description  String?
+  branchId     String
+  roomTypeCode String
+  floor        Int
+  Branch       Branch          @relation(fields: [branchId], references: [id])
+  RoomType     RoomType        @relation(fields: [roomTypeCode], references: [code])
+  Facilities   Facilities[]
+  Student      Student[]
+  Services     ServiceOnRoom[]
+  Invoice      Invoice[]
+  Register     Register[]
+  Maintenance  Maintenance[]
+  updateDate   DateTime        @updatedAt
+  createDate   DateTime        @default(now())
 
   @@map("room")
 }

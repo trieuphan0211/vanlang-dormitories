@@ -109,8 +109,8 @@ const ProfilePage = async () => {
               Thời hạn cư trú đến:{" "}
             </h4>
             <p className="">
-              {student.Room?.allowRegisterDate &&
-                new Date(student.Room?.allowRegisterDate).toLocaleDateString()}
+              {student?.expiredRoom &&
+                new Date(student?.expiredRoom).toLocaleDateString()}
             </p>
           </div>
         </div>

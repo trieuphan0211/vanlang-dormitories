@@ -1,5 +1,5 @@
 import {
-  removeRoomOfStudentExpired,
+  // removeRoomOfStudentExpired,
   resetPointOfStudents,
 } from "./data/student";
 
@@ -12,7 +12,7 @@ export const register = () => {
         await resetPointOfStudents();
         console.log("reset point of students:" + new Date().toISOString());
       }
-      const res = await removeRoomOfStudentExpired();
+      // const res = await removeRoomOfStudentExpired();
       console.log(
         `remove student when meetting dealine day:` + new Date().toISOString(),
       );

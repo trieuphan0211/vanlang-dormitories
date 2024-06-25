@@ -5,6 +5,8 @@ import { INVOICE } from "@/types";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Input } from "../Input";
+import clsx from "clsx";
+import axios from "axios";
 
 export const InvoiceDetailForm = ({
   invoice,
@@ -18,56 +20,107 @@ export const InvoiceDetailForm = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  console.log();
+  const onSubmit = async (value?: any) => {
+    const body = {
+      partnerCode: "MOMO",
+      requestId: "VLU" + new Date().getTime(),
+      orderInfo: invoice.roomId ? "HOA DON TIEN PHONG" : "HOA DON VI PHAM",
+      redirectUrl: `http://localhost:3000/home/payment/${invoice.id}`,
+      ipnUrl: `http://localhost:3000/home/payment/${invoice.id}`,
+      amount: invoice.total,
+    };
+    const result = await axios({
+      method: "POST",
+      url: "/api/payment/momo",
+      data: body,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (result) {
+      // console.log(result.data);
+      router.push(result.data.data.payUrl);
+    }
+  };
   return (
     <form className="rounded-lg bg-white p-4">
+      {invoice.roomId && (
+        <>
+          <div className="mb-5.5">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="emailAddress"
+            >
+              Phòng
+            </label>
+            <Input
+              type="text"
+              placeholder="Nhập giá tiền"
+              isPending={isPending}
+              register={{}}
+              disabled={true}
+              value={invoice?.Room?.code + " - " + invoice.Room?.RoomType?.name}
+            />
+          </div>
+          <div className="mb-5.5">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="emailAddress"
+            >
+              Chi nhánh
+            </label>
+            <Input
+              type="text"
+              placeholder="Nhập giá tiền"
+              isPending={isPending}
+              register={{}}
+              disabled={true}
+              value={invoice?.Room?.Branch?.name}
+            />
+          </div>
+          <div className="mb-5.5">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="emailAddress"
+            >
+              Trạng thái
+            </label>
+            <Input
+              type="text"
+              placeholder="Nhập giá tiền"
+              isPending={isPending}
+              register={{}}
+              disabled={true}
+              value={invoice.status === 1 ? "Đã thanh toán" : "Chưa thanh toán"}
+            />
+          </div>
+        </>
+      )}
+      {invoice.violateId && (
+        <div className="mb-5.5">
+          <label
+            className="mb-3 block text-sm font-medium text-black dark:text-white"
+            htmlFor="emailAddress"
+          >
+            Loại vi phạm
+          </label>
+          <Input
+            type="text"
+            placeholder="Nhập giá tiền"
+            isPending={isPending}
+            register={{}}
+            disabled={true}
+            value={invoice?.Violate?.TypeViolate?.name}
+          />
+        </div>
+      )}
       <div className="mb-5.5">
         <label
           className="mb-3 block text-sm font-medium text-black dark:text-white"
           htmlFor="emailAddress"
         >
-          Phòng
+          Chi tiết hóa đơn
         </label>
-        <Input
-          type="text"
-          placeholder="Nhập giá tiền"
-          isPending={isPending}
-          register={{}}
-          disabled={true}
-          value={invoice?.Room?.code + " - " + invoice.Room?.RoomType?.name}
-        />
-      </div>
-      <div className="mb-5.5">
-        <label
-          className="mb-3 block text-sm font-medium text-black dark:text-white"
-          htmlFor="emailAddress"
-        >
-          Chi nhánh
-        </label>
-        <Input
-          type="text"
-          placeholder="Nhập giá tiền"
-          isPending={isPending}
-          register={{}}
-          disabled={true}
-          value={invoice?.Room?.Branch?.name}
-        />
-      </div>
-      <div className="mb-5.5">
-        <label
-          className="mb-3 block text-sm font-medium text-black dark:text-white"
-          htmlFor="emailAddress"
-        >
-          Trạng thái
-        </label>
-        <Input
-          type="text"
-          placeholder="Nhập giá tiền"
-          isPending={isPending}
-          register={{}}
-          disabled={true}
-          value={invoice.status === 1 ? "Đã thanh toán" : "Chưa thanh toán"}
-        />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -135,7 +188,7 @@ export const InvoiceDetailForm = ({
           </tbody>
         </table>
       </div>
-      <div className="flex justify-end gap-4.5">
+      <div className="mt-2 flex justify-end gap-4.5">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -149,6 +202,24 @@ export const InvoiceDetailForm = ({
         >
           Quay lại
         </button>
+        {invoice.status === 0 && (
+          <button
+            className={clsx(
+              "flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90",
+              {
+                hidden: user !== "user" && invoice.status === 0,
+              },
+            )}
+            type="submit"
+            disabled={isPending}
+            onClick={(e) => {
+              e.preventDefault();
+              onSubmit();
+            }}
+          >
+            Thanh toán
+          </button>
+        )}
       </div>
     </form>
   );

@@ -9,6 +9,8 @@ import {
 } from "react-icons/md";
 import { LineChart, PieChart } from "../Charts";
 import { CardData } from "./CardData";
+import ChartTwo from "../Charts/ChartTwo";
+import ChatCard from "../Chat/ChatCard";
 
 const Dashboard = ({
   branchCount,
@@ -73,7 +75,7 @@ const Dashboard = ({
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <LineChart invoiceForLineChart={invoice} />
         <PieChart />
-        {/* <ChartTwo /> */}
+        <ChartTwo />
         {/* <MapOne /> */}
 
         {/* <ChatCard /> */}

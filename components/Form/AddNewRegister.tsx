@@ -49,7 +49,6 @@ export const AddNewRegister = ({
         year: value.year,
         email: user.data?.user.email,
       };
-      console.log(data);
       createRegister(data).then((res) => {
         if (res.success) {
           router.push("/home/register-dormitory");

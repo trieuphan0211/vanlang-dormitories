@@ -5,7 +5,7 @@ import {
   getRegisterById,
   updateRegister,
 } from "@/data/register";
-import { updateRoomDate } from "@/data/room";
+import { getStudentByEmail, updateStudentInRoom } from "@/data/student";
 import { sendRegisterEmail } from "@/lib/mail";
 import { REGISTER } from "@/types";
 
@@ -59,7 +59,12 @@ export const createExtensionRegister = async (data: any) => {
     if (res === null) {
       return { error: "An error occurred!" };
     }
-    const updateDateRoom = await updateRoomDate(
+    const student = await getStudentByEmail(data.email);
+    if (student?.id === undefined) {
+      return { error: "An error occurred!" };
+    }
+    const updateDateRoom = await updateStudentInRoom(
+      student.id,
       data.roomId,
       new Date(data.allowRegister),
     );

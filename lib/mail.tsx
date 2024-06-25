@@ -10,8 +10,8 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "trieuphan0211@gmail.com",
-    pass: "raveriqsisbzhtvz",
+    user: "vanlangdormitories@gmail.com",
+    pass: "webpxoaqlirpuohj",
   },
 });
 // config mail server from Ethereal email
