@@ -41,62 +41,62 @@ export const ExportToExcel = ({
 
     // Chèn hình ảnh vào worksheet
     worksheet.addImage(imageId, {
-      tl: { col: 1, row: 0 }, // Top-Left vị trí của hình ảnh
-      ext: { width: 420, height: 160 }, // Kích thước của hình ảnh
+      tl: { col: 1, row: 2 }, // Top-Left vị trí của hình ảnh
+      ext: { width: 300, height: 90 }, // Kích thước của hình ảnh
     });
 
     // Thêm văn bản vào worksheet
-    worksheet.mergeCells("I2:Q2");
-    worksheet.getCell("I2").value = "Trường Đại học Văn Lang";
-    worksheet.getCell("I2").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I2").alignment = {
+    worksheet.mergeCells("G2:O2");
+    worksheet.getCell("G2").value = "Trường Đại học Văn Lang";
+    worksheet.getCell("G2").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G2").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
     };
 
-    worksheet.mergeCells("I3:Q3");
-    worksheet.getCell("I3").value = "Ký túc xá Đặng Thùy Trâm";
-    worksheet.getCell("I3").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I3").alignment = {
+    worksheet.mergeCells("G3:O3");
+    worksheet.getCell("G3").value = "Ký túc xá Đặng Thùy Trâm";
+    worksheet.getCell("G3").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G3").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
     };
 
-    worksheet.mergeCells("I4:S4");
-    worksheet.getCell("I4").value =
+    worksheet.mergeCells("G4:Q4");
+    worksheet.getCell("G4").value =
       "Địa chỉ: 69/68 Đặng Thùy Trâm, Phường 13, Quận Bình Thạnh, Thành phố Hồ Chí Minh";
-    worksheet.getCell("I4").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I4").alignment = {
+    worksheet.getCell("G4").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G4").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
     };
 
-    worksheet.mergeCells("I5:Q5");
-    worksheet.getCell("I5").value = "Số điện thoại: 0372106260";
-    worksheet.getCell("I5").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I5").alignment = {
+    worksheet.mergeCells("G5:O5");
+    worksheet.getCell("G5").value = "Số điện thoại: 0372106260";
+    worksheet.getCell("G5").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G5").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
     };
 
-    worksheet.mergeCells("I6:Q6");
-    worksheet.getCell("I6").value = "Email: vanlangdormitories@gmail.com";
-    worksheet.getCell("I6").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I6").alignment = {
+    worksheet.mergeCells("G6:O6");
+    worksheet.getCell("G6").value = "Email: vanlangdormitories@gmail.com";
+    worksheet.getCell("G6").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G6").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
     };
 
-    worksheet.mergeCells("I7:Q7");
-    worksheet.getCell("I7").value =
+    worksheet.mergeCells("G7:O7");
+    worksheet.getCell("G7").value =
       "Website: https://vanlang-dormitories.vercel.app";
-    worksheet.getCell("I7").font = { name: "Times New Roman", size: 13 };
-    worksheet.getCell("I7").alignment = {
+    worksheet.getCell("G7").font = { name: "Times New Roman", size: 13 };
+    worksheet.getCell("G7").alignment = {
       vertical: "middle",
       horizontal: "center",
       wrapText: true,
@@ -140,6 +140,7 @@ export const ExportToExcel = ({
       name: "Times New Roman",
       size: 13,
       bold: true,
+      color: { argb: "FFFFFF" },
     };
     worksheet.getCell("E14").alignment = {
       vertical: "middle",
@@ -149,7 +150,7 @@ export const ExportToExcel = ({
     worksheet.getCell("E14").fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: "FF00FF00" }, // Màu xanh lá cây
+      fgColor: { argb: "FF0000" }, // Màu xanh lá cây
     };
 
     worksheet.mergeCells("H14:N14");
@@ -157,7 +158,7 @@ export const ExportToExcel = ({
     worksheet.getCell("H14").font = {
       name: "Times New Roman",
       size: 13,
-
+      color: { argb: "FFFFFF" },
       bold: true,
     };
     worksheet.getCell("H14").alignment = {
@@ -168,20 +169,16 @@ export const ExportToExcel = ({
     worksheet.getCell("H14").fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: "FF00FF00" }, // Màu xanh lá cây
+      fgColor: { argb: "FF0000" }, // Màu xanh lá cây
     };
-
-    // Vị trí bắt đầu của cột thứ nhất (cột B3)
-    const col1StartRow = 15;
-    const col1StartCol = 5;
-
-    // Vị trí bắt đầu của cột thứ hai (cột B5)
-    const col2StartRow = 15;
-    const col2StartCol = 8;
 
     // Đặt dữ liệu từ mảng vào các ô từ vị trí đã chỉ định
     let indexcolumn = 0;
+    let totalRevenue = 0;
+    console.log(totalArr);
     totalArr.forEach((item, index) => {
+      totalRevenue =
+        totalRevenue + item.invoicesArr.reduce((prev, curr) => prev + curr);
       // Đặt cột thứ nhất
       // Gộp cột thứ nhất
       item.invoicesArr.forEach((number, i) => {
@@ -214,18 +211,136 @@ export const ExportToExcel = ({
       });
     });
 
-    // // Định dạng header (cột A, B)
-    // const headerRow = worksheet.getRow(col1StartRow - 1); // Hàng header là hàng trước cột thứ nhất
-    // headerRow.getCell(col1StartCol).value = "Thời gian";
-    // headerRow.getCell(col2StartCol).value = "Doanh thu";
-    // headerRow.eachCell((cell) => {
-    //   cell.font = { bold: true };
-    //   cell.fill = {
-    //     type: "pattern",
-    //     pattern: "solid",
-    //     fgColor: { argb: "FF00FF00" }, // Màu xanh lá cây
-    //   };
-    // });
+    // Dòng ghi tổng doanh thu
+    worksheet.mergeCells(
+      `E${15 + totalArr[0].invoicesArr.length}:G${15 + totalArr[0].invoicesArr.length}`,
+    );
+    worksheet.getCell(`E${15 + totalArr[0].invoicesArr.length}`).value =
+      `Tổng doanh thu:`;
+    worksheet.getCell(`E${15 + totalArr[0].invoicesArr.length}`).font = {
+      name: "Times New Roman",
+      size: 13,
+      bold: true,
+    };
+    worksheet.getCell(`E${15 + totalArr[0].invoicesArr.length}`).alignment = {
+      vertical: "middle",
+      horizontal: "center",
+      wrapText: true,
+    };
+
+    worksheet.mergeCells(
+      `H${15 + totalArr[0].invoicesArr.length}:N${15 + totalArr[0].invoicesArr.length}`,
+    );
+    worksheet.getCell(`H${15 + totalArr[0].invoicesArr.length}`).value =
+      totalRevenue.toLocaleString("en-US");
+    worksheet.getCell(`H${15 + totalArr[0].invoicesArr.length}`).font = {
+      name: "Times New Roman",
+      size: 13,
+      bold: true,
+    };
+    worksheet.getCell(`H${15 + totalArr[0].invoicesArr.length}`).alignment = {
+      vertical: "middle",
+      horizontal: "center",
+      wrapText: true,
+    };
+
+    // Dòng ghi thời gian
+    let newdate = new Date();
+    let day = newdate.getDate();
+    let month = newdate.getMonth() + 1;
+    let year = newdate.getFullYear();
+    worksheet.mergeCells(
+      `L${15 + totalArr[0].invoicesArr.length + 2}:Q${15 + totalArr[0].invoicesArr.length + 2}`,
+    );
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 2}`).value =
+      `Thành phố Hồ Chí Minh, ngày ${day} tháng ${month} năm ${year}`;
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 2}`).font = {
+      name: "Times New Roman",
+      size: 13,
+      italic: true,
+    };
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 2}`).alignment =
+      {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+
+    // Dòng Trưởng phòng
+    worksheet.mergeCells(
+      `B${15 + totalArr[0].invoicesArr.length + 3}:F${15 + totalArr[0].invoicesArr.length + 3}`,
+    );
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 3}`).value =
+      `TRƯỞNG PHÒNG`;
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 3}`).font = {
+      name: "Times New Roman",
+      size: 14,
+      bold: true,
+    };
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 3}`).alignment =
+      {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+    worksheet.mergeCells(
+      `B${15 + totalArr[0].invoicesArr.length + 4}:F${15 + totalArr[0].invoicesArr.length + 4}`,
+    );
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 4}`).value =
+      `(Ký và ghi rõ họ tên)`;
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 4}`).font = {
+      name: "Times New Roman",
+      size: 14,
+      italic: true,
+    };
+    worksheet.getCell(`B${15 + totalArr[0].invoicesArr.length + 4}`).alignment =
+      {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+
+    // Dòng người lập báo cáo
+    worksheet.mergeCells(
+      `L${15 + totalArr[0].invoicesArr.length + 3}:Q${15 + totalArr[0].invoicesArr.length + 3}`,
+    );
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 3}`).value =
+      `NGƯỜI LẬP BÁO CÁO`;
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 3}`).font = {
+      name: "Times New Roman",
+      size: 13,
+      bold: true,
+    };
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 3}`).alignment =
+      {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+    worksheet.mergeCells(
+      `L${15 + totalArr[0].invoicesArr.length + 4}:Q${15 + totalArr[0].invoicesArr.length + 4}`,
+    );
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 4}`).value =
+      `(Ký và ghi rõ họ tên)`;
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 4}`).font = {
+      name: "Times New Roman",
+      size: 13,
+      italic: true,
+    };
+    worksheet.getCell(`L${15 + totalArr[0].invoicesArr.length + 4}`).alignment =
+      {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
+      };
+
+    worksheet.mergeCells(
+      `B${15 + totalArr[0].invoicesArr.length + 5}:F${15 + totalArr[0].invoicesArr.length + 10}`,
+    );
+
+    worksheet.mergeCells(
+      `L${15 + totalArr[0].invoicesArr.length + 5}:Q${15 + totalArr[0].invoicesArr.length + 10}`,
+    );
 
     // Ghi dữ liệu ra buffer
     const buffer = await workbook.xlsx.writeBuffer();
