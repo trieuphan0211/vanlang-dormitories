@@ -1,6 +1,7 @@
 "use server";
 import {
   createRegisterById,
+  getCountRegisterStatus,
   getFilterRegister,
   getRegisterById,
   updateRegister,
@@ -90,4 +91,41 @@ export const getRegisterByStatus = async (email: string, status: number) => {
     email,
   );
   return student;
+};
+
+export const getRegisterForDashboard = async (
+  branchId?: string,
+  startDate?: string,
+  finishDate?: string,
+) => {
+  const pedding = await getCountRegisterStatus({
+    branchId,
+    startDate,
+    finishDate,
+    status: 0,
+  });
+  const approved = await getCountRegisterStatus({
+    branchId,
+    startDate,
+    finishDate,
+    status: 1,
+  });
+  const canceled = await getCountRegisterStatus({
+    branchId,
+    startDate,
+    finishDate,
+    status: 2,
+  });
+  const extension = await getCountRegisterStatus({
+    branchId,
+    startDate,
+    finishDate,
+    status: 3,
+  });
+  return {
+    pedding,
+    approved,
+    canceled,
+    extension,
+  };
 };

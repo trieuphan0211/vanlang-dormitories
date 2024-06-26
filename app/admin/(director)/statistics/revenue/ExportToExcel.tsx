@@ -3,23 +3,23 @@ import { IoIosPrint } from "react-icons/io";
 import * as XLSX from "xlsx";
 import ExcelJS from "exceljs";
 import imageLogo from "../../../../../public/images/logo/logo.png";
+import { number } from "zod";
 export const ExportToExcel = ({
   totalArr,
-  apiData,
   fileName,
+  title,
 }: {
-  totalArr: number[];
-  apiData: any[];
+  totalArr: { year: string; invoicesArr: number[] }[];
   fileName: string;
+  title: string;
 }) => {
-  console.log(totalArr);
   const fileType =
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
 
   const exportToCSV = async (
-    totalArr: number[],
-    apiData: any[],
+    totalArr: { year: string; invoicesArr: number[] }[],
+
     fileName: string,
   ) => {
     const workbook = new ExcelJS.Workbook();
@@ -116,8 +116,7 @@ export const ExportToExcel = ({
     };
 
     worksheet.mergeCells("G11:K11");
-    worksheet.getCell("G11").value =
-      `Từ 01/${apiData[0]?.invoiceYear} đến 12/${apiData[0]?.invoiceYear}`;
+    worksheet.getCell("G11").value = title;
     worksheet.getCell("G11").font = { name: "Times New Roman", size: 13 };
     worksheet.getCell("G11").alignment = {
       vertical: "middle",
@@ -143,8 +142,8 @@ export const ExportToExcel = ({
       bold: true,
     };
     worksheet.getCell("E14").alignment = {
-      vertical: "bottom",
-      horizontal: "right",
+      vertical: "middle",
+      horizontal: "center",
       wrapText: true,
     };
     worksheet.getCell("E14").fill = {
@@ -158,11 +157,12 @@ export const ExportToExcel = ({
     worksheet.getCell("H14").font = {
       name: "Times New Roman",
       size: 13,
+
       bold: true,
     };
     worksheet.getCell("H14").alignment = {
-      vertical: "bottom",
-      horizontal: "right",
+      vertical: "middle",
+      horizontal: "center",
       wrapText: true,
     };
     worksheet.getCell("H14").fill = {
@@ -180,33 +180,38 @@ export const ExportToExcel = ({
     const col2StartCol = 8;
 
     // Đặt dữ liệu từ mảng vào các ô từ vị trí đã chỉ định
+    let indexcolumn = 0;
     totalArr.forEach((item, index) => {
       // Đặt cột thứ nhất
       // Gộp cột thứ nhất
-      worksheet.mergeCells(`E${15 + index}:G${15 + index}`);
-      worksheet.getCell(`E${15 + index}`).value =
-        `${index + 1}/${apiData[0]?.invoiceYear}`;
-      worksheet.getCell(`E${15 + index}`).font = {
-        name: "Times New Roman",
-        size: 13,
-      };
-      worksheet.getCell(`E${15 + index}`).alignment = {
-        vertical: "middle",
-        horizontal: "center",
-        wrapText: true,
-      };
+      item.invoicesArr.forEach((number, i) => {
+        worksheet.mergeCells(`E${15 + indexcolumn}:G${15 + indexcolumn}`);
+        worksheet.getCell(`E${15 + indexcolumn}`).value =
+          `${indexcolumn + 1}/${item.year}`;
+        worksheet.getCell(`E${15 + indexcolumn}`).font = {
+          name: "Times New Roman",
+          size: 13,
+        };
+        worksheet.getCell(`E${15 + indexcolumn}`).alignment = {
+          vertical: "middle",
+          horizontal: "center",
+          wrapText: true,
+        };
 
-      worksheet.mergeCells(`H${15 + index}:N${15 + index}`);
-      worksheet.getCell(`H${15 + index}`).value = item.toLocaleString("en-US");
-      worksheet.getCell(`H${15 + index}`).font = {
-        name: "Times New Roman",
-        size: 13,
-      };
-      worksheet.getCell(`H${15 + index}`).alignment = {
-        vertical: "middle",
-        horizontal: "center",
-        wrapText: true,
-      };
+        worksheet.mergeCells(`H${15 + indexcolumn}:N${15 + indexcolumn}`);
+        worksheet.getCell(`H${15 + indexcolumn}`).value =
+          number.toLocaleString("en-US");
+        worksheet.getCell(`H${15 + indexcolumn}`).font = {
+          name: "Times New Roman",
+          size: 13,
+        };
+        worksheet.getCell(`H${15 + indexcolumn}`).alignment = {
+          vertical: "middle",
+          horizontal: "center",
+          wrapText: true,
+        };
+        indexcolumn++;
+      });
     });
 
     // // Định dạng header (cột A, B)
@@ -233,7 +238,7 @@ export const ExportToExcel = ({
     // <button onClick={(e) => exportToCSV(apiData, fileName)}>Export</button>
     <button
       className="flex flex-row gap-2 rounded-md bg-orange-500 p-2 text-white shadow-4"
-      onClick={(e) => exportToCSV(totalArr, apiData, fileName)}
+      onClick={(e) => exportToCSV(totalArr, fileName)}
     >
       <IoIosPrint className="size-6" />
       Xuất ra Excel

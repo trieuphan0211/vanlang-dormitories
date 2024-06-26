@@ -228,35 +228,34 @@ export const changeStatusInvoiceById = async (id: string) => {
 
 export const getInvoiceForDashboard = async (
   branchId?: string,
-  invoiceYear?: string,
+  startDate?: string,
+  finishDate?: string,
 ) => {
-  const data = {
-    total: Array.from({ length: 12 }).map(() => 0), // Initialize the array with length 12
-    paid: Array.from({ length: 12 }).map(() => 0),
-    notpaid: Array.from({ length: 12 }).map(() => 0),
-    paid_quantity: 0,
-    all_quantity: 0,
-    invoicesArr: new Array(),
-  };
+  const year = [] as string[];
+
   const invoices = (await getAllInvoiceForDashboard({
     branchId,
-    invoiceYear,
+    startDate,
+    finishDate,
   })) as Invoices[];
-
   invoices.map((invoice) => {
-    data.invoicesArr.push(invoice);
-    console.log("invoice: ", invoice);
-    data.total[Number(invoice.invoiceMonth) - 1] =
-      (data.total[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
-    data.all_quantity++;
-    if (invoice.status === 1) {
-      data.paid[Number(invoice.invoiceMonth) - 1] =
-        (data.paid[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
-      data.paid_quantity++;
-    } else {
-      data.notpaid[Number(invoice.invoiceMonth) - 1] =
-        (data.notpaid[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
+    if (!year.includes(invoice.invoiceYear)) {
+      year.push(invoice.invoiceYear);
     }
   });
-  return data;
+  const result = year.map((year) => {
+    const invoicesArr = Array.from({ length: 12 }).map(() => 0);
+    invoices
+      .filter((invoice) => invoice.invoiceYear === year)
+      .map((invoice) => {
+        invoicesArr[Number(invoice.invoiceMonth) - 1] =
+          (invoicesArr[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
+      });
+    return {
+      year,
+      invoicesArr,
+    };
+  });
+
+  return result;
 };

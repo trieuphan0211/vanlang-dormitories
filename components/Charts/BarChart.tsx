@@ -125,11 +125,6 @@ const BarChart: React.FC<BarChartProps> = ({
             <IoIosPrint className="size-6" />
             Print to Excel
           </button> */}
-          <ExportToExcel
-            totalArr={total}
-            apiData={invoicesArr}
-            fileName="DoanhThuKTX"
-          />
         </div>
         {/* <div>
           <div className="relative z-20 inline-block">

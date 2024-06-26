@@ -221,3 +221,48 @@ export const updateViolate = async (
     console.error(e);
   }
 };
+
+export const getViolateByDate = async ({
+  branchId,
+  startDate,
+  finishDate,
+}: {
+  branchId?: string;
+  startDate?: string;
+  finishDate?: string;
+}) => {
+  try {
+    const search = [];
+    if (startDate && finishDate) {
+      search.push({
+        updateDate: {
+          gte: new Date(startDate),
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    if (startDate && !finishDate) {
+      search.push({
+        updateDate: {
+          gte: new Date(startDate),
+        },
+      });
+    }
+    if (!startDate && finishDate) {
+      search.push({
+        updateDate: {
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    const maintenances = await db.violate.findMany({
+      where: {
+        AND: search as Array<any>,
+      },
+      include: {},
+    });
+    return maintenances;
+  } catch (e) {
+    console.error(e);
+  }
+};

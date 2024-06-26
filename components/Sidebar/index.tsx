@@ -74,6 +74,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
           title: "Doanh thu",
           href: "/admin/statistics/revenue",
         },
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Đăng ký",
+          href: "/admin/statistics/register",
+        },
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Đơn bảo trì",
+          href: "/admin/statistics/maintenance",
+        },
+        {
+          icon: "/images/header-icon/branch.svg",
+          title: "Vi phạm",
+          href: "/admin/statistics/violate",
+        },
         // {
         //   icon: "/images/header-icon/service.svg",
         //   title: "Dịch vụ",

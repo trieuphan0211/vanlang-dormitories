@@ -190,6 +190,65 @@ export const getCountRegister = async (
     console.error(e);
   }
 };
+export const getCountRegisterStatus = async ({
+  branchId,
+  startDate,
+  finishDate,
+  status,
+}: {
+  branchId?: string;
+  startDate?: string;
+  finishDate?: string;
+  status?: number;
+}) => {
+  try {
+    const search = [];
+    branchId &&
+      search.push({
+        Room: {
+          branchId: {
+            equals: branchId,
+          },
+        },
+      });
+    status &&
+      search.push({
+        status: {
+          equals: status,
+        },
+      });
+    if (startDate && finishDate) {
+      search.push({
+        createDate: {
+          gte: new Date(startDate),
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    if (startDate && !finishDate) {
+      search.push({
+        createDate: {
+          gte: new Date(startDate),
+        },
+      });
+    }
+    if (!startDate && finishDate) {
+      search.push({
+        createDate: {
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    const register = await db.register.count({
+      where: {
+        AND: search as Array<any>,
+      },
+    });
+    return register;
+  } catch (e) {
+    console.error(e);
+  }
+};
 export const createRegisterById = async (data: {
   roomId: string;
   registerdeadline: number;

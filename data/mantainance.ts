@@ -139,3 +139,63 @@ export const updateMaintenance = async (
     console.error(e);
   }
 };
+
+export const getMaintainanceByDateBranch = async ({
+  branchId,
+  startDate,
+  finishDate,
+}: {
+  branchId?: string;
+  startDate?: string;
+  finishDate?: string;
+}) => {
+  try {
+    const search = [];
+    branchId &&
+      search.push({
+        Room: {
+          branchId: {
+            equals: branchId,
+          },
+        },
+      });
+
+    if (startDate && finishDate) {
+      search.push({
+        updateDate: {
+          gte: new Date(startDate),
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    if (startDate && !finishDate) {
+      search.push({
+        updateDate: {
+          gte: new Date(startDate),
+        },
+      });
+    }
+    if (!startDate && finishDate) {
+      search.push({
+        updateDate: {
+          lte: new Date(finishDate),
+        },
+      });
+    }
+    const maintenances = await db.maintenance.findMany({
+      where: {
+        AND: search as Array<any>,
+      },
+      include: {
+        Facilities: {
+          include: {
+            FacilitiesType: true,
+          },
+        },
+      },
+    });
+    return maintenances;
+  } catch (e) {
+    console.error(e);
+  }
+};

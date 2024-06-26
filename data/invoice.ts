@@ -46,10 +46,12 @@ export const createInvoices = async (data: Invoice) => {
 };
 export const getAllInvoiceForDashboard = async ({
   branchId,
-  invoiceYear,
+  startDate,
+  finishDate,
 }: {
   branchId?: string;
-  invoiceYear?: string;
+  startDate?: string;
+  finishDate?: string;
 }) => {
   try {
     const search = [];
@@ -61,12 +63,29 @@ export const getAllInvoiceForDashboard = async ({
           },
         },
       });
-    invoiceYear &&
+    if (startDate && finishDate) {
       search.push({
-        invoiceYear: {
-          contains: invoiceYear,
+        createDate: {
+          gte: new Date(startDate),
+          lte: new Date(finishDate),
         },
       });
+    }
+    if (startDate && !finishDate) {
+      search.push({
+        createDate: {
+          gte: new Date(startDate),
+        },
+      });
+    }
+    if (!startDate && finishDate) {
+      search.push({
+        createDate: {
+          lte: new Date(finishDate),
+        },
+      });
+    }
+
     const invoices = await db.invoice.findMany({
       orderBy: [
         {
@@ -82,14 +101,8 @@ export const getAllInvoiceForDashboard = async ({
         total: true,
         status: true,
       },
-      // include: {
-      //   Room: {
-      //     include: {
-      //       Branch: true,
-      //     },
-      //   },
-      // },
     });
+    console.log(invoices);
     return invoices;
   } catch (error) {
     console.error(error);

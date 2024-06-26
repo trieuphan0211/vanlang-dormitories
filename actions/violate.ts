@@ -3,6 +3,7 @@
 import {
   createViolate,
   deleteViolate,
+  getViolateByDate,
   getViolateById,
   updateViolate,
 } from "@/data/violate";
@@ -172,4 +173,57 @@ export const changeStatusViolateById = async (id: string) => {
     console.error(error);
     return { error: "An error occurred!" };
   }
+};
+
+export const getViolateForDashboard = async (
+  branchId?: string,
+  startDate?: string,
+  finishDate?: string,
+) => {
+  const year = [] as number[];
+  const maintenances = await getViolateByDate({
+    branchId,
+    startDate,
+    finishDate,
+  });
+  maintenances?.map((maintenance) => {
+    if (!year.includes(new Date(maintenance.updateDate).getFullYear())) {
+      year.push(new Date(maintenance.updateDate).getFullYear());
+    }
+  });
+  const result = [] as {
+    month: string;
+    status: { CREATED: number; INPROGRESS: number; FINISHED: number };
+  }[];
+  year.map((year) => {
+    Array.from({ length: 12 }).map((z, index) => {
+      const newMaintainance = maintenances
+        ?.filter(
+          (maintenance) =>
+            new Date(maintenance.updateDate).getFullYear() === year,
+        )
+        .filter(
+          (maintenance) =>
+            new Date(maintenance.updateDate).getMonth() === index,
+        );
+      if ((newMaintainance?.length || 0) > 0) {
+        result.push({
+          month: index + 1 + "/" + year,
+          status: {
+            CREATED:
+              newMaintainance?.filter((item) => item.status === "CREATED")
+                .length || 0,
+            INPROGRESS:
+              newMaintainance?.filter((item) => item.status === "INPROGRESS")
+                .length || 0,
+            FINISHED:
+              newMaintainance?.filter((item) => item.status === "FINISHED")
+                .length || 0,
+          },
+        });
+      }
+    });
+  });
+  // console.log(result);
+  return result;
 };
