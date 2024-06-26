@@ -123,19 +123,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
         },
         {
           icon: "/images/header-icon/room-type.svg",
-          title: "Phòng",
-          href: "/admin/room",
+          title: "Loại phòng",
+          href: "/admin/room-type",
         },
         {
           icon: "/images/header-icon/room-type.svg",
-          title: "Loại phòng",
-          href: "/admin/room-type",
+          title: "Phòng",
+          href: "/admin/room",
         },
       ],
     },
     {
       icon: "/images/header-icon/branch.svg",
-      title: "Người dùng",
+      title: "Tài khoản",
       list: [
         {
           icon: "/images/header-icon/student.svg",
@@ -155,17 +155,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       list: [
         {
           icon: "/images/header-icon/user.svg",
-          title: "Danh sách CSVC",
-          href: "/admin/facilities",
-        },
-        {
-          icon: "/images/header-icon/user.svg",
-          title: "Loại cơ sở vật chất",
+          title: "Loại CSVC",
           href: "/admin/facilities-type",
         },
         {
           icon: "/images/header-icon/user.svg",
-          title: "Bảo trì",
+          title: "Danh sách CSVC",
+          href: "/admin/facilities",
+        },
+
+        {
+          icon: "/images/header-icon/user.svg",
+          title: "Bảo trì CSVC",
           href: "/admin/maintenance",
         },
       ],
@@ -181,7 +182,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
         },
         {
           icon: "/images/header-icon/user.svg",
-          title: "Lập hóa đơn",
+          title: "Hóa đơn",
           href: "/admin/invoice",
         },
         {
@@ -213,13 +214,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       list: [
         {
           icon: "/images/header-icon/user.svg",
-          title: "Danh sách vi phạm",
-          href: "/admin/violate",
+          title: "Loại vi phạm",
+          href: "/admin/violate-type",
         },
         {
           icon: "/images/header-icon/user.svg",
-          title: "Loại vi phạm",
-          href: "/admin/violate-type",
+          title: "Danh sách vi phạm",
+          href: "/admin/violate",
         },
       ],
     },
