@@ -2,12 +2,7 @@
 import { Pagination } from "@/components/Pagination/Pagination";
 import { SearchTable } from "@/components/Search/SearchTable";
 import { STUDENT } from "@/types";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { FaRegEdit } from "react-icons/fa";
-import { MdMoreVert } from "react-icons/md";
-import { RemoveItemDialog } from "../Dialog/RemoveItem";
 import { IoLogOutOutline } from "react-icons/io5";
 import { CheckInvoice } from "../Dialog/CheckInvoice";
 

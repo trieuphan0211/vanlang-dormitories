@@ -6,35 +6,48 @@ interface RegisterPageProps {
   month: string;
   status: { CREATED: number; INPROGRESS: number; FINISHED: number };
 }
+interface ViolatePageProps {
+  month: string;
+  violateType: string;
+  status: { CREATED: number; INPROGRESS: number; FINISHED: number };
+}
 export const StatisticsTable = ({
   invoicesArr,
   headers,
   maintenanceArr,
   title,
-  registerCount,
+  violateArr,
+  registers,
 }: {
-  invoicesArr?: { year: string; invoicesArr: number[] }[];
+  invoicesArr?: { year: number; invoicesArr: number[] }[];
   headers: string[];
   maintenanceArr?: RegisterPageProps[];
+  violateArr?: ViolatePageProps[];
   title: string;
-  registerCount?: {
-    pedding: number;
-    approved: number;
-    canceled: number;
-    extension: number;
-  };
+  registers?: {
+    month: string;
+    branch: string;
+    status: {
+      CREATED: number;
+      APPROVED: number;
+      CANCEL: number;
+      EXTENSION: number;
+    };
+  }[];
 }) => {
   return (
     <div className=" rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-5 flex w-full justify-between gap-3 sm:flex-col">
         <div></div>
-        {invoicesArr && (
-          <ExportToExcel
-            totalArr={invoicesArr}
-            fileName="DoanhThuKTX"
-            title={title}
-          />
-        )}
+
+        <ExportToExcel
+          totalArr={invoicesArr}
+          registers={registers}
+          maintenanceArr={maintenanceArr}
+          violateArr={violateArr}
+          fileName="THONG_KE_DOANH_THU"
+          title={title}
+        />
       </div>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -72,52 +85,68 @@ export const StatisticsTable = ({
                 ),
               ),
             )}
-            {registerCount && (
-              <>
-                <tr>
+            {registers &&
+              registers.map((register, key) => (
+                <tr key={key}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">Đang chờ</p>
+                    <p className="text-black dark:text-white">
+                      {register.branch}
+                    </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {registerCount?.pedding}
+                      {register.month}
                     </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">Đã duyệt</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {registerCount?.approved}
+                      {register.status.CREATED}
                     </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">Đã hủy</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {registerCount?.canceled}
+                      {register.status.APPROVED}
                     </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">Đã gia hạn</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {registerCount?.extension}
+                      {register.status.CANCEL}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {register.status.EXTENSION}
                     </p>
                   </td>
                 </tr>
-              </>
-            )}
+              ))}
             {maintenanceArr?.map((e, key) => (
               <tr key={key}>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">{e.month}</p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {e.status.CREATED}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {e.status.INPROGRESS}
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {e.status.FINISHED}
+                  </p>
+                </td>
+              </tr>
+            ))}
+            {violateArr?.map((e, key) => (
+              <tr key={key}>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">{e.violateType}</p>
+                </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">{e.month}</p>
                 </td>

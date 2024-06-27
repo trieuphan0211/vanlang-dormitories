@@ -43,7 +43,7 @@ const RegisterPage = async ({
         // registerCount={registerCount}
         maintenanceArr={maintenance}
         headers={["Thời gian", "Đang chờ xử lý", "Đang xử lý", "Đã hoàn thành"]}
-        title={`Từ ${new Date(startDate).toLocaleDateString("vi-VN")} đến ${new Date(finishDate).toLocaleDateString("vi-VN")}`}
+        title={`Từ ${startDate ? new Date(startDate).toLocaleDateString("vi-VN") : "ban đầu"} đến ${finishDate ? new Date(finishDate).toLocaleDateString("vi-VN") : new Date().toLocaleDateString("vi-VN")}`}
       />
     </div>
   );

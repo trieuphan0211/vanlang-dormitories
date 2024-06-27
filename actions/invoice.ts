@@ -18,8 +18,8 @@ import * as z from "zod";
 import { changeStatusViolateById } from "./violate";
 
 interface Invoices {
-  invoiceMonth: string;
-  invoiceYear: string;
+  invoiceMonth: number;
+  invoiceYear: number;
   total: number;
   status: number;
 }
@@ -38,8 +38,7 @@ export const resendMail = async () => {
               student: invoice.Student as STUDENT,
               detail: JSON.parse(invoice.detail).detail,
               month:
-                invoice.invoiceMonth + invoice.invoiceMonth &&
-                "/" + invoice.invoiceYear + " lần 2",
+                invoice.invoiceMonth + "/" + invoice.invoiceYear + " lần 2",
             });
       }),
     );
@@ -113,8 +112,8 @@ export const createInvoice = async (data: z.infer<typeof InvoceSchema>) => {
             // Create object invoice
             const dataInvoice = {
               roomId: room.roomId,
-              invoiceMonth: invoiceMonth,
-              invoiceYear: invoiceYear,
+              invoiceMonth: Number(invoiceMonth),
+              invoiceYear: Number(invoiceYear),
               total: service.reduce(
                 (total: number, item: any) => total + item.cost,
                 0,
@@ -184,8 +183,8 @@ export const createInvoiceForViolate = async ({
   });
   if (sendMail) {
     const invoice = await createInvoices({
-      invoiceMonth: new Date().getMonth().toString(),
-      invoiceYear: new Date().getFullYear().toString(),
+      invoiceMonth: new Date().getMonth(),
+      invoiceYear: new Date().getFullYear(),
       total: service.reduce((total: number, item: any) => total + item.cost, 0),
       studentId: student.id,
       detail: JSON.stringify({
@@ -231,7 +230,7 @@ export const getInvoiceForDashboard = async (
   startDate?: string,
   finishDate?: string,
 ) => {
-  const year = [] as string[];
+  const year = [] as number[];
 
   const invoices = (await getAllInvoiceForDashboard({
     branchId,

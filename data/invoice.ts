@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
 interface Invoice {
   roomId?: string;
-  invoiceMonth: string;
-  invoiceYear: string;
+  invoiceMonth: number;
+  invoiceYear: number;
   studentId: string;
   total: number;
   detail: string;
@@ -65,27 +65,42 @@ export const getAllInvoiceForDashboard = async ({
       });
     if (startDate && finishDate) {
       search.push({
-        createDate: {
-          gte: new Date(startDate),
-          lte: new Date(finishDate),
+        invoiceMonth: {
+          gte: new Date(startDate).getMonth() + 1,
+          lte: new Date(finishDate).getMonth() + 1,
+        },
+      });
+      search.push({
+        invoiceYear: {
+          gte: new Date(startDate).getFullYear(),
+          lte: new Date(finishDate).getFullYear(),
         },
       });
     }
     if (startDate && !finishDate) {
       search.push({
-        createDate: {
-          gte: new Date(startDate),
+        invoiceMonth: {
+          gte: new Date(startDate).getMonth() + 1,
+        },
+      });
+      search.push({
+        invoiceYear: {
+          gte: new Date(startDate).getFullYear(),
         },
       });
     }
     if (!startDate && finishDate) {
       search.push({
-        createDate: {
-          lte: new Date(finishDate),
+        invoiceMonth: {
+          lte: new Date(finishDate).getMonth() + 1,
+        },
+      });
+      search.push({
+        invoiceYear: {
+          lte: new Date(finishDate).getFullYear(),
         },
       });
     }
-
     const invoices = await db.invoice.findMany({
       orderBy: [
         {
@@ -102,7 +117,6 @@ export const getAllInvoiceForDashboard = async ({
         status: true,
       },
     });
-    console.log(invoices);
     return invoices;
   } catch (error) {
     console.error(error);

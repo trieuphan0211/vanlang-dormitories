@@ -7,11 +7,12 @@ import { BRANCH } from "@/types";
 import Search from "../revenue/search";
 import { getViolateForDashboard } from "@/actions/violate";
 
-interface RegisterPageProps {
+interface ViolatePageProps {
   month: string;
+  violateType: string;
   status: { CREATED: number; INPROGRESS: number; FINISHED: number };
 }
-const RegisterPage = async ({
+const ViolatePage = async ({
   searchParams,
 }: {
   searchParams?: {
@@ -26,11 +27,11 @@ const RegisterPage = async ({
   const branchName = searchParams?.branchName || "";
   const startDate = searchParams?.startDate || "";
   const finishDate = searchParams?.finishDate || "";
-  const maintenance = (await getViolateForDashboard(
+  const violate = (await getViolateForDashboard(
     branchName,
     startDate,
     finishDate,
-  )) as RegisterPageProps[];
+  )) as ViolatePageProps[];
   return (
     <div className="flex flex-col gap-3">
       <Breadcrumb
@@ -42,12 +43,19 @@ const RegisterPage = async ({
       </div>
       <StatisticsTable
         // registerCount={registerCount}
-        maintenanceArr={maintenance}
-        headers={["Thời gian", "Đang chờ xử lý", "Đang xử lý", "Đã hoàn thành"]}
-        title={`Từ ${new Date(startDate).toLocaleDateString("vi-VN")} đến ${new Date(finishDate).toLocaleDateString("vi-VN")}`}
+        // maintenanceArr={maintenance}
+        violateArr={violate}
+        headers={[
+          "Loại vi phạm",
+          "Thời gian",
+          "Đang chờ xử lý",
+          "Đang xử lý",
+          "Đã hoàn thành",
+        ]}
+        title={`Từ ${startDate ? new Date(startDate).toLocaleDateString("vi-VN") : "ban đầu"} đến ${finishDate ? new Date(finishDate).toLocaleDateString("vi-VN") : new Date().toLocaleDateString("vi-VN")}`}
       />
     </div>
   );
 };
 
-export default RegisterPage;
+export default ViolatePage;

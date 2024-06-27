@@ -1,12 +1,10 @@
 import { getBranchsAll } from "@/actions/branch";
-import BarChart from "@/components/Charts/BarChart";
-import { yearsArr } from "@/prisma/testdata/MOCK_DATA";
-import { BRANCH } from "@/types";
-import { getInvoiceForDashboard } from "../../../../../actions/invoice";
+import { getRegisterForDashboard } from "@/actions/register";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { StatisticsTable } from "@/components/Tables/StatisticsTable";
+import { yearsArr } from "@/prisma/testdata/MOCK_DATA";
+import { BRANCH } from "@/types";
 import Search from "../revenue/search";
-import { getRegisterForDashboard } from "@/actions/register";
 
 const RegisterPage = async ({
   searchParams,
@@ -23,16 +21,22 @@ const RegisterPage = async ({
   const branchName = searchParams?.branchName || "";
   const startDate = searchParams?.startDate || "";
   const finishDate = searchParams?.finishDate || "";
-  const registerCount = (await getRegisterForDashboard(
+  const registers = (await getRegisterForDashboard(
     branchName,
     startDate,
     finishDate,
   )) as {
-    pedding: number;
-    approved: number;
-    canceled: number;
-    extension: number;
-  };
+    month: string;
+    branch: string;
+    status: {
+      CREATED: number;
+      APPROVED: number;
+      CANCEL: number;
+      EXTENSION: number;
+    };
+  }[];
+
+  console.log(registers);
   return (
     <div className="flex flex-col gap-3">
       <Breadcrumb
@@ -43,9 +47,16 @@ const RegisterPage = async ({
         <Search branchs={branchs} years={years} />
       </div>
       <StatisticsTable
-        registerCount={registerCount}
-        headers={["Trạng thái đăng ký", "Số lượng"]}
-        title={`Từ ${new Date(startDate).toLocaleDateString("vi-VN")} đến ${new Date(finishDate).toLocaleDateString("vi-VN")}`}
+        registers={registers}
+        headers={[
+          "Chi nhánh",
+          "Thời gian",
+          "Đang chờ",
+          "Đã duyệt",
+          "Hủy",
+          "Gia hạn",
+        ]}
+        title={`Từ ${startDate ? new Date(startDate).toLocaleDateString("vi-VN") : "ban đầu"} đến ${finishDate ? new Date(finishDate).toLocaleDateString("vi-VN") : new Date().toLocaleDateString("vi-VN")}`}
       />
     </div>
   );

@@ -11,7 +11,7 @@ import { ViolateSchema } from "@/schema";
 import * as z from "zod";
 import { createInvoiceForViolate } from "./invoice";
 import { StatusViolate, ViolateType } from "@prisma/client";
-import { getViolateTypeByCode } from "@/data/violate-type";
+import { getAllViolateTypes, getViolateTypeByCode } from "@/data/violate-type";
 import { sendViolateEmail } from "@/lib/mail";
 import { STUDENT, VIOLATE } from "@/types";
 import {
@@ -20,6 +20,8 @@ import {
   updateStudentPoint,
 } from "@/data/student";
 import { removeRoomOfStudent } from "./student";
+import { getViolareTypesAll } from "./violateType";
+import { get } from "http";
 
 export const addviolate = async (
   value: z.infer<typeof ViolateSchema>,
@@ -181,49 +183,60 @@ export const getViolateForDashboard = async (
   finishDate?: string,
 ) => {
   const year = [] as number[];
-  const maintenances = await getViolateByDate({
+  const violateTypes = [] as string[];
+  const getViolateTypes = await getAllViolateTypes();
+  const violates = await getViolateByDate({
     branchId,
     startDate,
     finishDate,
   });
-  maintenances?.map((maintenance) => {
-    if (!year.includes(new Date(maintenance.updateDate).getFullYear())) {
-      year.push(new Date(maintenance.updateDate).getFullYear());
+  violates?.map((violate) => {
+    if (!year.includes(new Date(violate.updateDate).getFullYear())) {
+      year.push(new Date(violate.updateDate).getFullYear());
+    }
+  });
+  violates?.map((violate) => {
+    if (!violateTypes.includes(violate.typeViolateCode)) {
+      violateTypes.push(violate.typeViolateCode);
     }
   });
   const result = [] as {
     month: string;
+    violateType: string;
     status: { CREATED: number; INPROGRESS: number; FINISHED: number };
   }[];
-  year.map((year) => {
-    Array.from({ length: 12 }).map((z, index) => {
-      const newMaintainance = maintenances
-        ?.filter(
-          (maintenance) =>
-            new Date(maintenance.updateDate).getFullYear() === year,
-        )
-        .filter(
-          (maintenance) =>
-            new Date(maintenance.updateDate).getMonth() === index,
-        );
-      if ((newMaintainance?.length || 0) > 0) {
-        result.push({
-          month: index + 1 + "/" + year,
-          status: {
-            CREATED:
-              newMaintainance?.filter((item) => item.status === "CREATED")
-                .length || 0,
-            INPROGRESS:
-              newMaintainance?.filter((item) => item.status === "INPROGRESS")
-                .length || 0,
-            FINISHED:
-              newMaintainance?.filter((item) => item.status === "FINISHED")
-                .length || 0,
-          },
-        });
-      }
+  violateTypes?.map((violateType) => {
+    year.map((year) => {
+      Array.from({ length: 12 }).map((z, index) => {
+        const newMaintainance = violates
+          ?.filter(
+            (violate) => new Date(violate.updateDate).getFullYear() === year,
+          )
+          .filter(
+            (violate) => new Date(violate.updateDate).getMonth() === index,
+          )
+          .filter((violate) => violate.typeViolateCode === violateType);
+        if ((newMaintainance?.length || 0) > 0) {
+          result.push({
+            month: index + 1 + "/" + year,
+            violateType:
+              getViolateTypes?.filter((item) => item.code === violateType)[0]
+                ?.name || "",
+            status: {
+              CREATED:
+                newMaintainance?.filter((item) => item.status === "CREATED")
+                  .length || 0,
+              INPROGRESS:
+                newMaintainance?.filter((item) => item.status === "INPROGRESS")
+                  .length || 0,
+              FINISHED:
+                newMaintainance?.filter((item) => item.status === "FINISHED")
+                  .length || 0,
+            },
+          });
+        }
+      });
     });
   });
-  // console.log(result);
   return result;
 };

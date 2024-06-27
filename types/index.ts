@@ -24,8 +24,8 @@ export type INVOICE = {
   violateId?: string;
   status: number;
   detail: string;
-  invoiceMonth: string;
-  invoiceYear: string;
+  invoiceMonth: number;
+  invoiceYear: number;
   Room?: ROOM;
   Violate?: VIOLATE;
   Student?: STUDENT;

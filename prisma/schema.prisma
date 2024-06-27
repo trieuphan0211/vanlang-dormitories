@@ -165,8 +165,8 @@ model Invoice {
   roomId       String?
   studentId    String
   violateId    String?
-  invoiceMonth String
-  invoiceYear  String
+  invoiceMonth Int
+  invoiceYear  Int
   total        Int
   detail       String
   status       Int // 0: Mới tạo, 1: Đã thanh toán, 2: Đã hủy

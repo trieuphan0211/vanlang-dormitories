@@ -259,7 +259,9 @@ export const getViolateByDate = async ({
       where: {
         AND: search as Array<any>,
       },
-      include: {},
+      include: {
+        TypeViolate: true,
+      },
     });
     return maintenances;
   } catch (e) {

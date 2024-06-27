@@ -27,6 +27,7 @@ const Page = async ({
     startDate,
     finishDate,
   );
+  console.log(invoice);
   return (
     <div className="flex flex-col gap-3">
       <Breadcrumb
@@ -40,7 +41,7 @@ const Page = async ({
         // total={invoice.total}
         invoicesArr={invoice}
         headers={["Thời gian", "Doanh thu"]}
-        title={`Từ ${new Date(startDate).toLocaleDateString("vi-VN")} đến ${new Date(finishDate).toLocaleDateString("vi-VN")}`}
+        title={`Từ ${startDate ? new Date(startDate).toLocaleDateString("vi-VN") : "ban đầu"} đến ${finishDate ? new Date(finishDate).toLocaleDateString("vi-VN") : new Date().toLocaleDateString("vi-VN")}`}
       />
     </div>
   );

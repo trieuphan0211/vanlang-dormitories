@@ -190,16 +190,14 @@ export const getCountRegister = async (
     console.error(e);
   }
 };
-export const getCountRegisterStatus = async ({
+export const getRegisterByBranchDate = async ({
   branchId,
   startDate,
   finishDate,
-  status,
 }: {
   branchId?: string;
   startDate?: string;
   finishDate?: string;
-  status?: number;
 }) => {
   try {
     const search = [];
@@ -211,12 +209,7 @@ export const getCountRegisterStatus = async ({
           },
         },
       });
-    status &&
-      search.push({
-        status: {
-          equals: status,
-        },
-      });
+
     if (startDate && finishDate) {
       search.push({
         createDate: {
@@ -239,9 +232,16 @@ export const getCountRegisterStatus = async ({
         },
       });
     }
-    const register = await db.register.count({
+    const register = await db.register.findMany({
       where: {
         AND: search as Array<any>,
+      },
+      include: {
+        Room: {
+          include: {
+            Branch: true,
+          },
+        },
       },
     });
     return register;

@@ -1,8 +1,9 @@
 "use server";
+import { getAllBranchs } from "@/data/branch";
 import {
   createRegisterById,
-  getCountRegisterStatus,
   getFilterRegister,
+  getRegisterByBranchDate,
   getRegisterById,
   updateRegister,
 } from "@/data/register";
@@ -98,34 +99,64 @@ export const getRegisterForDashboard = async (
   startDate?: string,
   finishDate?: string,
 ) => {
-  const pedding = await getCountRegisterStatus({
+  const year = [] as number[];
+  const branchs = [] as string[];
+  const getBranch = await getAllBranchs();
+  const registers = await getRegisterByBranchDate({
     branchId,
     startDate,
     finishDate,
-    status: 0,
   });
-  const approved = await getCountRegisterStatus({
-    branchId,
-    startDate,
-    finishDate,
-    status: 1,
+  registers?.map((register) => {
+    if (!year.includes(new Date(register.updateDate).getFullYear())) {
+      year.push(new Date(register.updateDate).getFullYear());
+    }
   });
-  const canceled = await getCountRegisterStatus({
-    branchId,
-    startDate,
-    finishDate,
-    status: 2,
+  registers?.map((register) => {
+    if (!branchs.includes(register.Room.Branch.id)) {
+      branchs.push(register.Room.Branch.id);
+    }
   });
-  const extension = await getCountRegisterStatus({
-    branchId,
-    startDate,
-    finishDate,
-    status: 3,
+  const result = [] as {
+    month: string;
+    branch: string;
+    status: {
+      CREATED: number;
+      APPROVED: number;
+      CANCEL: number;
+      EXTENSION: number;
+    };
+  }[];
+  branchs?.map((branch) => {
+    year.map((year) => {
+      Array.from({ length: 12 }).map((z, index) => {
+        const newRegisters = registers
+          ?.filter(
+            (register) => new Date(register.updateDate).getFullYear() === year,
+          )
+          .filter(
+            (register) => new Date(register.updateDate).getMonth() === index,
+          )
+          .filter((register) => register.Room.Branch.id === branch);
+        if ((newRegisters?.length || 0) > 0) {
+          result.push({
+            month: index + 1 + "/" + year,
+            branch:
+              getBranch?.filter((item) => item.id === branch)[0].name || "",
+            status: {
+              CREATED:
+                newRegisters?.filter((item) => item.status === 0).length || 0,
+              APPROVED:
+                newRegisters?.filter((item) => item.status === 1).length || 0,
+              CANCEL:
+                newRegisters?.filter((item) => item.status === 2).length || 0,
+              EXTENSION:
+                newRegisters?.filter((item) => item.status === 3).length || 0,
+            },
+          });
+        }
+      });
+    });
   });
-  return {
-    pedding,
-    approved,
-    canceled,
-    extension,
-  };
+  return result;
 };
