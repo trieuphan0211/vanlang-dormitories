@@ -390,23 +390,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   ];
   const userMenu = [
     {
-      icon: "/images/header-icon/dashboard.svg",
+      icon: "/images/header-icon/user.svg",
       title: "Thông tin cá nhân",
       href: "/home",
     },
 
     {
-      icon: "/images/header-icon/branch.svg",
+      icon: "/images/header-icon/register.svg",
       title: "Đăng ký",
       href: "/home/register-dormitory",
     },
     {
-      icon: "/images/header-icon/branch.svg",
+      icon: "/images/header-icon/listinout.svg",
       title: "Vào/ra",
       href: "/home/out-in",
     },
     {
-      icon: "/images/header-icon/branch.svg",
+      icon: "/images/header-icon/invoice.svg",
       title: "Hóa đơn",
       href: "/home/invoice",
     },
