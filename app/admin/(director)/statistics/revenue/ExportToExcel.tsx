@@ -51,7 +51,7 @@ export const ExportToExcel = ({
 
     // Đọc file hình ảnh dưới dạng Buffer
     const response = await fetch(
-      "http://vanlang-dormitories.vercel.app/_next/image?url=%2Fimages%2Flogo%2Flogo.png&w=256&q=75",
+      "https://vanlang-dormitories.vercel.app/_next/image?url=%2Fimages%2Flogo%2Flogo.png&w=256&q=75",
     ); // Đường dẫn đến file hình ảnh
 
     // Tải hình ảnh và chuyển đổi thành ArrayBuffer
