@@ -216,6 +216,6 @@ export const getMaintainanceForDashboard = async (
       }
     });
   });
-  // console.log(result);
+
   return result;
 };

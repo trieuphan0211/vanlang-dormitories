@@ -140,11 +140,11 @@ export const LineChart = ({
     series: [
       {
         name: "Tổng tiền hóa đơn",
-        data: invoiceForLineChart.total || [],
+        data: invoiceForLineChart[0]?.invoicesArr || [],
       },
       {
-        name: "Tổng tiền đã thanh toán",
-        data: invoiceForLineChart.paid || [],
+        name: "Tổng tiền chưa thanh toán",
+        data: invoiceForLineChart[0]?.invoiceNotPaid || [],
       },
     ],
   });
@@ -153,11 +153,11 @@ export const LineChart = ({
       series: [
         {
           name: "Tổng tiền hóa đơn",
-          data: invoiceForLineChart.total || [],
+          data: invoiceForLineChart[0]?.invoicesArr || [],
         },
         {
-          name: "Tổng tiền đã thanh toán",
-          data: invoiceForLineChart.paid || [],
+          name: "Tổng tiền chưa thanh toán",
+          data: invoiceForLineChart[0]?.invoiceNotPaid || [],
         },
       ],
     });
@@ -167,23 +167,23 @@ export const LineChart = ({
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
-            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-[#3056D3]">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-[#3056D3]"></span>
-            </span>
-            <div className="w-full">
-              <p className="font-semibold text-[#3056D3]">
-                Tổng tiền thanh toán
-              </p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
-            </div>
-          </div>
-          <div className="flex min-w-47.5">
             <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+              <span className="block h-2.5 w-full max-w-2.5 rounded-full  bg-secondary"></span>
             </span>
             <div className="w-full">
               <p className="font-semibold text-secondary">Tổng tiền hóa đơn</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium">01.01.2024- 31.12.2024</p>
+            </div>
+          </div>
+          <div className="flex min-w-60">
+            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-[#3056D3] ">
+              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-[#3056D3]"></span>
+            </span>
+            <div className="w-full">
+              <p className="font-semibold  text-[#3056D3]">
+                Tổng tiền chưa thanh toán
+              </p>
+              <p className="text-sm font-medium">01.01.2024- 31.12.2024</p>
             </div>
           </div>
         </div>

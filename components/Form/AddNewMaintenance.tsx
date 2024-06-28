@@ -61,7 +61,6 @@ export const AddNewMaintenance = ({
   const { branchId, floor } = watch();
   const onSubmit = (value: z.infer<typeof MaintenanceSchema>) => {
     const facilitiesId = facilities.map((item) => item.id);
-    console.log(value, facilitiesId);
     startTransition(() => {
       addManitainance({ ...value, listFacilities: facilitiesId }).then(
         (res) => {

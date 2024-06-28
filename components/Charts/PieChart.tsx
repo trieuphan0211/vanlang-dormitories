@@ -1,19 +1,26 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 interface ChartThreeState {
   series: number[];
 }
 
-export const PieChart = () => {
+export const PieChart = ({
+  invoiceStatus,
+}: {
+  invoiceStatus: {
+    paid: number;
+    notPaid: number;
+  };
+}) => {
   const options: ApexOptions = {
     chart: {
       fontFamily: "Satoshi, sans-serif",
       type: "donut",
     },
     colors: ["#3C50E0", "#6577F3"],
-    labels: ["Sinh viên đã thanh toán", "Sinh viên chưa thanh toán"],
+    labels: ["Hóa đơn đã thanh toán", "Hóa đơn chưa thanh toán"],
     legend: {
       show: false,
       position: "bottom",
@@ -50,17 +57,22 @@ export const PieChart = () => {
     ],
   };
   const [state, setState] = useState<ChartThreeState>({
-    series: [65, 34],
+    series: [invoiceStatus?.paid, invoiceStatus?.notPaid],
   });
+  useEffect(() => {
+    setState({
+      series: [invoiceStatus?.paid, invoiceStatus?.notPaid],
+    });
+  }, [invoiceStatus]);
   return (
     <div className=" col-span-4 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold text-black dark:text-white">
-            Tình trạng thanh toán
+            Tình trạng thanh toán 2024
           </h5>
         </div>
-        <div>
+        {/* <div>
           <div className="relative z-20 inline-block">
             <select
               name=""
@@ -95,7 +107,7 @@ export const PieChart = () => {
               </svg>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mb-2">
@@ -113,7 +125,7 @@ export const PieChart = () => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#3C50E0]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Sinh viên đã thanh toán </span>
+              <span>Hóa đơn đã thanh toán </span>
             </p>
           </div>
         </div>
@@ -121,7 +133,7 @@ export const PieChart = () => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Sinh viên chưa thanh toán </span>
+              <span> Hóa đơn chưa thanh toán </span>
             </p>
           </div>
         </div>

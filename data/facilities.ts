@@ -101,7 +101,7 @@ export const getFilterFacilities = async (
       });
     facilitiesTypeName &&
       search.push({
-        facilitiesType: {
+        FacilitiesType: {
           name: {
             contains: facilitiesTypeName,
             mode: "insensitive",
@@ -184,7 +184,7 @@ export const getCountFacilities = async (
       });
     facilitiesTypeName &&
       search.push({
-        facilitiesType: {
+        FacilitiesType: {
           name: {
             contains: facilitiesTypeName,
             mode: "insensitive",

@@ -160,3 +160,55 @@ export const getRegisterForDashboard = async (
   });
   return result;
 };
+
+export const getRegisterForDashboardStatus = async (
+  branchId?: string,
+  startDate?: string,
+  finishDate?: string,
+) => {
+  const registers = await getRegisterByBranchDate({
+    branchId,
+    startDate: "2024-01-01T00:00:00.000Z",
+    finishDate: "2024-11-31T23:59:59.999Z",
+  });
+  let create = Array.from({ length: 12 }).map(() => 0);
+  let approved = Array.from({ length: 12 }).map(() => 0);
+  let cancel = Array.from({ length: 12 }).map(() => 0);
+  let extension = Array.from({ length: 12 }).map(() => 0);
+  registers
+    ?.filter((e) => e.status === 0)
+    .map((register) => {
+      create[Number(new Date(register.updateDate).getMonth() - 1)] =
+        (create[Number(new Date(register.updateDate).getMonth() - 1)] || 0) + 1;
+    });
+  registers
+    ?.filter((e) => e.status === 1)
+    .map((register) => {
+      approved[Number(new Date(register.updateDate).getMonth() - 1)] =
+        (approved[Number(new Date(register.updateDate).getMonth() - 1)] || 0) +
+        1;
+    });
+  registers
+    ?.filter((e) => e.status === 2)
+    .map((register) => {
+      cancel[Number(new Date(register.updateDate).getMonth() - 1)] =
+        (cancel[Number(new Date(register.updateDate).getMonth() - 1)] || 0) + 1;
+    });
+  registers
+    ?.filter((e) => e.status === 3)
+    .map((register) => {
+      extension[Number(new Date(register.updateDate).getMonth() - 1)] =
+        (extension[Number(new Date(register.updateDate).getMonth() - 1)] || 0) +
+        1;
+    });
+  console.log("create", create);
+  console.log("approved", approved);
+  console.log("cancel", cancel);
+  console.log("extension", extension);
+  return {
+    create,
+    approved,
+    cancel,
+    extension,
+  };
+};

@@ -258,3 +258,60 @@ export const getInvoiceForDashboard = async (
 
   return result;
 };
+
+export const getInvoiceForDashboard1 = async (
+  branchId?: string,
+  startDate?: string,
+  finishDate?: string,
+) => {
+  const year = [] as number[];
+
+  const invoices = (await getAllInvoiceForDashboard({
+    branchId,
+    startDate: "2024-01-01T00:00:00.000Z",
+    finishDate: "2024-11-31T23:59:59.999Z",
+  })) as Invoices[];
+  invoices.map((invoice) => {
+    if (!year.includes(invoice.invoiceYear)) {
+      year.push(invoice.invoiceYear);
+    }
+  });
+  const result = year.map((year) => {
+    const invoicesArr = Array.from({ length: 12 }).map(() => 0);
+
+    invoices
+      .filter((invoice) => invoice.invoiceYear === year)
+      .map((invoice) => {
+        invoicesArr[Number(invoice.invoiceMonth) - 1] =
+          (invoicesArr[Number(invoice.invoiceMonth) - 1] || 0) + invoice.total;
+      });
+    const invoiceNotPaid = Array.from({ length: 12 }).map(() => 0);
+    invoices
+      .filter((invoice) => invoice.invoiceYear === year && invoice.status === 0)
+      .map((invoice) => {
+        invoiceNotPaid[Number(invoice.invoiceMonth) - 1] =
+          (invoiceNotPaid[Number(invoice.invoiceMonth) - 1] || 0) +
+          invoice.total;
+      });
+
+    return {
+      year,
+      invoicesArr,
+      invoiceNotPaid,
+    };
+  });
+
+  return result;
+};
+
+export const getInvoiceStatus = async () => {
+  const invoices = (await getAllInvoiceForDashboard({
+    // branchId,
+    startDate: "2024-01-01T00:00:00.000Z",
+    finishDate: "2024-11-31T23:59:59.999Z",
+  })) as Invoices[];
+  return {
+    paid: invoices.filter((invoice) => invoice.status === 1).length,
+    notPaid: invoices.filter((invoice) => invoice.status === 0).length,
+  };
+};

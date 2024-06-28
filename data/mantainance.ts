@@ -153,10 +153,8 @@ export const getMaintainanceByDateBranch = async ({
     const search = [];
     branchId &&
       search.push({
-        Room: {
-          branchId: {
-            equals: branchId,
-          },
+        branchId: {
+          contains: branchId,
         },
       });
 

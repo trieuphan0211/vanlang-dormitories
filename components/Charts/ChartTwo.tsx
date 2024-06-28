@@ -1,9 +1,9 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 const options: ApexOptions = {
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ["#3C50E0", "#22c55e", "#ef4444", "#FFB946"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
     type: "bar",
@@ -44,7 +44,31 @@ const options: ApexOptions = {
   },
 
   xaxis: {
-    categories: ["M", "T", "W", "T", "F", "S", "S"],
+    type: "category",
+    title: {
+      text: "Tháng",
+      style: {
+        fontSize: "12px",
+      },
+    },
+    categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: true,
+    },
+  },
+  yaxis: {
+    title: {
+      text: "Số đơn đăng ký",
+
+      style: {
+        fontSize: "12px",
+      },
+    },
+    // min: 0,
+    // max: Math.max(invoiceForLineChart.total),
   },
   legend: {
     position: "top",
@@ -69,20 +93,60 @@ interface ChartTwoState {
   }[];
 }
 
-const ChartTwo: React.FC = () => {
+const ChartTwo = ({
+  registerStatus,
+}: {
+  registerStatus: {
+    create: number[];
+    approved: number[];
+    cancel: number[];
+    extension: number[];
+  };
+}) => {
+  console.log(registerStatus);
   const [state, setState] = useState<ChartTwoState>({
     series: [
       {
-        name: "Sales",
-        data: [44, 55, 41, 67, 22, 43, 65],
+        name: "Đang chờ",
+        data: registerStatus?.create || 0,
       },
       {
-        name: "Revenue",
-        data: [13, 23, 20, 8, 13, 27, 15],
+        name: "Đã duyệt",
+        data: registerStatus?.approved || 0,
+      },
+      {
+        name: "Đã hủy",
+        data: registerStatus?.cancel || 0,
+      },
+      {
+        name: "Đã gia hạn",
+        data: registerStatus?.extension || 0,
       },
     ],
   });
-
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: "Đang chờ",
+          data: registerStatus?.create || 0,
+        },
+        {
+          name: "Đã duyệt",
+          data: registerStatus?.approved || 0,
+        },
+        {
+          name: "Đã hủy",
+          data: registerStatus?.cancel || 0,
+        },
+        {
+          name: "Đã gia hạn",
+          data: registerStatus?.extension || 0,
+        },
+      ],
+    }));
+  }, [registerStatus]);
   const handleReset = () => {
     setState((prevState) => ({
       ...prevState,
@@ -95,10 +159,10 @@ const ChartTwo: React.FC = () => {
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Profit this week
+            Tình trạng đăng ký
           </h4>
         </div>
-        <div>
+        {/* <div>
           <div className="relative z-20 inline-block">
             <select
               name="#"
@@ -133,7 +197,7 @@ const ChartTwo: React.FC = () => {
               </svg>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div>
