@@ -1,3 +1,4 @@
+"use client";
 import ExcelJS from "exceljs";
 import * as FileSaver from "file-saver";
 import { IoIosPrint } from "react-icons/io";

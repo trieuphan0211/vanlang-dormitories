@@ -7,6 +7,7 @@ import {
   Hr,
   Html,
   Img,
+  Link,
   Preview,
   Row,
   Section,
@@ -135,6 +136,20 @@ const InvoiceMail = ({
               <Column align="left" style={{ width: "50%" }}>
                 <Text style={{ ...resetText }}>
                   Nghành: {data?.student?.major}
+                </Text>
+              </Column>{" "}
+            </Row>{" "}
+            <Row style={{ marginBottom: "5px" }}>
+              <Column align="left" style={{ width: "50%" }}>
+                <Text style={{ ...resetText }}>
+                  Sinh viên có thể thanh toán hóa đơn tại phòng kế toán hoặc
+                  truy cập vào{" "}
+                  <Link
+                    href={`https://vanlang-dormitories.vercel.app/home/invoice`}
+                  >
+                    liên kết
+                  </Link>{" "}
+                  này để thanh toán online.
                 </Text>
               </Column>{" "}
             </Row>{" "}
@@ -391,7 +406,7 @@ const InvoiceMail = ({
             <Row style={{ marginBottom: "5px", color: "rgba(0,0,0,0.7)" }}>
               <Column align="left" style={{ width: "50%" }}>
                 <Text style={{ ...resetText }}>
-                  Email: ktx.vanlangdormitories@gmail.com
+                  Email: vanlangdormitories@gmail.com
                 </Text>
               </Column>
               <Column align="right">

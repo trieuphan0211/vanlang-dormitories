@@ -85,7 +85,10 @@ export const ViolateMail = ({ violate }: { violate: VIOLATE }) => (
             {/* {"( "}Bạn sẽ bị trừ điếm {violate?.TypeViolate?.point || 0} trong
             tổng 10 điểm của tháng này {" )"} */}
           </Text>
-
+          <Text style={paragraph}>
+            <b>Điểm bị trừ: </b>
+            {violate?.TypeViolate?.point || 0}
+          </Text>
           <Text style={paragraph}>
             <b>Điểm hiện tại: </b>
             {violate?.Student?.point}

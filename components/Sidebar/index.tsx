@@ -61,7 +61,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
   // Begin: Handle Logic
   const adminMenu = [
     {
-      icon: "/images/header-icon/dashboard.svg",
+      icon: "/images/header-icon/dashboard1.svg",
       title: "Bảng điều khiển",
       href: "/admin",
     },
@@ -114,18 +114,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Cơ sở vật chất",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/facilities.svg",
           title: "Loại CSVC",
           href: "/admin/facilities-type",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/listinout.svg",
           title: "Danh sách CSVC",
           href: "/admin/facilities",
         },
 
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/maintenance.svg",
           title: "Bảo trì CSVC",
           href: "/admin/maintenance",
         },
@@ -136,17 +136,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Dịch vụ",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/register.svg",
           title: "Đăng ký Ký túc xá",
           href: "/admin/register-dormitory",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/invoice.svg",
           title: "Hóa đơn",
           href: "/admin/invoice",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/expired.svg",
           title: "Danh sách hết hạn",
           href: "/admin/expired",
         },
@@ -157,12 +157,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Vào/ra",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/inout.svg",
           title: "Đăng ký vào ra",
           href: "/admin/out-in",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/listinout.svg",
           title: "Danh sách vào ra",
           href: "/admin/out-in/list",
         },
@@ -173,12 +173,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Vi phạm",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/violate.svg",
           title: "Loại vi phạm",
           href: "/admin/violate-type",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/listinout.svg",
           title: "Danh sách vi phạm",
           href: "/admin/violate",
         },
@@ -189,46 +189,31 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Thống kê",
       list: [
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/revenue.svg",
           title: "Doanh thu",
           href: "/admin/statistics/revenue",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/register.svg",
           title: "Đăng ký",
           href: "/admin/statistics/register",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/maintenance.svg",
           title: "Đơn bảo trì",
           href: "/admin/statistics/maintenance",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/violate.svg",
           title: "Vi phạm",
           href: "/admin/statistics/violate",
         },
-        // {
-        //   icon: "/images/header-icon/service.svg",
-        //   title: "Dịch vụ",
-        //   href: "/admin/service",
-        // },
-        // {
-        //   icon: "/images/header-icon/room-type.svg",
-        //   title: "Phòng",
-        //   href: "/admin/room",
-        // },
-        // {
-        //   icon: "/images/header-icon/room-type.svg",
-        //   title: "Loại phòng",
-        //   href: "/admin/room-type",
-        // },
       ],
     },
   ];
   const staffMenu = [
     {
-      icon: "/images/header-icon/dashboard.svg",
+      icon: "/images/header-icon/dashboard1.svg",
       title: "Bảng điều khiển",
       href: "/admin",
     },
@@ -262,14 +247,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Cơ sở vật chất",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/listinout.svg",
           title: "Danh sách CSVC",
           href: "/admin/facilities",
         },
 
         {
-          icon: "/images/header-icon/user.svg",
-          title: "Bảo trì",
+          icon: "/images/header-icon/maintenance.svg",
+          title: "Bảo trì CSVC",
           href: "/admin/maintenance",
         },
       ],
@@ -279,14 +264,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Dịch vụ",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/register.svg",
           title: "Đăng ký Ký túc xá",
           href: "/admin/register-dormitory",
         },
         {
-          icon: "/images/header-icon/user.svg",
-          title: "Lập hóa đơn",
+          icon: "/images/header-icon/invoice.svg",
+          title: "Hóa đơn",
           href: "/admin/invoice",
+        },
+        {
+          icon: "/images/header-icon/expired.svg",
+          title: "Danh sách hết hạn",
+          href: "/admin/expired",
         },
       ],
     },
@@ -295,19 +285,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Vào/ra",
       list: [
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/inout.svg",
           title: "Đăng ký vào ra",
           href: "/admin/out-in",
         },
         {
-          icon: "/images/header-icon/user.svg",
+          icon: "/images/header-icon/listinout.svg",
           title: "Danh sách vào ra",
           href: "/admin/out-in/list",
-        },
-        {
-          icon: "/images/header-icon/user.svg",
-          title: "Danh sách hết hạn",
-          href: "/admin/expired",
         },
       ],
     },
@@ -322,14 +307,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       href: "/admin/student",
     },
     {
-      icon: "/images/header-icon/user.svg",
-      title: "Vi phạm",
+      icon: "/images/header-icon/listinout.svg",
+      title: "Danh sách vi phạm",
       href: "/admin/violate",
     },
   ];
   const directorMenu = [
     {
-      icon: "/images/header-icon/dashboard.svg",
+      icon: "/images/header-icon/dashboard1.svg",
       title: "Bảng điều khiển",
       href: "/admin",
     },
@@ -366,13 +351,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       href: "/admin/user",
     },
     {
-      icon: "/images/header-icon/user.svg",
-      title: "Loại cơ sở vật chất",
+      icon: "/images/header-icon/facilities.svg",
+      title: "Loại CSVC",
       href: "/admin/facilities-type",
     },
 
     {
-      icon: "/images/header-icon/user.svg",
+      icon: "/images/header-icon/violate.svg",
       title: "Loại vi phạm",
       href: "/admin/violate-type",
     },
@@ -381,40 +366,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, role }: SidebarProps) => {
       title: "Thống kê",
       list: [
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/revenue.svg",
           title: "Doanh thu",
           href: "/admin/statistics/revenue",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/register.svg",
           title: "Đăng ký",
           href: "/admin/statistics/register",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/maintenance.svg",
           title: "Đơn bảo trì",
           href: "/admin/statistics/maintenance",
         },
         {
-          icon: "/images/header-icon/branch.svg",
+          icon: "/images/header-icon/violate.svg",
           title: "Vi phạm",
           href: "/admin/statistics/violate",
         },
-        // {
-        //   icon: "/images/header-icon/service.svg",
-        //   title: "Dịch vụ",
-        //   href: "/admin/service",
-        // },
-        // {
-        //   icon: "/images/header-icon/room-type.svg",
-        //   title: "Phòng",
-        //   href: "/admin/room",
-        // },
-        // {
-        //   icon: "/images/header-icon/room-type.svg",
-        //   title: "Loại phòng",
-        //   href: "/admin/room-type",
-        // },
       ],
     },
   ];
